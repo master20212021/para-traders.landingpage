@@ -48,9 +48,14 @@
             animation: spin 1s linear infinite;
         }
         #brain-animation-container {
-            height: 350px;
-            cursor: grab;
+            height: 250px; /* Mobile height */
         }
+        @media (min-width: 768px) { /* md breakpoint */
+            #brain-animation-container {
+                height: 350px; /* Desktop height */
+            }
+        }
+
         .pulsing-icon {
             animation: pulse 3s infinite ease-in-out;
         }
@@ -90,13 +95,6 @@
                 🔥 ¡Quiero empezar el reto ya!
             </a>
         </div>
-        <!-- Key Benefits -->
-        <div class="max-w-4xl mx-auto mt-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-gray-300">
-            <div class="text-center"><p class="font-semibold">🧠 Control emocional</p></div>
-            <div class="text-center"><p class="font-semibold">📉 Evitar sobreoperar</p></div>
-            <div class="text-center"><p class="font-semibold">🧘 Rutina de enfoque</p></div>
-            <div class="text-center"><p class="font-semibold">🛑 Saber cuándo parar</p></div>
-        </div>
         <!-- 3D Animation -->
         <div class="mt-12 max-w-4xl mx-auto">
             <div id="brain-animation-container" class="rounded-xl shadow-2xl"></div>
@@ -124,7 +122,7 @@
         </section>
 
         <!-- 3. Sobre mí -->
-        <section class="px-4 max-w-6xl mx-auto bg-gray-800/50 rounded-2xl p-12 grid md:grid-cols-3 gap-12 items-center section-glow">
+        <section class="px-4 max-w-6xl mx-auto bg-gray-800/50 rounded-2xl p-8 md:p-12 grid md:grid-cols-3 gap-12 items-center section-glow">
             <div class="md:col-span-2">
                 <h2 class="text-4xl md:text-5xl font-bold">🧑‍💻 ¿Quién soy yo para enseñarte esto?</h2>
                 <p class="mt-6 text-lg text-gray-400">
@@ -141,7 +139,7 @@
 
         <!-- NEW: Benefits Section -->
         <section class="px-4 max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl md:text-5xl font-bold">📦 ¿Qué vas a obtener?</h2>
+            <h2 class="text-4xl md:text-5xl font-bold">📦 ¿Qué vas a lograr en 5 días?</h2>
             <div class="mt-12 grid sm:grid-cols-2 gap-8 text-left">
                 <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4"><span class="text-4xl">🧘</span><div><h3 class="font-bold text-lg">Dominar el impulso de sobreoperar</h3></div></div>
                 <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4"><span class="text-4xl">🔫</span><div><h3 class="font-bold text-lg">Aplicar mentalidad sniper en entradas</h3></div></div>
