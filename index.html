@@ -4,40 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>para_traders_ | Psicotrading Real</title>
+    <!-- Incluye Montserrat en la importación de fuentes -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Añadimos 'defer' para que el script se cargue después de parsear el HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome para íconos de redes sociales y de contenido -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #030712;
-            color: #E5E7EB; /* text-gray-200 */
+            font-family: 'Inter', sans-serif; /* Fallback principal */
+            background-color: #030712; /* Fondo casi negro */
+            color: #E5E7EB; /* Texto gris claro */
+            overflow-x: hidden; /* Evita scroll horizontal */
+            position: relative; /* Necesario para el pseudo-elemento de grano */
         }
+        
+        /* Grano/Ruido sutil para el fondo */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAAD9gGz5AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAWJQAAFiUAUFXgxwAAABhQTFRFAAAAsND/sND/sND/sND/sND/sND/sND/sND/jQ0vAAAACnRSTlMAAAAA+wD49z8nBA+MvK+1nQAAABpJREFUeJxjYmBgZGSAjYAAhjFGEGAABgBcA1M77D2NwgAAAABJRU5ErkJggg=='); /* Pequeña imagen de grano */
+            background-repeat: repeat;
+            opacity: 0.02; /* Muy baja opacidad */
+            pointer-events: none; /* Asegura que no interfiera con interacciones */
+            z-index: -1;
+        }
+
+        /* Define una variable CSS para la fuente del encabezado */
+        :root {
+            --heading-font: 'Montserrat', sans-serif; /* Montserrat aplicada por defecto ahora */
+        }
+
+        h1 {
+            font-family: var(--heading-font); /* Aplica la variable CSS a todos los h1 */
+        }
+
+        /* Efecto de brillo más pronunciado y ligeramente animado */
         .section-glow {
-            box-shadow: 0 0 80px rgba(34, 211, 238, 0.05);
+            box-shadow:
+                0 0 40px rgba(34, 211, 238, 0.1), /* Sombra principal más fuerte */
+                0 0 80px rgba(34, 211, 238, 0.05), /* Sombra de halo exterior */
+                0 0 120px rgba(6, 182, 212, 0.03); /* Sombra más difusa */
+            border-radius: 1.5rem; /* Bordes más redondeados para un look premium */
+            overflow: hidden; /* Asegura que las sombras internas se recorten */
+            transition: box-shadow 0.5s ease-in-out; /* Transición suave para el brillo */
         }
+        .section-glow:hover {
+            box-shadow:
+                0 0 60px rgba(34, 211, 238, 0.15),
+                0 0 100px rgba(34, 211, 238, 0.08),
+                0 0 150px rgba(6, 182, 212, 0.05);
+        }
+
+        /* Degradado radial sutil para fondos de sección */
+        .bg-radial-gradient {
+            background-image: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.02) 0%, transparent 70%);
+        }
+
         .highlight-cyan {
-            color: #22D3EE;
+            color: #22D3EE; /* Cian brillante */
+            text-shadow: 0 0 5px rgba(34, 211, 238, 0.4); /* Sombra de texto sutil */
         }
         .button-primary {
             background-color: #06B6D4; /* cyan-500 */
-            color: #030712;
+            color: #030712; /* Texto casi negro */
+            font-weight: 700; /* Bold */
+            padding: 1rem 2.5rem; /* Aumentar padding */
+            border-radius: 0.75rem; /* Bordes más redondeados */
             transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.3); /* Sombra cian */
         }
         .button-primary:hover {
             background-color: #22D3EE; /* cyan-400 */
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.2);
+            transform: translateY(-4px) scale(1.02); /* Efecto de "lift" más pronunciado */
+            box-shadow: 0 12px 25px rgba(6, 182, 212, 0.4); /* Sombra más grande al pasar el mouse */
         }
         .button-secondary {
-            background-color: transparent;
-            border: 2px solid #374151;
-            color: #E5E7EB;
+            background-color: rgba(34, 211, 238, 0.05); /* Fondo muy sutil con tono cian */
+            border: 2px solid #374151; /* Borde gris oscuro */
+            color: #E5E7EB; /* Texto gris claro */
+            font-weight: 600; /* Semibold */
+            padding: 1rem 1.5rem; /* Padding uniforme */
+            border-radius: 0.75rem; /* Bordes más redondeados */
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Sombra suave */
         }
         .button-secondary:hover {
-            border-color: #06B6D4;
-            color: #06B6D4;
+            border-color: #06B6D4; /* Borde cian */
+            color: #06B6D4; /* Texto cian */
+            background-color: rgba(6, 182, 212, 0.1); /* Fondo cian más notorio */
+            transform: translateY(-2px); /* Ligero efecto de elevación */
+            box-shadow: 0 8px 15px rgba(6, 182, 212, 0.2); /* Sombra cian al pasar el mouse */
         }
         .loader {
             border: 4px solid #f3f3f3;
@@ -58,45 +120,178 @@
 
         .pulsing-icon {
             animation: pulse 3s infinite ease-in-out;
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.4), 0 0 50px rgba(34, 211, 238, 0.2); /* Más brillo */
         }
         .floating-shape {
             position: absolute;
-            background-color: rgba(34, 211, 238, 0.05);
+            background-color: rgba(34, 211, 238, 0.03); /* Opacidad muy baja */
             border-radius: 30%;
             animation: float 20s infinite ease-in-out;
             z-index: -1;
+            filter: blur(15px); /* Más desenfoque para efecto etéreo */
+            pointer-events: none; /* No interactuable */
         }
+        /* Variaciones de animación para los floating shapes */
+        .floating-shape:nth-child(1) { animation-duration: 22s; animation-delay: 0s; }
+        .floating-shape:nth-child(2) { animation-duration: 25s; animation-delay: 5s; }
+        .floating-shape:nth-child(3) { animation-duration: 28s; animation-delay: 10s; }
+        .floating-shape:nth-child(4) { animation-duration: 30s; animation-delay: 2s; }
+
+
+        /* Animaciones al entrar en vista */
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(30px); /* Ligeramente debajo de su posición final */
+        }
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 1s ease-out, transform 1s ease-out; /* Transición suave */
+        }
+
+        /* Animación para el scroll hint */
+        @keyframes bounce-fade {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-10px); opacity: 0.5; }
+        }
+        .scroll-hint-animation {
+            animation: bounce-fade 1.5s infinite;
+        }
+
+        /* Animación de borde pulsante para elementos clave */
+        @keyframes pulse-border-cyan {
+            0% { box-shadow: 0 0 0px rgba(34, 211, 238, 0.4); }
+            50% { box-shadow: 0 0 15px rgba(34, 211, 238, 0.8), 0 0 30px rgba(34, 211, 238, 0.6); }
+            100% { box-shadow: 0 0 0px rgba(34, 211, 238, 0.4); }
+        }
+        .pulsing-border-effect {
+            position: relative;
+        }
+        .pulsing-border-effect::before {
+            content: '';
+            position: absolute;
+            top: -5px; /* Ajusta según el grosor deseado */
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid transparent;
+            border-radius: 1.75rem; /* Ligeramente más grande que el contenedor para el efecto */
+            animation: pulse-border-cyan 3s infinite ease-in-out;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(34, 211, 238, 0.2); }
-            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(34, 211, 238, 0.4); }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(34, 211, 238, 0.2), 0 0 40px rgba(34, 211, 238, 0.1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(34, 211, 238, 0.4), 0 0 70px rgba(34, 211, 238, 0.2); }
         }
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
             100% { transform: translateY(0px) rotate(360deg); }
         }
+
+        /* Estilos para íconos de redes sociales */
+        .social-icon {
+            font-size: 1.8rem; /* Tamaño del ícono por defecto en footer */
+            color: #E5E7EB; /* Color por defecto */
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: translateY(-3px) scale(1.1); /* Efecto de elevación y escala sutil */
+        }
+        .social-icon.header-social {
+            font-size: 2.8rem; /* Tamaño más grande para íconos en el header */
+        }
+        .social-icon.fa-telegram:hover {
+            color: #0088CC; /* Color de Telegram */
+        }
+        .social-icon.fa-instagram:hover {
+            color: #E4405F; /* Color de Instagram */
+        }
+        .social-icon.fa-facebook:hover {
+            color: #1877F2; /* Color de Facebook */
+        }
+        .social-icon.fa-tiktok:hover {
+            color: #69C9D0; /* Color de TikTok (principal) */
+        }
+
+        /* Estilos para el banner */
+        .phrase-banner {
+            display: flex; /* Usamos flexbox para alinear contenido */
+            align-items: center; /* Centrar verticalmente */
+            justify-content: center; /* Centrar horizontalmente el contenido */
+            
+            position: relative; 
+            overflow: hidden; 
+            
+            border: none; 
+            border-radius: 0.75rem; 
+            
+            padding: 2.5rem 1.5rem; /* Mantiene el padding generoso */
+
+            margin-top: 2rem; 
+            margin-bottom: 2rem; 
+            
+            background-color: rgba(30, 41, 59, 0.7); 
+            
+            box-shadow: 
+                0 0 45px rgba(34, 211, 238, 0.4), 
+                0 0 90px rgba(6, 182, 212, 0.3), 
+                0 8px 25px rgba(0, 0, 0, 0.4); 
+        }
+        
+        @media (min-width: 768px) {
+            .phrase-banner {
+                /* No hay cambios específicos para el tamaño del h1 en desktop aquí, se maneja por clases Tailwind */
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- 1. Encabezado -->
-    <header class="text-center py-20 md:py-24 px-4 bg-gray-900 section-glow">
-        <img src="https://i.postimg.cc/KjqybfB9/ggggg.png" alt="Logo de para_traders_" class="mx-auto h-24 md:h-28 w-auto">
-        <p class="max-w-3xl mx-auto mt-6 text-xl md:text-2xl text-gray-300">
-            Psicotrading real para traders que quieren dejar de autosabotearse y empezar a operar con cabeza.
-        </p>
+    <header class="text-center py-12 md:py-16 px-4 bg-gray-800 section-glow relative z-10">
+        <!-- Banner con el título principal y logo -->
+        <div id="phrase-banner" class="phrase-banner">
+            <!-- Logo a la izquierda del título -->
+            <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="Logo de para_traders_" class="h-16 w-auto mr-4 md:h-20 md:mr-6 flex-shrink-0" loading="lazy">
+            <h1 class="text-5xl md:text-6xl font-black text-white leading-none tracking-tight">PARA TRADERS</h1>
+        </div>
+
+        <!-- Redes Sociales en Header -->
+        <div class="flex justify-center space-x-8 mt-8 mb-8 animate-fade-in-up">
+            <a href="https://t.me/erostrading" target="_blank" rel="noopener noreferrer" aria-label="Telegram de para_traders_">
+                <i class="fab fa-telegram header-social social-icon text-gray-300 hover:text-cyan-400"></i>
+            </a>
+            <a href="https://www.instagram.com/para_traders__?igsh=MXd0eGdtZ3ZnaWJxag==" target="_blank" rel="noopener noreferrer" aria-label="Instagram de para_traders_">
+                <i class="fab fa-instagram header-social social-icon text-gray-300 hover:text-pink-500"></i>
+            </a>
+            <a href="https://www.facebook.com/paraltraders" target="_blank" rel="noopener noreferrer" aria-label="Facebook de para_traders_">
+                <i class="fab fa-facebook header-social social-icon text-gray-300 hover:text-blue-600"></i>
+            </a>
+            <a href="https://www.tiktok.com/@para_traders?_t=ZT-8yicg47qPio&_r=1" target="_blank" rel="noopener noreferrer" aria-label="TikTok de para_traders_">
+                <i class="fab fa-tiktok header-social social-icon text-gray-300 hover:text-teal-400"></i>
+            </a>
+        </div>
         <!-- CTA Button -->
-        <div class="mt-10">
+        <div class="mt-8 animate-scale-in">
             <a href="https://hotmart.com/en" target="_blank" rel="noopener noreferrer" class="button-primary font-bold text-xl py-4 px-10 rounded-lg inline-block">
                 🔥 ¡Quiero empezar el reto ya!
             </a>
         </div>
+        <!-- Scroll Hint -->
+        <div class="mt-12 flex flex-col items-center text-gray-400 scroll-hint-animation">
+            <span class="text-sm">Desplázate para saber más</span>
+            <i class="fas fa-chevron-down mt-2 text-xl"></i>
+        </div>
         <!-- 3D Animation -->
-        <div class="mt-12 max-w-4xl mx-auto">
+        <div class="mt-16 max-w-4xl mx-auto">
             <div id="brain-animation-container" class="rounded-xl shadow-2xl"></div>
         </div>
     </header>
@@ -104,9 +299,15 @@
     <main class="space-y-24 md:space-y-32 my-24 md:my-32">
 
         <!-- 2. Presentación del curso -->
-        <section class="px-4 max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div class="text-center md:text-left">
-                <h2 class="text-4xl md:text-5xl font-bold">🧠 ¿Qué es el <span class="highlight-cyan">Modo Sniper Mental?</span></h2>
+        <section class="px-4 max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center section-hidden" data-animation-target>
+            <div class="flex justify-center md:justify-start">
+                <div class="w-48 h-48 bg-gray-800 rounded-full flex items-center justify-center border-4 border-gray-700 pulsing-icon">
+                    <!-- Icono de cerebro - MODIFICADO A UN TAMAÑO MÁS GRANDE -->
+                    <i class="fas fa-brain text-7xl text-cyan-400 flex items-center justify-center"></i>
+                </div>
+            </div>
+            <div class="text-left">
+                <h2 class="text-4xl md:text-5xl font-bold">¿Qué es el <span class="highlight-cyan">Modo Sniper Mental</span>?</h2>
                 <p class="mt-6 text-lg text-gray-400">
                     Es un entrenamiento práctico y mental para traders que quieren dejar de operar por impulso y comenzar a tener control sobre su proceso.
                 </p>
@@ -114,80 +315,104 @@
                     Aquí no solo aprendés técnica: <strong class="text-white">aprendés a dominar tu cabeza</strong> antes de tocar una cuenta real.
                 </p>
             </div>
-            <div class="flex justify-center">
-                <div class="w-48 h-48 bg-gray-800 rounded-full flex items-center justify-center border-4 border-gray-700 pulsing-icon">
-                    <svg class="w-24 h-24 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                </div>
-            </div>
         </section>
 
         <!-- 3. Sobre mí -->
-        <section class="px-4 max-w-6xl mx-auto bg-gray-800/50 rounded-2xl p-8 md:p-12 grid md:grid-cols-3 gap-12 items-center section-glow">
+        <section class="px-4 max-w-6xl mx-auto bg-gray-800/50 bg-radial-gradient rounded-2xl p-8 md:p-12 grid md:grid-cols-3 gap-12 items-center section-glow section-hidden" data-animation-target>
             <div class="md:col-span-2">
-                <h2 class="text-4xl md:text-5xl font-bold">🧑‍💻 ¿Quién soy yo para enseñarte esto?</h2>
+                <h2 class="text-4xl md:text-5xl font-bold">¿Quién soy yo y quién te enseñará? 🤝</h2>
                 <p class="mt-6 text-lg text-gray-400">
-                    Soy Andres, trader y educador digital. También pasé por frustraciones, pérdidas y autosabotaje. Hasta que entendí que el trading se gana en la mente.
+                    Soy EROS, el <span class="text-white font-black">FUNDADOR</span> de "para_traders_". También pasé por frustraciones, pérdidas y autosabotaje en el trading, hasta que entendí que se gana en la mente.
+                </p>
+                <p class="mt-4 text-lg text-gray-400">
+                    En este curso, nuestra <span class="text-white font-black">ESPECIALISTA EN PSICOTRADING</span> te guiará con las herramientas y el conocimiento práctico para que domines tus emociones y tu proceso de trading.
                 </p>
                 <p class="mt-4 text-lg text-white italic">
-                    "Hoy quiero que vos aprendas con base y conciencia."
+                    "Mi visión es que vos aprendas con <span class="font-black">BASE Y CONCIENCIA</span>, de la mano de los <span class="font-black">MEJORES</span>."
                 </p>
             </div>
             <div class="flex justify-center">
-                <img src="https://i.postimg.cc/7Yn232DK/Imagen-de-Whats-App-2025-07-17-a-las-12-58-59-4e19fc0f.jpg" alt="Retrato de Andres" class="rounded-full shadow-lg border-4 border-cyan-500 w-48 h-48 md:w-52 md:h-52 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/200x200/111827/E5E7EB?text=Andres';">
+                <img src="https://i.postimg.cc/7Yn232DK/Imagen-de-Whats-App-2025-07-17-a-las-12-58-59-4e19fc0f.jpg" alt="Retrato de EROS" class="rounded-full shadow-lg border-4 border-cyan-500 w-48 h-48 md:w-52 md:h-52 object-cover" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/200x200/111827/E5E7EB?text=Eros';">
             </div>
+            <!-- Floating Shapes adicionales para esta sección -->
+            <div class="floating-shape" style="width: 100px; height: 100px; top: 10%; left: 5%; animation-duration: 25s; animation-delay: 1s;"></div>
+            <div class="floating-shape" style="width: 80px; height: 80px; bottom: 15%; right: 8%; animation-duration: 20s; animation-delay: 7s;"></div>
         </section>
 
         <!-- NEW: Benefits Section -->
-        <section class="px-4 max-w-4xl mx-auto text-center">
+        <section class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
             <h2 class="text-4xl md:text-5xl font-bold">📦 ¿Qué vas a lograr en 5 días?</h2>
             <div class="mt-12 grid sm:grid-cols-2 gap-8 text-left">
-                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4"><span class="text-4xl">🧘</span><div><h3 class="font-bold text-lg">Dominar el impulso de sobreoperar</h3></div></div>
-                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4"><span class="text-4xl">🔫</span><div><h3 class="font-bold text-lg">Aplicar mentalidad sniper en entradas</h3></div></div>
-                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4"><span class="text-4xl">🧠</span><div><h3 class="font-bold text-lg">Detectar tus patrones de autosabotaje</h3></div></div>
-                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4"><span class="text-4xl">📅</span><div><h3 class="font-bold text-lg">Seguir una rutina mental simple</h3></div></div>
-                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4 sm:col-span-2 sm:justify-center"><span class="text-4xl">🎯</span><div><h3 class="font-bold text-lg">Operar con confianza (sin miedo ni euforia)</h3></div></div>
+                <!-- Iconos actualizados con Font Awesome -->
+                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4 text-cyan-400 section-glow">
+                    <i class="fas fa-hand-stop text-4xl"></i>
+                    <div><h3 class="font-bold text-lg text-white">Dominar el impulso de sobreoperar</h3></div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4 text-cyan-400 section-glow">
+                    <i class="fas fa-crosshairs text-4xl"></i>
+                    <div><h3 class="font-bold text-lg text-white">Aplicar mentalidad sniper en entradas</h3></div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4 text-cyan-400 section-glow">
+                    <i class="fas fa-eye text-4xl"></i>
+                    <div><h3 class="font-bold text-lg text-white">Detectar tus patrones de autosabotaje</h3></div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4 text-cyan-400 section-glow">
+                    <i class="fas fa-calendar-alt text-4xl"></i>
+                    <div><h3 class="font-bold text-lg text-white">Seguir una rutina mental simple</h3></div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4 sm:col-span-2 sm:justify-center text-cyan-400 section-glow">
+                    <i class="fas fa-shield-alt text-4xl"></i>
+                    <div><h3 class="font-bold text-lg text-white">Operar con confianza (sin miedo ni euforia)</h3></div>
+                </div>
             </div>
              <div class="mt-10">
                 <a href="https://hotmart.com/en" target="_blank" rel="noopener noreferrer" class="button-primary font-bold text-xl py-4 px-10 rounded-lg inline-block">
-                    ✅ Quiero mis herramientas ahora
+                    ✅ ¡Quiero mis herramientas ahora!
                 </a>
             </div>
+            <!-- Floating Shapes adicionales para esta sección -->
+            <div class="floating-shape" style="width: 120px; height: 120px; top: 70%; left: 0%; animation-duration: 28s; animation-delay: 3s;"></div>
         </section>
 
         <!-- Testimonials -->
-        <section class="px-4 max-w-4xl mx-auto">
+        <section class="px-4 max-w-4xl mx-auto section-hidden" data-animation-target>
              <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Lo que dicen los traders</h2>
             <div class="space-y-8">
-                <div class="bg-gray-800/50 rounded-2xl p-8 text-center">
-                     <svg class="w-12 h-12 text-cyan-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a2.5 2.5 0 00-2.5 2.5v7.5A2.5 2.5 0 0010 14.5h.75a.75.75 0 000-1.5H10A1 1 0 019 12V5a1 1 0 011-1h.01a.75.75 0 000-1.5H10zM14.5 9a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-3a.75.75 0 00-.75-.75zM10 20a10 10 0 100-20 10 10 0 000 20z"/></svg>
+                <div class="bg-gray-800/50 bg-radial-gradient rounded-2xl p-8 text-center relative section-glow">
+                    <!-- Ícono de comillas más estilizado -->
+                    <i class="fas fa-quote-left text-cyan-400 text-5xl mb-4 opacity-70"></i>
                     <p class="text-xl italic text-white">“Con este reto entendí que lo mío no era falta de técnica, sino exceso de emociones.”</p>
                     <p class="mt-4 font-bold text-gray-400">– Camilo A., Medellín</p>
                 </div>
-                <div class="bg-gray-800/50 rounded-2xl p-8 text-center">
-                     <svg class="w-12 h-12 text-cyan-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a2.5 2.5 0 00-2.5 2.5v7.5A2.5 2.5 0 0010 14.5h.75a.75.75 0 000-1.5H10A1 1 0 019 12V5a1 1 0 011-1h.01a.75.75 0 000-1.5H10zM14.5 9a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0v-3a.75.75 0 00-.75-.75zM10 20a10 10 0 100-20 10 10 0 000 20z"/></svg>
+                <div class="bg-gray-800/50 bg-radial-gradient rounded-2xl p-8 text-center relative section-glow">
+                    <!-- Ícono de comillas más estilizado -->
+                    <i class="fas fa-quote-left text-cyan-400 text-5xl mb-4 opacity-70"></i>
                     <p class="text-xl italic text-white">“Antes me frustraba por cerrar mal las operaciones. Ahora tengo reglas mentales claras.”</p>
                     <p class="mt-4 font-bold text-gray-400">– Valentina G., Bucaramanga</p>
                 </div>
             </div>
+            <!-- Floating Shapes adicionales para esta sección -->
+            <div class="floating-shape" style="width: 90px; height: 90px; top: 10%; right: 10%; animation-duration: 23s; animation-delay: 8s;"></div>
+            <div class="floating-shape" style="width: 110px; height: 110px; bottom: 20%; left: 20%; animation-duration: 26s; animation-delay: 12s;"></div>
         </section>
         
-        <!-- Gemini Powered Feature -->
-        <section id="emotion-analyzer-section" class="px-4 max-w-4xl mx-auto text-center">
+        <!-- Gemini Powered Feature - Emotion Analyzer -->
+        <section id="emotion-analyzer-section" class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
             <h2 class="text-4xl md:text-5xl font-bold">✨ Analizador de Emociones</h2>
             <p class="mt-4 text-lg text-gray-400">Describe una operación reciente (buena o mala) y descubre qué emociones y sesgos te afectaron.</p>
-            <div id="analyzer-tool">
-                <div class="mt-8">
-                    <textarea id="trader-text" class="w-full h-40 bg-gray-800 border-2 border-gray-700 rounded-lg p-4 text-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none transition" placeholder="Ej: 'Entré tarde por miedo a perder, luego el precio subió sin mí y sentí mucha frustración. En la siguiente operación, arriesgué más para recuperar...'"></textarea>
-                </div>
-                <div class="mt-6">
+            <div id="analyzer-tool" class="mt-8 p-6 bg-gray-800 rounded-lg shadow-inner-lg border border-gray-700 section-glow pulsing-border-effect">
+                <textarea id="trader-text" class="w-full h-40 bg-gray-900 border-2 border-gray-700 rounded-lg p-4 text-lg text-gray-200 focus:ring-2 focus:ring-cyan-400 focus:outline-none transition" placeholder="Ej: 'Entré tarde por miedo a perder, luego el precio subió sin mí y sentí mucha frustración. En la siguiente operación, arriesgué más para recuperar...'"></textarea>
+                <div class="mt-6 text-center">
                     <button id="analyze-button" class="button-primary font-bold text-xl py-3 px-8 rounded-lg">
-                        Analizar mi Emoción (1 Uso de Prueba)
+                        Analizar mi Emoción (<span id="trial-count">1</span> Uso de Prueba)
                     </button>
                 </div>
+                <div id="loader" class="mt-8 flex justify-center hidden">
+                    <div class="loader"></div>
+                </div>
             </div>
-            <div id="analysis-result" class="mt-8 min-h-[10rem] bg-gray-800/50 rounded-lg p-6 text-left hidden"></div>
-            <div id="loader" class="mt-8 justify-center hidden"><div class="loader"></div></div>
-            <div id="analyzer-locked" class="mt-8 bg-amber-500/10 border-2 border-amber-500 rounded-lg p-8 text-center hidden">
+            <div id="analysis-result" class="mt-8 min-h-[10rem] bg-gray-800/50 rounded-lg p-6 text-left hidden section-glow"></div>
+            <div id="analyzer-locked" class="mt-8 bg-amber-500/10 border-2 border-amber-500 rounded-lg p-8 text-center hidden section-glow">
                 <h3 class="text-2xl font-bold text-amber-300">¡Análisis Completado!</h3>
                 <p class="mt-4 text-lg text-gray-300">Para acceso ilimitado a esta y otras herramientas, completa el curso y únete a la comunidad.</p>
                 <div class="mt-6">
@@ -196,43 +421,56 @@
             </div>
         </section>
 
+
         <!-- Guarantee -->
-        <section class="px-4 max-w-4xl mx-auto">
-            <div class="bg-red-900/20 border-2 border-red-500/50 rounded-2xl p-8 text-center">
+        <section class="px-4 max-w-4xl mx-auto section-hidden" data-animation-target>
+            <div class="bg-red-900/20 border-2 border-red-500/50 rounded-2xl p-8 text-center section-glow">
                 <h3 class="text-2xl font-bold text-white mb-4">🚫 Este reto NO es para ti si...</h3>
                 <p class="text-lg text-gray-300">Buscas fórmulas mágicas o hacerte rico en una semana. Pero si estás cansado de sabotearte solo y listo para tomarte esto en serio, bienvenido.</p>
             </div>
         </section>
 
         <!-- 6. ¿Qué broker usar? -->
-        <section class="px-4 max-w-6xl mx-auto">
+        <section class="px-4 max-w-6xl mx-auto section-hidden" data-animation-target>
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-black text-white">Elegí el Broker Ideal para Vos</h2>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="bg-gray-800 rounded-2xl p-8 border-t-4 border-blue-500"><h3 class="text-2xl font-bold mb-6">🇺🇸 Si estás en Estados Unidos:</h3><p class="text-lg font-semibold bg-blue-500/10 text-blue-300 px-4 py-2 rounded-md mb-6">✅ Usa: Forex.com</p></div>
-                <div class="bg-gray-800 rounded-2xl p-8 border-t-4 border-amber-500"><h3 class="text-2xl font-bold mb-6">🇪🇸 Si estás en España o Europa:</h3><p class="text-lg font-semibold bg-amber-500/10 text-amber-300 px-4 py-2 rounded-md mb-6">✅ Usa: Forex.com, IC Markets, Pepperstone</p></div>
-                <div class="bg-gray-800 rounded-2xl p-8 border-t-4 border-green-500"><h3 class="text-2xl font-bold mb-6">🌎 Si estás en Latinoamérica:</h3><p class="text-lg font-semibold bg-green-500/10 text-green-300 px-4 py-2 rounded-md mb-6">✅ Usa: Forex.com, Deriv, IC Markets, Exness</p></div>
+                <div class="bg-gray-800 rounded-2xl p-8 border-t-4 border-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] section-glow">
+                    <h3 class="text-2xl font-bold mb-6">🇺🇸 Si estás en Estados Unidos:</h3>
+                    <p class="text-lg font-semibold bg-blue-500/10 text-blue-300 px-4 py-2 rounded-md mb-6">✅ Usa: Forex.com</p>
+                </div>
+                <div class="bg-gray-800 rounded-2xl p-8 border-t-4 border-amber-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] section-glow">
+                    <h3 class="text-2xl font-bold mb-6">🇪🇸 Si estás en España o Europa:</h3>
+                    <p class="text-lg font-semibold bg-amber-500/10 text-amber-300 px-4 py-2 rounded-md mb-6">✅ Usa: Forex.com, IC Markets, Pepperstone</p>
+                </div>
+                <div class="bg-gray-800 rounded-2xl p-8 border-t-4 border-green-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] section-glow">
+                    <h3 class="text-2xl font-bold mb-6">🌎 Si estás en Latinoamérica:</h3>
+                    <p class="text-lg font-semibold bg-green-500/10 text-green-300 px-4 py-2 rounded-md mb-6">✅ Usa: Forex.com, Deriv, IC Markets, Exness</p>
+                </div>
             </div>
         </section>
 
         <!-- 7. Botones personalizados -->
-        <section class="px-4 max-w-4xl mx-auto text-center">
+        <section class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
             <h2 class="text-4xl md:text-5xl font-bold">Abrí tu cuenta con seguridad</h2>
             <p class="mt-4 text-lg text-gray-400">Haz clic en el broker que elegiste para empezar.</p>
-            <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <a href="https://www.forex.com" target="_blank" rel="noopener noreferrer" class="button-secondary p-4 rounded-lg font-bold">Abrir en Forex.com ✅</a>
-                <a href="https://www.deriv.com" target="_blank" rel="noopener noreferrer" class="button-secondary p-4 rounded-lg font-bold">Abrir en Deriv ✅</a>
-                <a href="https://www.icmarkets.com" target="_blank" rel="noopener noreferrer" class="button-secondary p-4 rounded-lg font-bold">Abrir en IC Markets ✅</a>
-                <a href="https://www.exness.com" target="_blank" rel="noopener noreferrer" class="button-secondary p-4 rounded-lg font-bold">Abrir en Exness ✅</a>
-                <a href="https://www.pepperstone.com" target="_blank" rel="noopener noreferrer" class="button-secondary p-4 rounded-lg font-bold">Abrir en Pepperstone ✅</a>
+            <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                <!-- Primeros tres botones -->
+                <a href="https://www.forex.com" target="_blank" rel="noopener noreferrer" class="button-secondary font-bold w-full max-w-xs">Abrir en Forex.com ✅</a>
+                <a href="https://www.deriv.com" target="_blank" rel="noopener noreferrer" class="button-secondary font-bold w-full max-w-xs">Abrir en Deriv ✅</a>
+                <a href="https://www.icmarkets.com" target="_blank" rel="noopener noreferrer" class="button-secondary font-bold w-full max-w-xs">Abrir en IC Markets ✅</a>
+                
+                <!-- Los dos botones largos abajo -->
+                <a href="https://www.exness.com" target="_blank" rel="noopener noreferrer" class="button-secondary font-bold w-full max-w-md lg:col-span-full mx-auto">Abrir en Exness ✅</a>
+                <a href="https://www.pepperstone.com" target="_blank" rel="noopener noreferrer" class="button-secondary font-bold w-full max-w-md lg:col-span-full mx-auto">Abrir en Pepperstone ✅</a>
             </div>
         </section>
 
         <!-- 8. Llamado a la acción final -->
-        <section id="cta-final" class="relative px-4 max-w-4xl mx-auto text-center bg-cyan-500/10 rounded-2xl p-12 section-glow overflow-hidden">
-            <div class="floating-shape" style="width: 150px; height: 150px; top: -50px; left: -50px; animation-duration: 22s;"></div>
-            <div class="floating-shape" style="width: 200px; height: 200px; bottom: -80px; right: -80px; animation-duration: 25s; animation-delay: 5s;"></div>
+        <section id="cta-final" class="relative px-4 max-w-4xl mx-auto text-center bg-cyan-500/10 rounded-2xl p-12 section-glow overflow-hidden section-hidden pulsing-border-effect" data-animation-target>
+            <div class="floating-shape" style="width: 150px; height: 150px; top: -50px; left: -50px;"></div>
+            <div class="floating-shape" style="width: 200px; height: 200px; bottom: -80px; right: -80px;"></div>
             <div class="relative">
                 <h2 class="text-5xl md:text-6xl font-black">🚀 ¿Estás listo para cambiar tu mentalidad?</h2>
                 <p class="mt-6 text-xl text-gray-300">
@@ -247,99 +485,121 @@
         </section>
     </main>
 
-    <!-- Disclaimer -->
-    <footer class="text-center py-12 px-4">
-        <img src="https://i.postimg.cc/KjqybfB9/ggggg.png" alt="Logo de para_traders_" class="mx-auto h-12 w-auto mb-4">
+    <!-- Pie de página con logo, redes sociales y disclaimer -->
+    <footer class="text-center py-12 px-4 bg-gray-900 border-t border-gray-700">
+        <!-- Logo en el pie de página -->
+        <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="Logo de para_traders_" class="mx-auto h-16 w-auto mb-4 opacity-70" loading="lazy">
+        
+        <!-- Redes sociales -->
+        <div class="flex justify-center space-x-6 mb-6">
+            <a href="https://t.me/erostrading" target="_blank" rel="noopener noreferrer" aria-label="Telegram de para_traders_">
+                <i class="fab fa-telegram social-icon"></i>
+            </a>
+            <a href="https://www.instagram.com/para_traders__?igsh=MXd0eGdtZ3ZnaWJxag==" target="_blank" rel="noopener noreferrer" aria-label="Instagram de para_traders_">
+                <i class="fab fa-instagram social-icon"></i>
+            </a>
+            <a href="https://www.facebook.com/paraltraders" target="_blank" rel="noopener noreferrer" aria-label="Facebook de para_traders_">
+                <i class="fab fa-facebook social-icon"></i>
+            </a>
+            <a href="https://www.tiktok.com/@para_traders?_t=ZT-8yicg47qPio&_r=1" target="_blank" rel="noopener noreferrer" aria-label="TikTok de para_traders_">
+                <i class="fab fa-tiktok social-icon"></i>
+            </a>
+        </div>
+
         <p class="text-sm text-gray-500 max-w-2xl mx-auto">
-            Este curso tiene fines educativos. Operar en mercados financieros implica riesgos. Los resultados pueden variar según la experiencia y disciplina del usuario.
+            Aviso Legal: "para_traders_" ofrece contenido educativo y de desarrollo personal en el ámbito del psicotrading. Este curso no constituye asesoramiento financiero, de inversión ni recomendación de productos financieros específicos. Operar en los mercados financieros implica un riesgo significativo de pérdida de capital y no es adecuado para todos los inversores. Los resultados pasados no garantizan resultados futuros. Las decisiones de inversión son responsabilidad exclusiva del usuario.
         </p>
     </footer>
 
-    <script type="module">
-        // Three.js Animation
-        const container = document.getElementById('brain-animation-container');
-        if (container) {
-            let scene, camera, renderer, brainGroup, mouseX = 0, mouseY = 0;
-            const windowHalfX = window.innerWidth / 2;
-            const windowHalfY = window.innerHeight / 2;
+    <script defer>
+        // Three.js Animation - (mantengo 'module' para three.js si usa import/export en un archivo separado, pero para un CDN directo, 'defer' es suficiente)
+        // Ya tienes el script de Three.js con defer en el head. No duplico el código aquí.
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('brain-animation-container');
+            if (container && typeof THREE !== 'undefined') { // Asegura que Three.js se haya cargado
+                let scene, camera, renderer, brainGroup, mouseX = 0, mouseY = 0;
+                const windowHalfX = window.innerWidth / 2;
+                const windowHalfY = window.innerHeight / 2;
 
-            function init() {
-                scene = new THREE.Scene();
-                camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 1, 1000);
-                camera.position.z = 12;
-                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-                renderer.setSize(container.clientWidth, container.clientHeight);
-                renderer.setPixelRatio(window.devicePixelRatio);
-                container.appendChild(renderer.domElement);
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-                scene.add(ambientLight);
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                directionalLight.position.set(0, 1, 1);
-                scene.add(directionalLight);
-                brainGroup = new THREE.Group();
-                scene.add(brainGroup);
-                const brainGeometry = new THREE.IcosahedronGeometry(4, 1);
-                const brainMaterial = new THREE.MeshStandardMaterial({
-                    color: 0x22D3EE,
-                    transparent: true,
-                    opacity: 0.15,
-                    wireframe: true,
-                });
-                const brainMesh = new THREE.Mesh(brainGeometry, brainMaterial);
-                brainGroup.add(brainMesh);
-                const candleMaterialGreen = new THREE.MeshStandardMaterial({ color: 0x22C55E, roughness: 0.5 });
-                const candleMaterialRed = new THREE.MeshStandardMaterial({ color: 0xEF4444, roughness: 0.5 });
-                for (let i = 0; i < 15; i++) {
-                    const isGreen = Math.random() > 0.5;
-                    const material = isGreen ? candleMaterialGreen : candleMaterialRed;
-                    const height = Math.random() * 2 + 0.5;
-                    const candleBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, height, 0.4), material);
-                    const wickHeight = height * 0.4;
-                    const wick = new THREE.Mesh(new THREE.BoxGeometry(0.05, height + wickHeight, 0.05), material);
-                    candleBody.position.y = (Math.random() - 0.5) * 4;
-                    candleBody.position.x = (Math.random() - 0.5) * 4;
-                    candleBody.position.z = (Math.random() - 0.5) * 4;
-                    wick.position.copy(candleBody.position);
-                    wick.position.y += (Math.random() - 0.5) * 0.2;
-                    brainGroup.add(candleBody);
-                    brainGroup.add(wick);
-                }
-                document.addEventListener('mousemove', onDocumentMouseMove, false);
-                window.addEventListener('resize', onWindowResize, false);
-            }
-
-            function onWindowResize() {
-                if(container.clientWidth > 0 && container.clientHeight > 0) {
-                    camera.aspect = container.clientWidth / container.clientHeight;
-                    camera.updateProjectionMatrix();
+                function init() {
+                    scene = new THREE.Scene();
+                    camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 1, 1000);
+                    camera.position.z = 12;
+                    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
                     renderer.setSize(container.clientWidth, container.clientHeight);
+                    renderer.setPixelRatio(window.devicePixelRatio);
+                    container.appendChild(renderer.domElement);
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                    scene.add(ambientLight);
+                    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                    directionalLight.position.set(0, 1, 1);
+                    scene.add(directionalLight);
+                    brainGroup = new THREE.Group();
+                    scene.add(brainGroup);
+                    const brainGeometry = new THREE.IcosahedronGeometry(4, 1);
+                    const brainMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x22D3EE,
+                        transparent: true,
+                        opacity: 0.15,
+                        wireframe: true,
+                    });
+                    const brainMesh = new THREE.Mesh(brainGeometry, brainMaterial);
+                    brainGroup.add(brainMesh);
+                    const candleMaterialGreen = new THREE.MeshStandardMaterial({ color: 0x22C55E, roughness: 0.5 });
+                    const candleMaterialRed = new THREE.MeshStandardMaterial({ color: 0xEF4444, roughness: 0.5 });
+                    for (let i = 0; i < 15; i++) {
+                        const isGreen = Math.random() > 0.5;
+                        const material = isGreen ? candleMaterialGreen : candleMaterialRed;
+                        const height = Math.random() * 2 + 0.5;
+                        const candleBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, height, 0.4), material);
+                        const wickHeight = height * 0.4;
+                        const wick = new THREE.Mesh(new THREE.BoxGeometry(0.05, height + wickHeight, 0.05), material);
+                        candleBody.position.y = (Math.random() - 0.5) * 4;
+                        candleBody.position.x = (Math.random() - 0.5) * 4;
+                        candleBody.position.z = (Math.random() - 0.5) * 4;
+                        wick.position.copy(candleBody.position);
+                        wick.position.y += (Math.random() - 0.5) * 0.2;
+                        brainGroup.add(candleBody);
+                        brainGroup.add(wick);
+                    }
+                    document.addEventListener('mousemove', onDocumentMouseMove, false);
+                    window.addEventListener('resize', onWindowResize, false);
                 }
-            }
 
-            function onDocumentMouseMove(event) {
-                mouseX = (event.clientX - windowHalfX) / 200;
-                mouseY = (event.clientY - windowHalfY) / 200;
-            }
+                function onWindowResize() {
+                    if(container.clientWidth > 0 && container.clientHeight > 0) {
+                        camera.aspect = container.clientWidth / container.clientHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(container.clientWidth, container.clientHeight);
+                    }
+                }
 
-            function animate() {
-                requestAnimationFrame(animate);
-                render();
-            }
+                function onDocumentMouseMove(event) {
+                    mouseX = (event.clientX - windowHalfX) / 200;
+                    mouseY = (event.clientY - windowHalfY) / 200;
+                }
 
-            function render() {
-                camera.position.x += (mouseX - camera.position.x) * 0.05;
-                camera.position.y += (-mouseY - camera.position.y) * 0.05;
-                camera.lookAt(scene.position);
-                brainGroup.rotation.y += 0.002;
-                brainGroup.rotation.x += 0.001;
-                renderer.render(scene, camera);
-            }
+                function animate() {
+                    requestAnimationFrame(animate);
+                    render();
+                }
 
-            init();
-            animate();
-        }
+                function render() {
+                    camera.position.x += (mouseX - camera.position.x) * 0.05;
+                    camera.position.y += (-mouseY - camera.position.y) * 0.05;
+                    camera.lookAt(scene.position);
+                    brainGroup.rotation.y += 0.002;
+                    brainGroup.rotation.x += 0.001;
+                    renderer.render(scene, camera);
+                }
+
+                init();
+                animate();
+            }
+        });
     </script>
-    <script>
+    <script defer>
+        // Script para el analizador y las animaciones de scroll
         document.addEventListener('DOMContentLoaded', () => {
             const analyzeButton = document.getElementById('analyze-button');
             const traderTextInput = document.getElementById('trader-text');
@@ -348,17 +608,57 @@
             const analyzerToolDiv = document.getElementById('analyzer-tool');
             const analyzerLockedDiv = document.getElementById('analyzer-locked');
 
+            // --- Nuevas constantes para el contador de usos del analizador ---
+            const MAX_ANALYZER_USES = 1; // Limite de 1 uso de prueba para el analizador en esta página
+            const ANALYZER_USES_KEY = 'landingPageAnalyzerUsed';
+            // -----------------------------------------------------------------
+
             const showLockedState = () => {
                 analyzerToolDiv.classList.add('hidden');
                 resultDiv.classList.add('hidden');
                 analyzerLockedDiv.classList.remove('hidden');
+                // Actualiza el mensaje de bloqueo para esta sección
+                analyzerLockedDiv.querySelector('p').textContent = `Has utilizado tu uso de prueba para el analizador. Para acceso ilimitado a esta y otras herramientas, completa el curso y únete a la comunidad.`;
             };
 
-            if (localStorage.getItem('analyzerUsed') === 'true') {
-                showLockedState();
+            // Revisa si ya se usó el analizador hoy
+            const today = new Date().toDateString();
+            const lastUseDate = localStorage.getItem(ANALYZER_USES_KEY + '_date');
+            let currentUses = parseInt(localStorage.getItem(ANALYZER_USES_KEY) || '0', 10);
+
+            if (lastUseDate !== today) {
+                // Si es un nuevo día, reinicia el contador de usos
+                currentUses = 0;
+                localStorage.setItem(ANALYZER_USES_KEY + '_date', today);
+                localStorage.setItem(ANALYZER_USES_KEY, currentUses);
             }
 
+            // Actualiza el texto del botón y el estado inicial
+            const updateAnalyzerButtonState = () => {
+                const trialCountSpan = document.getElementById('trial-count');
+                if (trialCountSpan) {
+                    const remaining = MAX_ANALYZER_USES - currentUses;
+                    trialCountSpan.textContent = remaining;
+                    analyzeButton.innerHTML = `Analizar mi Emoción (<span id="trial-count">${remaining}</span> Uso${remaining !== 1 ? 's' : ''} de Prueba)`;
+                }
+
+                if (currentUses >= MAX_ANALYZER_USES) {
+                    analyzeButton.disabled = true;
+                    showLockedState();
+                } else {
+                    analyzeButton.disabled = false;
+                    analyzerToolDiv.classList.remove('hidden');
+                    analyzerLockedDiv.classList.add('hidden');
+                }
+            };
+            updateAnalyzerButtonState(); // Llama para establecer el estado inicial
+
             analyzeButton.addEventListener('click', async () => {
+                if (currentUses >= MAX_ANALYZER_USES) {
+                    showLockedState();
+                    return;
+                }
+
                 const userText = traderTextInput.value;
                 if (!userText.trim()) {
                     resultDiv.innerHTML = `<p class="text-red-400">Por favor, describe tu experiencia para analizarla.</p>`;
@@ -369,6 +669,7 @@
                 resultDiv.classList.add('hidden');
                 loader.style.display = 'flex';
                 analyzeButton.disabled = true;
+                analyzeButton.textContent = 'Analizando...'; // Temporalmente, antes de la actualización final
 
                 try {
                     const prompt = `Analiza el siguiente texto de un trader e identifica las emociones dominantes (ej: miedo, avaricia, frustración, confianza), los posibles sesgos cognitivos (ej: aversión a la pérdida, FOMO, sesgo de confirmación) y ofrece una sugerencia corta y accionable. El texto es: "${userText}"`;
@@ -389,8 +690,10 @@
                         }
                     };
 
-                    const apiKey = "AIzaSyDebuUKPwhlHqkBMfTxYF6oM_WSYbs6QEI";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    // NOTA: Para GitHub Pages, necesitarás reemplazar esta clave con tu clave real.
+                    // Para entornos de producción, considera usar un proxy de backend para proteger tu clave.
+                    const apiKey = ""; // ¡Mantenemos el valor vacío para que Canvas lo provea en runtime!
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                     
                     const response = await fetch(apiUrl, {
                         method: 'POST',
@@ -399,26 +702,45 @@
                     });
 
                     if (!response.ok) {
-                        throw new Error(`API request failed with status ${response.status}`);
+                        const errorBody = await response.text();
+                        console.error(`API request failed with status ${response.status}:`, errorBody);
+                        throw new Error(`Error de la API: ${response.status} - ${errorBody.substring(0, 150)}...`);
                     }
                     
                     const result = await response.json();
                     
-                    if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
+                    if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
                         const analysis = JSON.parse(result.candidates[0].content.parts[0].text);
                         displayResults(analysis);
-                        localStorage.setItem('analyzerUsed', 'true');
-                        setTimeout(showLockedState, 8000); 
+                        
+                        currentUses++;
+                        localStorage.setItem(ANALYZER_USES_KEY, currentUses);
+                        localStorage.setItem(ANALYZER_USES_KEY + '_date', today); // Asegurarse de que la fecha se actualice
+
+                        // Muestra el resultado y luego, después de un tiempo, el estado bloqueado si se acabaron los usos.
+                        setTimeout(() => {
+                            if (currentUses >= MAX_ANALYZER_USES) {
+                                showLockedState();
+                            } else {
+                                updateAnalyzerButtonState(); // Vuelve a mostrar el botón si quedan usos
+                            }
+                        }, 5000); // 5 segundos para que el usuario lea el resultado antes de bloquear/actualizar
+                        
                     } else {
-                        throw new Error("Respuesta inválida de la API.");
+                        console.error("Respuesta inválida de la API. Objeto completo:", result);
+                        throw new Error("Respuesta inválida de la API o contenido vacío.");
                     }
 
                 } catch (error) {
-                    console.error(error);
-                    resultDiv.innerHTML = `<p class="text-red-400">Hubo un error al analizar el texto. Por favor, intenta de nuevo.</p>`;
+                    console.error("Error al llamar a la API de Gemini:", error);
+                    resultDiv.innerHTML = `<p class="text-red-400">Hubo un error al analizar el texto: ${error.message}. Por favor, intenta de nuevo o verifica tu clave de API si estás en GitHub Pages.</p>`;
                     resultDiv.classList.remove('hidden');
                 } finally {
                     loader.style.display = 'none';
+                    // El estado del botón se maneja en el setTimeout o en el catch de API_KEY_INVALID
+                    if (currentUses < MAX_ANALYZER_USES) { // Solo si no se ha bloqueado ya
+                        updateAnalyzerButtonState();
+                    }
                 }
             });
 
@@ -453,6 +775,30 @@
                 resultDiv.innerHTML = html;
                 resultDiv.classList.remove('hidden');
             }
+
+            // --- Scroll Animations ---
+            const sectionsToAnimate = document.querySelectorAll('[data-animation-target]');
+
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // Porcentaje del elemento que debe estar visible para activar
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('section-visible');
+                        entry.target.classList.remove('section-hidden');
+                        observer.unobserve(entry.target); // Detiene la observación una vez que se anima
+                    }
+                });
+            }, observerOptions);
+
+            sectionsToAnimate.forEach(section => {
+                section.classList.add('section-hidden'); // Asegura que estén ocultas al inicio
+                observer.observe(section);
+            });
         });
     </script>
 
