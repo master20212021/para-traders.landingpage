@@ -28,7 +28,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAAD9gGz5AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAWJQAAFiUAUFXgxwAAABhQTFRFAAAAsND/sND/sND/sND/sND/sND/sND/sND/jQ0vAAAACnRSTlMAAAAA+wD49z8nBA+MvK+1nQAAABpJREFUeJxjYmBgZGSAjYAAhjFGEGAABgBcA1M77D2NwgAAAABJRU5ErkJggg=='); /* Pequeña imagen de grano */
+            background-image: url('data:image/png;base64,iVB0SUhEUgAAADAAAAAwCAMAAAD9gGz5AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAWJQAAFiUAUFXgxwAAABhQTFRFAAAAsND/sND/sND/sND/sND/sND/sND/sND/jQ0vAAAACnRSTlMAAAAA+wD49z8nBA+MvK+1nQAAABpJREFUeJxjYmBgZGSAjYAAhjFGEGAABgBcA1M77D2NwgAAAABJRU5ErkJggg=='); /* Pequeña imagen de grano */
             background-repeat: repeat;
             opacity: 0.02; /* Muy baja opacidad */
             pointer-events: none; /* Asegura que no interfiera con interacciones */
@@ -310,6 +310,31 @@
 
     <main class="space-y-24 md:space-y-32 my-24 md:my-32">
 
+        <!-- Gemini Powered Feature - Emotion Analyzer - MOVIDO AQUÍ -->
+        <section id="emotion-analyzer-section" class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
+            <h2 class="text-4xl md:text-5xl font-bold">✨ ANALIZADOR DE EMOCIONES</h2>
+            <p class="mt-4 text-lg text-gray-400">Describe una operación reciente (buena o mala) y descubre qué emociones y sesgos te afectaron.</p>
+            <div id="analyzer-tool" class="mt-8 p-6 bg-gray-800 rounded-lg shadow-inner-lg border border-gray-700 section-glow pulsing-border-effect">
+                <textarea id="trader-text" class="w-full h-40 bg-gray-900 border-2 border-gray-700 rounded-lg p-4 text-lg text-gray-200 focus:ring-2 focus:ring-cyan-400 focus:outline-none transition" placeholder="Ej: 'Entré tarde por miedo a perder, luego el precio subió sin mí y sentí mucha frustración. En la siguiente operación, arriesgué más para recuperar...'"></textarea>
+                <div class="mt-6 text-center">
+                    <button id="analyze-button" class="button-primary font-bold text-xl py-3 px-8 rounded-lg">
+                        Analizar mi Emoción (<span id="trial-count">1</span> Uso de Prueba)
+                    </button>
+                </div>
+                <div id="loader" class="mt-8 flex justify-center hidden">
+                    <div class="loader"></div>
+                </div>
+            </div>
+            <div id="analysis-result" class="mt-8 min-h-[10rem] bg-gray-800/50 rounded-lg p-6 text-left hidden section-glow"></div>
+            <div id="analyzer-locked" class="mt-8 bg-amber-500/10 border-2 border-amber-500 rounded-lg p-8 text-center hidden section-glow">
+                <h3 class="text-2xl font-bold text-amber-300">¡Análisis Completado!</h3>
+                <p class="mt-4 text-lg text-gray-300">Para acceso ilimitado a esta y otras herramientas, completa el curso y únete a la comunidad.</p>
+                <div class="mt-6">
+                     <a href="https://hotmart.com/en" target="_blank" rel="noopener noreferrer" class="button-primary font-bold text-xl py-3 px-8 rounded-lg">Empezar el Curso</a>
+                </div>
+            </div>
+        </section>
+
         <!-- 2. Presentación del curso -->
         <section class="px-4 max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center section-hidden" data-animation-target>
             <div class="flex justify-center md:justify-start">
@@ -408,31 +433,6 @@
             <div class="floating-shape" style="width: 110px; height: 110px; bottom: 20%; left: 20%; animation-duration: 26s; animation-delay: 12s;"></div>
         </section>
         
-        <!-- Gemini Powered Feature - Emotion Analyzer -->
-        <section id="emotion-analyzer-section" class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
-            <h2 class="text-4xl md:text-5xl font-bold">✨ ANALIZADOR DE EMOCIONES</h2>
-            <p class="mt-4 text-lg text-gray-400">Describe una operación reciente (buena o mala) y descubre qué emociones y sesgos te afectaron.</p>
-            <div id="analyzer-tool" class="mt-8 p-6 bg-gray-800 rounded-lg shadow-inner-lg border border-gray-700 section-glow pulsing-border-effect">
-                <textarea id="trader-text" class="w-full h-40 bg-gray-900 border-2 border-gray-700 rounded-lg p-4 text-lg text-gray-200 focus:ring-2 focus:ring-cyan-400 focus:outline-none transition" placeholder="Ej: 'Entré tarde por miedo a perder, luego el precio subió sin mí y sentí mucha frustración. En la siguiente operación, arriesgué más para recuperar...'"></textarea>
-                <div class="mt-6 text-center">
-                    <button id="analyze-button" class="button-primary font-bold text-xl py-3 px-8 rounded-lg">
-                        Analizar mi Emoción (<span id="trial-count">1</span> Uso de Prueba)
-                    </button>
-                </div>
-                <div id="loader" class="mt-8 flex justify-center hidden">
-                    <div class="loader"></div>
-                </div>
-            </div>
-            <div id="analysis-result" class="mt-8 min-h-[10rem] bg-gray-800/50 rounded-lg p-6 text-left hidden section-glow"></div>
-            <div id="analyzer-locked" class="mt-8 bg-amber-500/10 border-2 border-amber-500 rounded-lg p-8 text-center hidden section-glow">
-                <h3 class="text-2xl font-bold text-amber-300">¡Análisis Completado!</h3>
-                <p class="mt-4 text-lg text-gray-300">Para acceso ilimitado a esta y otras herramientas, completa el curso y únete a la comunidad.</p>
-                <div class="mt-6">
-                     <a href="https://hotmart.com/en" target="_blank" rel="noopener noreferrer" class="button-primary font-bold text-xl py-3 px-8 rounded-lg">Empezar el Curso</a>
-                </div>
-            </div>
-        </section>
-
 
         <!-- Guarantee -->
         <section class="px-4 max-w-4xl mx-auto section-hidden" data-animation-target>
@@ -618,7 +618,7 @@
             const phrases = [
                 "Prepara tu mente, domina el mercado.",
                 "La disciplina es tu mejor estrategia.",
-                "Controla tus emociones, controla tus operaciones.",
+                "Mente Clara, Operaciones Exactas.", 
                 "Trading real: del impulso a la conciencia.",
                 "El éxito comienza en tu mentalidad."
             ];
@@ -738,7 +738,7 @@
 
                     // NOTA: Para GitHub Pages, necesitarás reemplazar esta clave con tu clave real.
                     // Para entornos de producción, considera usar un proxy de backend para proteger tu clave.
-                    const apiKey = ""; // ¡Mantenemos el valor vacío para que Canvas lo provea en runtime!
+                    const apiKey = "AIzaSyDebuUKPwhlHqkBMfTxYF6oM_WSYbs6QEI"; // ¡Mantenemos el valor vacío para que Canvas lo provea en runtime!
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
                     
                     const response = await fetch(apiUrl, {
