@@ -40,8 +40,9 @@
             --heading-font: 'Montserrat', sans-serif; /* Montserrat aplicada por defecto ahora */
         }
 
-        h1 {
-            font-family: var(--heading-font); /* Aplica la variable CSS a todos los h1 */
+        /* Aplica la fuente Montserrat a todos los h2 también */
+        h2 {
+            font-family: var(--heading-font);
         }
 
         /* Efecto de brillo más pronunciado y ligeramente animado */
@@ -240,12 +241,20 @@
             
             background-color: rgba(30, 41, 59, 0.7); 
             
+            /* Sombra del banner: reducida la opacidad para menos saturación */
             box-shadow: 
-                0 0 45px rgba(34, 211, 238, 0.4), 
-                0 0 90px rgba(6, 182, 212, 0.3), 
-                0 8px 25px rgba(0, 0, 0, 0.4); 
+                0 0 8px rgba(34, 211, 238, 0.05), /* Reducido aún más */
+                0 0 15px rgba(6, 182, 212, 0.03), /* Reducido aún más */
+                0 1px 5px rgba(0, 0, 0, 0.05); /* Reducido aún más */
+            min-height: 100px; /* Asegura un alto mínimo para las frases */
         }
         
+        /* Estilo para el logo dentro del banner de frases */
+        #dynamic-logo {
+            transition: opacity 1s ease-in-out; /* Misma transición que la frase */
+            margin-right: 1rem; /* Espacio entre el logo y la frase */
+        }
+
         @media (min-width: 768px) {
             .phrase-banner {
                 /* No hay cambios específicos para el tamaño del h1 en desktop aquí, se maneja por clases Tailwind */
@@ -257,11 +266,11 @@
 
     <!-- 1. Encabezado -->
     <header class="text-center py-12 md:py-16 px-4 bg-gray-800 section-glow relative z-10">
-        <!-- Banner con el título principal y logo -->
+        <!-- Banner con frases dinámicas y logo -->
         <div id="phrase-banner" class="phrase-banner">
-            <!-- Logo a la izquierda del título -->
-            <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="Logo de para_traders_" class="h-16 w-auto mr-4 md:h-20 md:mr-6 flex-shrink-0" loading="lazy">
-            <h1 class="text-5xl md:text-6xl font-black text-white leading-none tracking-tight">PARA TRADERS</h1>
+            <!-- Logo de la academia -->
+            <img id="dynamic-logo" src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="Logo para_traders_" class="h-16 w-auto md:h-20 flex-shrink-0" loading="lazy">
+            <p id="dynamic-phrase" class="text-3xl md:text-4xl font-black text-white leading-tight tracking-tight text-center transition-opacity duration-1000 ease-in-out" style="font-family: var(--heading-font);"></p>
         </div>
 
         <!-- Redes Sociales en Header -->
@@ -307,7 +316,7 @@
                 </div>
             </div>
             <div class="text-left">
-                <h2 class="text-4xl md:text-5xl font-bold">¿Qué es el <span class="highlight-cyan">Modo Sniper Mental</span>?</h2>
+                <h2 class="text-4xl md:text-5xl font-bold">¿QUÉ ES EL <span class="highlight-cyan">MODO SNIPER MENTAL</span>?</h2>
                 <p class="mt-6 text-lg text-gray-400">
                     Es un entrenamiento práctico y mental para traders que quieren dejar de operar por impulso y comenzar a tener control sobre su proceso.
                 </p>
@@ -320,7 +329,7 @@
         <!-- 3. Sobre mí -->
         <section class="px-4 max-w-6xl mx-auto bg-gray-800/50 bg-radial-gradient rounded-2xl p-8 md:p-12 grid md:grid-cols-3 gap-12 items-center section-glow section-hidden" data-animation-target>
             <div class="md:col-span-2">
-                <h2 class="text-4xl md:text-5xl font-bold">¿Quién soy yo y quién te enseñará? 🤝</h2>
+                <h2 class="text-4xl md:text-5xl font-bold">¿QUIÉN SOY YO Y QUIÉN TE ENSEÑARÁ? 🤝</h2>
                 <p class="mt-6 text-lg text-gray-400">
                     Soy EROS, el <span class="text-white font-black">FUNDADOR</span> de "para_traders_". También pasé por frustraciones, pérdidas y autosabotaje en el trading, hasta que entendí que se gana en la mente.
                 </p>
@@ -341,7 +350,7 @@
 
         <!-- NEW: Benefits Section -->
         <section class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
-            <h2 class="text-4xl md:text-5xl font-bold">📦 ¿Qué vas a lograr en 5 días?</h2>
+            <h2 class="text-4xl md:text-5xl font-bold">📦 ¿QUÉ VAS A LOGRAR EN 5 DÍAS?</h2>
             <div class="mt-12 grid sm:grid-cols-2 gap-8 text-left">
                 <!-- Iconos actualizados con Font Awesome -->
                 <div class="bg-gray-800 p-6 rounded-lg flex items-center gap-4 text-cyan-400 section-glow">
@@ -376,7 +385,7 @@
 
         <!-- Testimonials -->
         <section class="px-4 max-w-4xl mx-auto section-hidden" data-animation-target>
-             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Lo que dicen los traders</h2>
+             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">LO QUE DICEN LOS TRADERS</h2>
             <div class="space-y-8">
                 <div class="bg-gray-800/50 bg-radial-gradient rounded-2xl p-8 text-center relative section-glow">
                     <!-- Ícono de comillas más estilizado -->
@@ -398,7 +407,7 @@
         
         <!-- Gemini Powered Feature - Emotion Analyzer -->
         <section id="emotion-analyzer-section" class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
-            <h2 class="text-4xl md:text-5xl font-bold">✨ Analizador de Emociones</h2>
+            <h2 class="text-4xl md:text-5xl font-bold">✨ ANALIZADOR DE EMOCIONES</h2>
             <p class="mt-4 text-lg text-gray-400">Describe una operación reciente (buena o mala) y descubre qué emociones y sesgos te afectaron.</p>
             <div id="analyzer-tool" class="mt-8 p-6 bg-gray-800 rounded-lg shadow-inner-lg border border-gray-700 section-glow pulsing-border-effect">
                 <textarea id="trader-text" class="w-full h-40 bg-gray-900 border-2 border-gray-700 rounded-lg p-4 text-lg text-gray-200 focus:ring-2 focus:ring-cyan-400 focus:outline-none transition" placeholder="Ej: 'Entré tarde por miedo a perder, luego el precio subió sin mí y sentí mucha frustración. En la siguiente operación, arriesgué más para recuperar...'"></textarea>
@@ -425,7 +434,7 @@
         <!-- Guarantee -->
         <section class="px-4 max-w-4xl mx-auto section-hidden" data-animation-target>
             <div class="bg-red-900/20 border-2 border-red-500/50 rounded-2xl p-8 text-center section-glow">
-                <h3 class="text-2xl font-bold text-white mb-4">🚫 Este reto NO es para ti si...</h3>
+                <h3 class="text-2xl font-bold text-white mb-4">🚫 ESTE RETO NO ES PARA TI SI...</h3>
                 <p class="text-lg text-gray-300">Buscas fórmulas mágicas o hacerte rico en una semana. Pero si estás cansado de sabotearte solo y listo para tomarte esto en serio, bienvenido.</p>
             </div>
         </section>
@@ -433,7 +442,7 @@
         <!-- 6. ¿Qué broker usar? -->
         <section class="px-4 max-w-6xl mx-auto section-hidden" data-animation-target>
             <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-black text-white">Elegí el Broker Ideal para Vos</h2>
+                <h2 class="text-4xl md:text-5xl font-black text-white">ELEGÍ EL BROKER IDEAL PARA VOS</h2>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="bg-gray-800 rounded-2xl p-8 border-t-4 border-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] section-glow">
@@ -453,7 +462,7 @@
 
         <!-- 7. Botones personalizados -->
         <section class="px-4 max-w-4xl mx-auto text-center section-hidden" data-animation-target>
-            <h2 class="text-4xl md:text-5xl font-bold">Abrí tu cuenta con seguridad</h2>
+            <h2 class="text-4xl md:text-5xl font-bold">ABRÍ TU CUENTA CON SEGURIDAD</h2>
             <p class="mt-4 text-lg text-gray-400">Haz clic en el broker que elegiste para empezar.</p>
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
                 <!-- Primeros tres botones -->
@@ -472,7 +481,7 @@
             <div class="floating-shape" style="width: 150px; height: 150px; top: -50px; left: -50px;"></div>
             <div class="floating-shape" style="width: 200px; height: 200px; bottom: -80px; right: -80px;"></div>
             <div class="relative">
-                <h2 class="text-5xl md:text-6xl font-black">🚀 ¿Estás listo para cambiar tu mentalidad?</h2>
+                <h2 class="text-5xl md:text-6xl font-black">🚀 ¿ESTÁS LISTO PARA CAMBIAR TU MENTALIDAD?</h2>
                 <p class="mt-6 text-xl text-gray-300">
                     Completá el curso, abrí tu cuenta y empezá a construir resultados reales con control mental y estrategia.
                 </p>
@@ -487,8 +496,8 @@
 
     <!-- Pie de página con logo, redes sociales y disclaimer -->
     <footer class="text-center py-12 px-4 bg-gray-900 border-t border-gray-700">
-        <!-- Logo en el pie de página -->
-        <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="Logo de para_traders_" class="mx-auto h-16 w-auto mb-4 opacity-70" loading="lazy">
+        <!-- Logo en el pie de página - Reposicionado y más grande -->
+        <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="Logo de para_traders_" class="mx-auto h-20 w-auto mb-6 opacity-80" loading="lazy">
         
         <!-- Redes sociales -->
         <div class="flex justify-center space-x-6 mb-6">
@@ -601,6 +610,39 @@
     <script defer>
         // Script para el analizador y las animaciones de scroll
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Frases Dinámicas ---
+            const phrases = [
+                "Prepara tu mente, domina el mercado.",
+                "La disciplina es tu mejor estrategia.",
+                "Controla tus emociones, controla tus operaciones.",
+                "Trading real: del impulso a la conciencia.",
+                "El éxito comienza en tu mentalidad."
+            ];
+            let currentPhraseIndex = 0;
+            const dynamicPhraseElement = document.getElementById('dynamic-phrase');
+            const dynamicLogoElement = document.getElementById('dynamic-logo'); // Obtener el elemento del logo
+
+            function updatePhrase() {
+                if (dynamicPhraseElement && dynamicLogoElement) {
+                    dynamicPhraseElement.style.opacity = '0'; // Iniciar fade out de frase
+                    dynamicLogoElement.style.opacity = '0'; // Iniciar fade out de logo
+
+                    setTimeout(() => {
+                        currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+                        dynamicPhraseElement.textContent = phrases[currentPhraseIndex];
+                        dynamicPhraseElement.style.opacity = '1'; // Iniciar fade in de frase
+                        dynamicLogoElement.style.opacity = '1'; // Iniciar fade in de logo
+                    }, 1000); // Esperar 1 segundo para el fade out antes de cambiar y hacer fade in
+                }
+            }
+
+            if (dynamicPhraseElement && dynamicLogoElement) {
+                dynamicPhraseElement.textContent = phrases[currentPhraseIndex]; // Establecer frase inicial
+                dynamicLogoElement.style.opacity = '1'; // Asegurar que el logo inicial sea visible
+                setInterval(updatePhrase, 5000); // Cambiar frase cada 5 segundos
+            }
+
+            // --- Analizador de Emociones ---
             const analyzeButton = document.getElementById('analyze-button');
             const traderTextInput = document.getElementById('trader-text');
             const resultDiv = document.getElementById('analysis-result');
