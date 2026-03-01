@@ -21,6 +21,7 @@
     initModal();
     initDemoButton();
     initMobileMenu();
+    handleReturnScroll();
   });
 
   // ═══ PARTICLE CANVAS ═══════════════════════
@@ -360,5 +361,21 @@
         document.body.style.overflow = "";
       }
     });
+  }
+
+  // ═══ RETURN SCROLL ═════════════════════════
+  function handleReturnScroll() {
+    if (window.location.hash) {
+      const target = document.querySelector(window.location.hash);
+      if (target) {
+        // Make reveal elements visible immediately so scroll target is correct
+        target.classList.add("visible");
+        target.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
+        // Scroll after a brief paint delay
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+    }
   }
 })();
