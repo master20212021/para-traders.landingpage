@@ -366,17 +366,17 @@
 
   // ═══ RETURN SCROLL ═════════════════════════
   function handleReturnScroll() {
-    if (window.location.hash) {
-      const target = document.querySelector(window.location.hash);
-      if (target) {
-        // Make reveal elements visible immediately so scroll target is correct
-        target.classList.add("visible");
-        target.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
-        // Scroll after a brief paint delay
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
-      }
+    // Only scroll when returning from a tool page via "Volver al inicio"
+    if (window.location.hash !== "#return-tools") return;
+    const target = document.getElementById("tools");
+    if (target) {
+      target.classList.add("visible");
+      target.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+      // Clean up the URL hash so it doesn't persist
+      history.replaceState(null, "", window.location.pathname);
     }
   }
 
