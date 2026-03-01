@@ -369,15 +369,34 @@
     // Only scroll when returning from a tool page via "Volver al inicio"
     if (window.location.hash !== "#return-tools") return;
     const target = document.getElementById("tools");
-    if (target) {
-      target.classList.add("visible");
-      target.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
+    if (!target) return;
+
+    // Make ALL reveal elements visible so sections have real height
+    // (needed for accurate scroll position calculation)
+    document.querySelectorAll(".reveal").forEach((el) => {
+      el.classList.add("visible");
+    });
+
+    // Clean up hash from URL
+    history.replaceState(null, "", window.location.pathname);
+
+    // Use requestAnimationFrame + timeout for mobile browser compatibility
+    requestAnimationFrame(() => {
       setTimeout(() => {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-      // Clean up the URL hash so it doesn't persist
-      history.replaceState(null, "", window.location.pathname);
-    }
+        // Calculate position manually as fallback (more reliable on mobile)
+        const rect = target.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const topbarHeight = 60; // approximate topbar height
+        const targetY = rect.top + scrollTop - topbarHeight;
+
+        // Try smooth scroll, with instant fallback
+        try {
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        } catch (e) {
+          window.scrollTo(0, targetY);
+        }
+      }, 300);
+    });
   }
 
   // ═══ FLOATING APP TOAST ════════════════════
