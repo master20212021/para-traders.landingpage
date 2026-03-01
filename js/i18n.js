@@ -63,8 +63,8 @@ const i18n = {
     mod3_desc: "Construye resiliencia emocional. Técnicas de respiración, anclas mentales y rutinas de alto rendimiento.",
     mod4_title: "Tu Plan de Acción",
     mod4_desc: "Framework completo: checklist pre-mercado, plan de contingencia y sistema de gestión emocional diario.",
-    mod5_title: "Demostración en Vivo",
-    mod5_desc: "Observa cómo se aplica el sistema completo en una sesión real de trading. De la teoría a la práctica.",
+    mod5_title: "La Demo: Tu Gimnasio Mental",
+    mod5_desc: "Aprende a usar la cuenta demo como herramienta real de entrenamiento. Rutina diaria, manejo del FOMO y disciplina antes de operar con dinero real.",
     mod6_title: "Cierre y Compromiso",
     mod6_desc: "Consolida todo lo aprendido. Firma tu contrato personal y únete a la comunidad de traders transformados.",
 
@@ -232,8 +232,8 @@ const i18n = {
     mod3_desc: "Build emotional resilience. Breathing techniques, mental anchors, and high-performance routines.",
     mod4_title: "Your Action Plan",
     mod4_desc: "Complete framework: pre-market checklist, contingency plan, and daily emotional management system.",
-    mod5_title: "Live Demonstration",
-    mod5_desc: "Watch how the complete system is applied in a real trading session. From theory to practice.",
+    mod5_title: "The Demo: Your Mental Gym",
+    mod5_desc: "Learn to use the demo account as a real training tool. Daily routine, FOMO management, and discipline before trading with real money.",
     mod6_title: "Closing & Commitment",
     mod6_desc: "Consolidate everything learned. Sign your personal contract and join the community of transformed traders.",
 
