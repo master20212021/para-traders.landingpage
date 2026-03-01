@@ -20,6 +20,7 @@
     initToolCards();
     initModal();
     initDemoButton();
+    initMobileMenu();
   });
 
   // ═══ PARTICLE CANVAS ═══════════════════════
@@ -327,6 +328,37 @@
     if (!btn) return;
     btn.addEventListener("click", () => {
       document.getElementById("roadmap")?.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+
+  // ═══ MOBILE MENU ═══════════════════════════
+  function initMobileMenu() {
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobile-menu");
+    if (!hamburger || !mobileMenu) return;
+
+    hamburger.addEventListener("click", () => {
+      const isActive = hamburger.classList.toggle("active");
+      mobileMenu.classList.toggle("active", isActive);
+      document.body.style.overflow = isActive ? "hidden" : "";
+    });
+
+    // Close menu when clicking a link
+    mobileMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("active");
+        mobileMenu.classList.remove("active");
+        document.body.style.overflow = "";
+      });
+    });
+
+    // Close on resize if desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1024) {
+        hamburger.classList.remove("active");
+        mobileMenu.classList.remove("active");
+        document.body.style.overflow = "";
+      }
     });
   }
 })();
