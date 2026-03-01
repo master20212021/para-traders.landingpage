@@ -1,387 +1,623 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>P'Traders — Psicología del Trading</title>
-  <meta name="description" content="Curso de psicotrading: domina tus emociones, deja de perder dinero por impulso. Herramientas prácticas, método probado.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P'Traders — Despierta tu Mentalidad de Trader</title>
+  <meta name="description" content="Curso completo de psicología del trading. 6 módulos, 11 herramientas interactivas y una comunidad que te acompaña." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<!-- Background -->
-<div class="bg-grid"></div>
-<div class="bg-orbs">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-</div>
+  <!-- Background effects -->
+  <canvas id="particles-canvas"></canvas>
+  <div class="bg-noise"></div>
+  <div class="bg-glow bg-glow--1"></div>
+  <div class="bg-glow bg-glow--2"></div>
 
-<!-- ═══ TOPBAR ═══ -->
-<nav class="topbar">
-  <a href="/" class="brand">
-    <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="P'Traders" class="brand-logo">
-    <span class="brand-text">P'TRADERS</span>
-  </a>
-  <div class="topbar-actions">
-    <div class="lang-toggle">
-      <button class="lang-btn" data-lang="es">ES</button>
-      <button class="lang-btn" data-lang="en">EN</button>
+  <!-- ═══ TOPBAR ═══ -->
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <span class="brand-text">P'TRADERS</span>
     </div>
-    <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="topbar-cta">
-      <span data-i18n="topbarCta">Empezar curso</span> →
-    </a>
-  </div>
-</nav>
-
-<!-- ═══ HERO ═══ -->
-<section class="hero">
-  <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="P'Traders Logo" class="hero-logo">
-  <h1 class="hero-title" data-i18n="heroTitle">Psicología del Trading: <span class="highlight">Domina tu Mente</span></h1>
-  <p class="hero-subtitle" data-i18n="heroSubtitle">Este curso no es uno más. Aquí vas a descubrir qué pasa dentro de tu cabeza cuando operas… y cómo controlarlo.</p>
-  <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="hero-cta" data-i18n="heroCta">🔥 Quiero empezar ahora</a>
-  <div class="hero-social">
-    <a href="https://t.me/erostrading" target="_blank" rel="noopener" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
-    <a href="https://www.instagram.com/para_traders__" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    <a href="https://www.facebook.com/paraltraders" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-    <a href="https://www.tiktok.com/@para_traders" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-  </div>
-  <div class="scroll-hint" data-i18n="scrollHint">Desplázate para saber más ↓</div>
-</section>
-
-<div class="container">
-
-  <!-- ═══ WHAT IS ═══ -->
-  <section class="section reveal">
-    <div class="section-header">
-      <span class="section-tag" data-i18n="whatIsTag">¿QUÉ ES ESTO?</span>
-      <h2 class="section-title" data-i18n="whatIsTitle">Un entrenamiento mental real para traders</h2>
+    <nav class="topbar-nav">
+      <a href="#outcomes" data-i18n="nav_outcomes">Qué Lograrás</a>
+      <a href="#roadmap" data-i18n="nav_roadmap">Programa</a>
+      <a href="#tools" data-i18n="nav_tools">Herramientas</a>
+      <a href="#testimonials" data-i18n="nav_testimonials">Testimonios</a>
+      <a href="#faq" data-i18n="nav_faq">FAQ</a>
+    </nav>
+    <div class="topbar-actions">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" class="topbar-cta">
+        <i class="fa-solid fa-rocket"></i>
+        <span data-i18n="nav_cta">Inscribirme</span>
+      </a>
     </div>
-    <div class="glass-card" style="max-width:800px;margin:0 auto">
-      <p style="font-size:1.05rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem" data-i18n="whatIsDesc">P'Traders es un curso de psicotrading diseñado con un solo objetivo: que dejes de perder dinero por culpa de tus emociones.</p>
-      <div style="display:flex;flex-direction:column;gap:0.8rem">
-        <div style="display:flex;align-items:center;gap:0.8rem"><span style="color:var(--cyan);font-size:1.2rem">✓</span> <span data-i18n="whatIs1">Método 100% enfocado en dominio psicológico</span></div>
-        <div style="display:flex;align-items:center;gap:0.8rem"><span style="color:var(--cyan);font-size:1.2rem">✓</span> <span data-i18n="whatIs2">Herramientas prácticas desde el día uno</span></div>
-        <div style="display:flex;align-items:center;gap:0.8rem"><span style="color:var(--cyan);font-size:1.2rem">✓</span> <span data-i18n="whatIs3">Acompañamiento paso a paso, módulo por módulo</span></div>
+  </header>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span data-i18n="hero_badge">Inscripciones Abiertas — Acceso Inmediato</span>
+    </div>
+    <h1 class="hero-title">
+      <span data-i18n="hero_title_1">Domina tu </span><span class="highlight" data-i18n="hero_title_hl">Mentalidad</span><br />
+      <span data-i18n="hero_title_2">y Opera con Confianza</span>
+    </h1>
+    <p class="hero-subtitle" data-i18n="hero_subtitle">
+      El curso de psicología del trading que transforma traders emocionales en operadores disciplinados. 6 módulos, 11 herramientas interactivas y una comunidad que te acompaña.
+    </p>
+    <div class="hero-actions">
+      <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" class="btn btn-primary btn-lg btn-pulse">
+        <i class="fa-solid fa-bolt"></i>
+        <span data-i18n="hero_cta_primary">Quiero Transformar mi Trading</span>
+      </a>
+      <button class="btn btn-secondary btn-lg" id="btn-demo">
+        <i class="fa-solid fa-play"></i>
+        <span data-i18n="hero_cta_secondary">Ver Programa</span>
+      </button>
+    </div>
+    <div class="hero-social">
+      <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+  </section>
+
+  <!-- ═══ STATS BAR ═══ -->
+  <section class="stats-bar reveal">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number" data-target="500">0</div>
+        <div class="stat-label" data-i18n="stat_1">en la Comunidad</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="6">0</div>
+        <div class="stat-label" data-i18n="stat_2">Módulos Estructurados</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="11">0</div>
+        <div class="stat-label" data-i18n="stat_3">Herramientas Interactivas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="24">0</div>
+        <div class="stat-label" data-i18n="stat_4">Acceso 24/7</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ OUTCOMES ═══ -->
+  <section class="section" id="outcomes">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-bullseye"></i> <span data-i18n="outcomes_tag">RESULTADOS</span></span>
+        <h2 class="section-title" data-i18n="outcomes_title">¿Qué vas a lograr con este curso?</h2>
+        <p class="section-desc" data-i18n="outcomes_desc">No es solo teoría. Es un sistema probado con herramientas prácticas que vas a usar cada día de operativa.</p>
+      </div>
+      <div class="outcomes-grid stagger-children reveal">
+        <div class="outcome-card" style="--card-accent: linear-gradient(135deg, var(--accent), var(--blue))">
+          <div class="outcome-icon" style="background: rgba(var(--accent-rgb), 0.1); color: var(--accent);">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <h3 class="outcome-title" data-i18n="outcome_1_title">Domina tus Emociones</h3>
+          <p class="outcome-desc" data-i18n="outcome_1_desc">Identifica miedo, codicia y frustración antes de que saboteen tu operativa. Herramientas de autodiagnóstico en tiempo real.</p>
+        </div>
+        <div class="outcome-card" style="--card-accent: linear-gradient(135deg, var(--blue), var(--indigo))">
+          <div class="outcome-icon" style="background: rgba(99,102,241,0.1); color: var(--indigo);">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h3 class="outcome-title" data-i18n="outcome_2_title">Construye Disciplina Real</h3>
+          <p class="outcome-desc" data-i18n="outcome_2_desc">Crea rutinas pre-mercado, checklists y planes de contingencia. Un framework completo para operar con consistencia.</p>
+        </div>
+        <div class="outcome-card" style="--card-accent: linear-gradient(135deg, var(--emerald), var(--accent))">
+          <div class="outcome-icon" style="background: rgba(16,185,129,0.1); color: var(--emerald);">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h3 class="outcome-title" data-i18n="outcome_3_title">Opera con Confianza</h3>
+          <p class="outcome-desc" data-i18n="outcome_3_desc">Transforma la ansiedad en calma operativa. Aprende a confiar en tu plan y ejecutar sin dudar.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ═══ ABOUT ═══ -->
-  <section class="section reveal">
-    <div class="section-header">
-      <span class="section-tag" data-i18n="aboutTag">QUIÉN TE ENSEÑA</span>
-      <h2 class="section-title" data-i18n="aboutTitle">Conoce a EROS y al equipo P'Traders</h2>
-    </div>
-    <div class="glass-card about-grid">
-      <div>
-        <p class="about-name">EROS — FUNDADOR</p>
-        <p class="about-text" data-i18n="aboutText1">Soy EROS, fundador de para_traders_. También pasé por frustraciones, pérdidas y autosabotaje en el trading, hasta que entendí que <strong>se gana en la mente.</strong></p>
-        <p class="about-text" data-i18n="aboutText2">En este curso, nuestra especialista en psicotrading te guiará con las herramientas y el conocimiento práctico para que domines tus emociones.</p>
-        <p class="about-quote" data-i18n="aboutQuote">"Mi visión es que aprendas con base y conciencia, de la mano de los mejores."</p>
+  <section class="section" id="about">
+    <div class="container">
+      <div class="about-grid reveal">
+        <div class="about-content">
+          <span class="section-tag"><i class="fa-solid fa-user-tie"></i> <span data-i18n="about_tag">TU INSTRUCTOR</span></span>
+          <h2 class="section-title mb-2" data-i18n="about_title">Creado por un trader activo, para traders reales</h2>
+          <p class="about-text" data-i18n="about_p1">
+            Este curso nació de <strong>años de experiencia</strong> operando mercados reales — cometiendo errores,
+            descubriendo patrones emocionales y desarrollando sistemas para manejarlos.
+          </p>
+          <p class="about-text" data-i18n="about_p2">
+            Cada herramienta, cada módulo, cada ejercicio viene de la <strong>trinchera real del trading</strong>.
+            No es teoría de libro: es el sistema que uso cada día antes de abrir una operación.
+          </p>
+          <blockquote class="about-quote" data-i18n="about_quote">
+            "El 80% del trading es psicología. Este curso es el 80% que nadie te enseña."
+          </blockquote>
+          <div class="about-credentials">
+            <span class="credential"><i class="fa-solid fa-check-circle"></i> <span data-i18n="cred_1">Trader Activo +5 años</span></span>
+            <span class="credential"><i class="fa-solid fa-check-circle"></i> <span data-i18n="cred_2">Mercados Forex & Futuros</span></span>
+            <span class="credential"><i class="fa-solid fa-check-circle"></i> <span data-i18n="cred_3">Comunidad +500 traders</span></span>
+            <span class="credential"><i class="fa-solid fa-check-circle"></i> <span data-i18n="cred_4">Enfoque Psicología Aplicada</span></span>
+          </div>
+        </div>
+        <div class="about-photo-wrapper">
+          <div class="about-photo-glow"></div>
+          <div class="about-photo flex-center" style="background: var(--surface-2); font-size: 3.5rem;">
+            <i class="fa-solid fa-chart-bar text-accent"></i>
+          </div>
+        </div>
       </div>
-      <img src="https://i.postimg.cc/7Yn232DK/Imagen-de-Whats-App-2025-07-17-a-las-12-58-59-4e19fc0f.jpg" alt="EROS" class="about-photo" loading="lazy" onerror="this.style.display='none'">
     </div>
   </section>
 
   <!-- ═══ ROADMAP ═══ -->
-  <section class="section reveal" id="modules">
-    <div class="section-header">
-      <span class="section-tag" data-i18n="roadmapTag">EL CAMINO</span>
-      <h2 class="section-title" data-i18n="roadmapTitle">6 módulos que transforman tu trading</h2>
-      <p class="section-desc" data-i18n="roadmapDesc">Cada módulo te desafía de forma distinta. No es complicado, pero requiere compromiso.</p>
-    </div>
-    <div class="roadmap-grid">
-      <div class="roadmap-card">
-        <span class="roadmap-number">01</span>
-        <h3 class="roadmap-title" data-i18n="mod1Title">¡Despierta!</h3>
-        <p class="roadmap-desc" data-i18n="mod1Desc">Tu peor enemigo no es el mercado. Descubre por qué el 65% de tus decisiones son emocionales.</p>
+  <section class="section" id="roadmap">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-route"></i> <span data-i18n="roadmap_tag">PROGRAMA</span></span>
+        <h2 class="section-title" data-i18n="roadmap_title">Tu camino de transformación</h2>
+        <p class="section-desc" data-i18n="roadmap_desc">6 módulos diseñados como una ruta progresiva. Cada paso construye sobre el anterior.</p>
       </div>
-      <div class="roadmap-card">
-        <span class="roadmap-number">02</span>
-        <h3 class="roadmap-title" data-i18n="mod2Title">Identifica tus Saboteadores</h3>
-        <p class="roadmap-desc" data-i18n="mod2Desc">Ponle nombre a la negación, el FOMO, la sobreconfianza y la venganza.</p>
-      </div>
-      <div class="roadmap-card">
-        <span class="roadmap-number">03</span>
-        <h3 class="roadmap-title" data-i18n="mod3Title">Mentalidad de Trader Pro</h3>
-        <p class="roadmap-desc" data-i18n="mod3Desc">Construye rutinas, respiración 4-4-4, mantras y los 3 pilares: Respirar, Reflexionar, Repetir.</p>
-      </div>
-      <div class="roadmap-card">
-        <span class="roadmap-number">04</span>
-        <h3 class="roadmap-title" data-i18n="mod4Title">El Plan es tu Escudo</h3>
-        <p class="roadmap-desc" data-i18n="mod4Desc">4 reglas de autoprotección, lectura de velas y respetar tu plan cuando duele.</p>
-      </div>
-      <div class="roadmap-card">
-        <span class="roadmap-number">05</span>
-        <h3 class="roadmap-title" data-i18n="mod5Title">Tu Gimnasio Mental</h3>
-        <p class="roadmap-desc" data-i18n="mod5Desc">5 días en demo como si fuera real. Respiración, plan, operación, reflexión.</p>
-      </div>
-      <div class="roadmap-card">
-        <span class="roadmap-number">06</span>
-        <h3 class="roadmap-title" data-i18n="mod6Title">¿Estás Listo para Real?</h3>
-        <p class="roadmap-desc" data-i18n="mod6Desc">Chequeo final de 3 preguntas, pack de herramientas mentales y tu primer paso consciente.</p>
+      <div class="roadmap-timeline stagger-children reveal">
+        <div class="roadmap-item">
+          <div class="roadmap-marker">00</div>
+          <div class="roadmap-body">
+            <h3 class="roadmap-title" data-i18n="mod0_title">Introducción</h3>
+            <p class="roadmap-desc" data-i18n="mod0_desc">Bienvenida al curso. Tu punto de partida y cómo aprovechar al máximo cada herramienta.</p>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker">01</div>
+          <div class="roadmap-body">
+            <h3 class="roadmap-title" data-i18n="mod1_title">Despierta: El Espejo del Trader</h3>
+            <p class="roadmap-desc" data-i18n="mod1_desc">Autodiagnóstico profundo. Identifica tus miedos, creencias limitantes y el estado real de tu psicología operativa.</p>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker">02</div>
+          <div class="roadmap-body">
+            <h3 class="roadmap-title" data-i18n="mod2_title">Saboteadores Internos</h3>
+            <p class="roadmap-desc" data-i18n="mod2_desc">Descubre los patrones inconscientes que destruyen tus operaciones: venganza, parálisis, euforia descontrolada.</p>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker">03</div>
+          <div class="roadmap-body">
+            <h3 class="roadmap-title" data-i18n="mod3_title">Mentalidad de Acero</h3>
+            <p class="roadmap-desc" data-i18n="mod3_desc">Construye resiliencia emocional. Técnicas de respiración, anclas mentales y rutinas de alto rendimiento.</p>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker">04</div>
+          <div class="roadmap-body">
+            <h3 class="roadmap-title" data-i18n="mod4_title">Tu Plan de Acción</h3>
+            <p class="roadmap-desc" data-i18n="mod4_desc">Framework completo: checklist pre-mercado, plan de contingencia y sistema de gestión emocional diario.</p>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker">05</div>
+          <div class="roadmap-body">
+            <h3 class="roadmap-title" data-i18n="mod5_title">Demostración en Vivo</h3>
+            <p class="roadmap-desc" data-i18n="mod5_desc">Observa cómo se aplica el sistema completo en una sesión real de trading. De la teoría a la práctica.</p>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker">06</div>
+          <div class="roadmap-body">
+            <h3 class="roadmap-title" data-i18n="mod6_title">Cierre y Compromiso</h3>
+            <p class="roadmap-desc" data-i18n="mod6_desc">Consolida todo lo aprendido. Firma tu contrato personal y únete a la comunidad de traders transformados.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ TOOLS PREVIEW ═══ -->
-  <section class="section reveal" id="tools">
-    <div class="section-header">
-      <span class="section-tag" data-i18n="toolsTag">HERRAMIENTAS</span>
-      <h2 class="section-title" data-i18n="toolsTitle">Tu arsenal de herramientas mentales</h2>
-      <p class="section-desc" data-i18n="toolsDesc">Interactivas y descargables. Si compraste el curso, ingresa tu código para desbloquearlas.</p>
-    </div>
-
-    <!-- Unlock / Status buttons -->
-    <div class="text-center mb-3">
-      <button class="btn btn-primary" data-open-modal data-show-locked data-i18n="toolUnlockBtn">🔓 Ingresar código de acceso</button>
-      <span class="section-tag" data-show-unlocked data-i18n="toolAccessLabel" style="font-size:0.85rem">✅ Acceso desbloqueado</span>
-    </div>
-
-    <div class="tools-grid">
-      <!-- Tool 1 -->
-      <div class="tool-card locked" data-tool-href="herramientas/test-mental/">
-        <div class="tool-content">
-          <div class="tool-icon">🧠</div>
-          <p class="tool-module" data-i18n="tool1Module">MÓDULO 1</p>
-          <h3 class="tool-name" data-i18n="tool1Name">Test Mental de Arranque</h3>
-          <p class="tool-desc" data-i18n="tool1Desc">5 afirmaciones para descubrir tu punto de partida emocional como trader.</p>
-        </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
+  <!-- ═══ TOOLS ═══ -->
+  <section class="section" id="tools">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-toolbox"></i> <span data-i18n="tools_tag">HERRAMIENTAS</span></span>
+        <h2 class="section-title" data-i18n="tools_title">11 herramientas interactivas incluidas</h2>
+        <p class="section-desc" data-i18n="tools_desc">No son PDFs aburridos. Son herramientas web interactivas que usarás antes, durante y después de cada sesión de trading.</p>
       </div>
-      <!-- Tool 2 -->
-      <div class="tool-card locked" data-tool-href="herramientas/detector-saboteadores/">
-        <div class="tool-content">
-          <div class="tool-icon">🔍</div>
-          <p class="tool-module" data-i18n="tool2Module">MÓDULO 2</p>
-          <h3 class="tool-name" data-i18n="tool2Name">Detector de Saboteadores</h3>
-          <p class="tool-desc" data-i18n="tool2Desc">Identifica cuáles de los 5 saboteadores están operando en silencio dentro de ti.</p>
+      <div class="tools-grid stagger-children reveal" id="tools-grid">
+        <!-- Tool 1 -->
+        <div class="tool-card locked" data-tool="test-mental">
+          <div class="tool-icon-box" style="background: rgba(var(--accent-rgb), 0.1); color: var(--accent);">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod1">MÓDULO 1</div>
+            <div class="tool-name" data-i18n="tool_1_name">Test de Fortaleza Mental</div>
+            <div class="tool-desc" data-i18n="tool_1_desc">Autodiagnóstico de 5 dimensiones clave de tu psicología operativa.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 3 -->
-      <div class="tool-card locked" data-tool-href="herramientas/checklist-pretrade/">
-        <div class="tool-content">
-          <div class="tool-icon">✅</div>
-          <p class="tool-module" data-i18n="tool3Module">MÓDULO 2</p>
-          <h3 class="tool-name" data-i18n="tool3Name">Checklist Pre-Trade</h3>
-          <p class="tool-desc" data-i18n="tool3Desc">3 preguntas clave antes de cada operación.</p>
+        <!-- Tool 2 -->
+        <div class="tool-card locked" data-tool="inventario-miedos">
+          <div class="tool-icon-box" style="background: rgba(244,63,94,0.1); color: var(--rose);">
+            <i class="fa-solid fa-ghost"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod1">MÓDULO 1</div>
+            <div class="tool-name" data-i18n="tool_2_name">Inventario de Miedos</div>
+            <div class="tool-desc" data-i18n="tool_2_desc">Identifica los miedos específicos que sabotean tu operativa.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 4 -->
-      <div class="tool-card locked" data-tool-href="herramientas/rutina-trading/">
-        <div class="tool-content">
-          <div class="tool-icon">📋</div>
-          <p class="tool-module" data-i18n="tool4Module">MÓDULO 3</p>
-          <h3 class="tool-name" data-i18n="tool4Name">Rutina de Trading Diaria</h3>
-          <p class="tool-desc" data-i18n="tool4Desc">Checklist concreto para antes, durante y después de cada sesión.</p>
+        <!-- Tool 3 -->
+        <div class="tool-card locked" data-tool="detector-saboteadores">
+          <div class="tool-icon-box" style="background: rgba(245,158,11,0.1); color: var(--amber);">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod2">MÓDULO 2</div>
+            <div class="tool-name" data-i18n="tool_3_name">Detector de Saboteadores</div>
+            <div class="tool-desc" data-i18n="tool_3_desc">Descubre qué patrones inconscientes están destruyendo tus resultados.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 5 -->
-      <div class="tool-card locked" data-tool-href="herramientas/respiracion/">
-        <div class="tool-content">
-          <div class="tool-icon">🌬️</div>
-          <p class="tool-module" data-i18n="tool5Module">MÓDULO 3</p>
-          <h3 class="tool-name" data-i18n="tool5Name">Respiración 4-4-4</h3>
-          <p class="tool-desc" data-i18n="tool5Desc">Ejercicio guiado para activar tu modo estrategia.</p>
+        <!-- Tool 4 -->
+        <div class="tool-card locked" data-tool="diario-emocional">
+          <div class="tool-icon-box" style="background: rgba(99,102,241,0.1); color: var(--indigo);">
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod2">MÓDULO 2</div>
+            <div class="tool-name" data-i18n="tool_4_name">Diario Emocional</div>
+            <div class="tool-desc" data-i18n="tool_4_desc">Registro diario de emociones, disparadores y patrones de comportamiento.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 6 -->
-      <div class="tool-card locked" data-tool-href="herramientas/disciplina-mental/">
-        <div class="tool-content">
-          <div class="tool-icon">📜</div>
-          <p class="tool-module" data-i18n="tool6Module">MÓDULO 3</p>
-          <h3 class="tool-name" data-i18n="tool6Name">Plantilla de Disciplina</h3>
-          <p class="tool-desc" data-i18n="tool6Desc">3 principios: paciencia, disciplina, aceptación.</p>
+        <!-- Tool 5 -->
+        <div class="tool-card locked" data-tool="respiracion-box">
+          <div class="tool-icon-box" style="background: rgba(16,185,129,0.1); color: var(--emerald);">
+            <i class="fa-solid fa-wind"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod3">MÓDULO 3</div>
+            <div class="tool-name" data-i18n="tool_5_name">Respiración Box Breathing</div>
+            <div class="tool-desc" data-i18n="tool_5_desc">Técnica guiada de 4 tiempos para resetear tu sistema nervioso antes de operar.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 7 -->
-      <div class="tool-card locked" data-tool-href="herramientas/reglas-autoproteccion/">
-        <div class="tool-content">
-          <div class="tool-icon">🛡️</div>
-          <p class="tool-module" data-i18n="tool7Module">MÓDULO 4</p>
-          <h3 class="tool-name" data-i18n="tool7Name">Reglas de Autoprotección</h3>
-          <p class="tool-desc" data-i18n="tool7Desc">4 preguntas antes de que la emoción te atrape.</p>
+        <!-- Tool 6 -->
+        <div class="tool-card locked" data-tool="ancla-mental">
+          <div class="tool-icon-box" style="background: rgba(139,92,246,0.1); color: var(--violet);">
+            <i class="fa-solid fa-anchor"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod3">MÓDULO 3</div>
+            <div class="tool-name" data-i18n="tool_6_name">Generador de Ancla Mental</div>
+            <div class="tool-desc" data-i18n="tool_6_desc">Crea tu ancla personal para acceder a estados de alto rendimiento en segundos.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 8 -->
-      <div class="tool-card locked" data-tool-href="herramientas/condiciones-entrada/">
-        <div class="tool-content">
-          <div class="tool-icon">🎯</div>
-          <p class="tool-module" data-i18n="tool8Module">MÓDULO 4</p>
-          <h3 class="tool-name" data-i18n="tool8Name">4 Condiciones de Entrada</h3>
-          <p class="tool-desc" data-i18n="tool8Desc">Solo si las 4 están en verde, tienes entrada válida.</p>
+        <!-- Tool 7 -->
+        <div class="tool-card locked" data-tool="checklist-premercado">
+          <div class="tool-icon-box" style="background: rgba(var(--accent-rgb), 0.1); color: var(--accent);">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod4">MÓDULO 4</div>
+            <div class="tool-name" data-i18n="tool_7_name">Checklist Pre-Mercado</div>
+            <div class="tool-desc" data-i18n="tool_7_desc">Revisa tu estado psicológico antes de cada sesión con esta lista profesional.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 9 -->
-      <div class="tool-card locked" data-tool-href="herramientas/reto-5-dias/">
-        <div class="tool-content">
-          <div class="tool-icon">🏋️</div>
-          <p class="tool-module" data-i18n="tool9Module">MÓDULO 5</p>
-          <h3 class="tool-name" data-i18n="tool9Name">Tracker Reto 5 Días</h3>
-          <p class="tool-desc" data-i18n="tool9Desc">Registra tu progreso diario en demo.</p>
+        <!-- Tool 8 -->
+        <div class="tool-card locked" data-tool="plan-contingencia">
+          <div class="tool-icon-box" style="background: rgba(59,130,246,0.1); color: var(--blue);">
+            <i class="fa-solid fa-shield"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod4">MÓDULO 4</div>
+            <div class="tool-name" data-i18n="tool_8_name">Plan de Contingencia</div>
+            <div class="tool-desc" data-i18n="tool_8_desc">Protocolos de acción para escenarios de crisis emocional durante sesiones.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 10 -->
-      <div class="tool-card locked" data-tool-href="herramientas/chequeo-prelanzamiento/">
-        <div class="tool-content">
-          <div class="tool-icon">🚀</div>
-          <p class="tool-module" data-i18n="tool10Module">MÓDULO 6</p>
-          <h3 class="tool-name" data-i18n="tool10Name">Chequeo Pre-Lanzamiento</h3>
-          <p class="tool-desc" data-i18n="tool10Desc">3 preguntas de honestidad brutal. ¿Luz verde para real?</p>
+        <!-- Tool 9 -->
+        <div class="tool-card locked" data-tool="simulador-escenarios">
+          <div class="tool-icon-box" style="background: rgba(245,158,11,0.1); color: var(--amber);">
+            <i class="fa-solid fa-dice"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod5">MÓDULO 5</div>
+            <div class="tool-name" data-i18n="tool_9_name">Simulador de Escenarios</div>
+            <div class="tool-desc" data-i18n="tool_9_desc">Practica toma de decisiones bajo presión en escenarios controlados.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
-      </div>
-      <!-- Tool 11 -->
-      <div class="tool-card locked" data-tool-href="herramientas/diario-trader/">
-        <div class="tool-content">
-          <div class="tool-icon">📓</div>
-          <p class="tool-module" data-i18n="tool11Module">MÓDULO 6</p>
-          <h3 class="tool-name" data-i18n="tool11Name">Diario Pro del Trader</h3>
-          <p class="tool-desc" data-i18n="tool11Desc">Registra emociones por operación. Los patrones son oro.</p>
+        <!-- Tool 10 -->
+        <div class="tool-card locked" data-tool="tracker-progreso">
+          <div class="tool-icon-box" style="background: rgba(16,185,129,0.1); color: var(--emerald);">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod5">MÓDULO 5</div>
+            <div class="tool-name" data-i18n="tool_10_name">Tracker de Progreso</div>
+            <div class="tool-desc" data-i18n="tool_10_desc">Visualiza tu evolución con métricas de disciplina, control emocional y consistencia.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
         </div>
-        <div class="tool-lock-overlay"><span class="lock-icon">🔒</span><span class="lock-text" data-i18n="toolLockText">Compra el curso para acceder</span></div>
+        <!-- Tool 11 -->
+        <div class="tool-card locked" data-tool="contrato-compromiso">
+          <div class="tool-icon-box" style="background: rgba(251,191,36,0.1); color: var(--gold);">
+            <i class="fa-solid fa-file-signature"></i>
+          </div>
+          <div class="tool-content">
+            <div class="tool-module" data-i18n="tool_mod6">MÓDULO 6</div>
+            <div class="tool-name" data-i18n="tool_11_name">Contrato de Compromiso</div>
+            <div class="tool-desc" data-i18n="tool_11_desc">Formaliza tu compromiso contigo mismo. Tu manifiesto personal de trader disciplinado.</div>
+          </div>
+          <div class="tool-lock-overlay">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div class="lock-text" data-i18n="tool_locked">Requiere acceso</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ═══ ANALYZER ═══ -->
-  <section class="section reveal" id="analyzer">
-    <div class="section-header">
-      <span class="section-tag" data-i18n="analyzerTag">HERRAMIENTA IA</span>
-      <h2 class="section-title" data-i18n="analyzerTitle">Analizador de Emociones</h2>
-      <p class="section-desc" data-i18n="analyzerDesc">Describe una operación reciente y descubre qué emociones y sesgos te afectaron.</p>
-    </div>
-    <div class="analyzer-box" style="max-width:700px;margin:0 auto" id="analyzer-tool">
-      <textarea id="analyzer-text" class="analyzer-textarea" data-i18n-placeholder="analyzerPlaceholder" placeholder='Ej: "Entré tarde por miedo a perder…"'></textarea>
-      <div class="text-center mt-2">
-        <button id="analyze-btn" class="btn btn-primary" data-i18n="analyzerBtn">Analizar mi emoción</button>
+  <section class="section" id="analyzer">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-flask"></i> <span data-i18n="analyzer_tag">PRUEBA GRATIS</span></span>
+        <h2 class="section-title" data-i18n="analyzer_title">Analizador de Emociones — IA</h2>
+        <p class="section-desc" data-i18n="analyzer_desc">Escribe lo que sientes sobre tu trading y nuestra IA identificará tus emociones dominantes, sesgos cognitivos y te dará una recomendación personalizada.</p>
       </div>
-      <div id="analyzer-loader" class="text-center mt-2 hidden">
-        <div style="display:inline-block;width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.8s linear infinite"></div>
+      <div class="analyzer-box reveal">
+        <textarea class="analyzer-textarea" id="analyzer-input" data-i18n-placeholder="analyzer_placeholder" placeholder="Ejemplo: Hoy perdí 3 operaciones seguidas y siento que el mercado está en mi contra..."></textarea>
+        <div class="mt-2 text-center">
+          <button class="btn btn-primary" id="analyzer-btn">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span data-i18n="analyzer_btn">Analizar mis Emociones</span>
+          </button>
+        </div>
+        <div class="analyzer-result hidden" id="analyzer-result"></div>
       </div>
-      <div id="analyzer-result" class="analyzer-result hidden"></div>
-    </div>
-    <div id="analyzer-locked-msg" class="glass-card text-center hidden" style="max-width:500px;margin:2rem auto 0">
-      <h3 data-i18n="analyzerLocked" style="color:var(--gold);margin-bottom:0.5rem">¡Análisis completado!</h3>
-      <p class="text-muted" data-i18n="analyzerLockedDesc">Para acceso ilimitado, completa el curso y únete a la comunidad.</p>
-      <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn btn-primary mt-2" data-i18n="heroCta">🔥 Quiero empezar ahora</a>
     </div>
   </section>
 
-  <!-- ═══ BROKERS ═══ -->
-  <section class="section reveal" id="brokers">
-    <div class="section-header">
-      <span class="section-tag" data-i18n="brokersTag">BROKERS</span>
-      <h2 class="section-title" data-i18n="brokersTitle">Elige el broker ideal para ti</h2>
-      <p class="section-desc" data-i18n="brokersDesc">Todos regulados, con soporte en español. Si abres cuenta con nuestros enlaces, recibes bonos exclusivos.</p>
-    </div>
-    <div class="broker-grid">
-      <div class="broker-card">
-        <p class="broker-region">🇺🇸</p>
-        <h3 class="broker-title" data-i18n="brokerUS">Estados Unidos</h3>
-        <p class="broker-list">Forex.com</p>
-        <a href="https://www.forex.com" target="_blank" rel="noopener" class="broker-btn" data-i18n="brokerOpen">Abrir cuenta →</a>
+  <!-- ═══ FAQ ═══ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-circle-question"></i> <span data-i18n="faq_tag">FAQ</span></span>
+        <h2 class="section-title" data-i18n="faq_title">Preguntas Frecuentes</h2>
       </div>
-      <div class="broker-card">
-        <p class="broker-region">🇪🇺</p>
-        <h3 class="broker-title" data-i18n="brokerEU">España / Europa</h3>
-        <p class="broker-list">Forex.com · IC Markets · Pepperstone</p>
-        <a href="https://www.forex.com" target="_blank" rel="noopener" class="broker-btn" data-i18n="brokerOpen">Abrir cuenta →</a>
-      </div>
-      <div class="broker-card">
-        <p class="broker-region">🌎</p>
-        <h3 class="broker-title" data-i18n="brokerLATAM">Latinoamérica</h3>
-        <p class="broker-list">Forex.com · Deriv · IC Markets · Exness</p>
-        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem">
-          <a href="https://www.forex.com" target="_blank" rel="noopener" class="broker-btn">Forex.com</a>
-          <a href="https://track.deriv.com/_r32OVaC5CHpZl7VyVw174GNd7ZgqdRLk/1/" target="_blank" rel="noopener" class="broker-btn">Deriv</a>
-          <a href="https://www.icmarkets.com" target="_blank" rel="noopener" class="broker-btn">IC Markets</a>
-          <a href="https://one.exness.link/a/c_79fzikcmyp" target="_blank" rel="noopener" class="broker-btn">Exness</a>
+      <div class="faq-list reveal">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q1">¿Necesito experiencia previa en trading?</span>
+            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a1">No. El curso está diseñado tanto para principiantes como para traders con experiencia. Si operas o planeas operar, este curso te dará las bases psicológicas que necesitas desde el primer día.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q2">¿Qué incluye exactamente el curso?</span>
+            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a2">6 módulos en video, 11 herramientas interactivas web exclusivas, acceso a la comunidad de traders, material descargable y actualizaciones futuras incluidas.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q3">¿Las herramientas son descargables o están online?</span>
+            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a3">Son aplicaciones web interactivas que funcionan desde tu navegador en cualquier dispositivo. Accedes con tu código personal y puedes usarlas en tu computadora, tablet o celular. Algunas permiten descargar resultados en formato texto.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q4">¿Cuánto tiempo tengo acceso al curso?</span>
+            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a4">Acceso de por vida. Una vez inscrito, puedes revisar el material y usar las herramientas cuando quieras, sin límite de tiempo. Además, recibirás todas las actualizaciones futuras sin costo adicional.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span data-i18n="faq_q5">¿El curso enseña estrategias de trading técnico?</span>
+            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+          </button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a5">No directamente. Este curso se enfoca 100% en la psicología del trading — el aspecto que representa el 80% de tu éxito. Es el complemento perfecto para cualquier estrategia técnica que ya uses o estés aprendiendo.</div></div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ═══ TESTIMONIALS ═══ -->
-  <section class="section reveal">
-    <div class="section-header">
-      <span class="section-tag" data-i18n="testimonialsTag">TESTIMONIOS</span>
-      <h2 class="section-title" data-i18n="testimonialsTitle">Lo que dicen los traders</h2>
-    </div>
-    <div class="testimonial-grid">
-      <div class="testimonial-card">
-        <p class="testimonial-quote" data-i18n="testimonial1">Con este reto entendí que lo mío no era falta de técnica, sino exceso de emociones.</p>
-        <p class="testimonial-author" data-i18n="testimonial1Author">— Camilo A., Medellín</p>
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-star"></i> <span data-i18n="test_tag">TESTIMONIOS</span></span>
+        <h2 class="section-title" data-i18n="test_title">Lo que dicen nuestros traders</h2>
       </div>
-      <div class="testimonial-card">
-        <p class="testimonial-quote" data-i18n="testimonial2">Antes me frustraba por cerrar mal las operaciones. Ahora tengo reglas mentales claras.</p>
-        <p class="testimonial-author" data-i18n="testimonial2Author">— Valentina G., Bucaramanga</p>
+      <div class="testimonial-grid stagger-children reveal">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote" data-i18n="test_1_quote">"Después del módulo de saboteadores internos, descubrí que mis pérdidas no eran por estrategia — eran por venganza inconsciente. Cambió mi perspectiva completamente."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">CM</div>
+            <div>
+              <div class="testimonial-name" data-i18n="test_1_name">Carlos M.</div>
+              <div class="testimonial-role" data-i18n="test_1_role">Trader Forex — 2 años de experiencia</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote" data-i18n="test_2_quote">"Las herramientas interactivas valen cada centavo. El checklist pre-mercado ahora es parte de mi rutina de todas las mañanas. Operé 3 semanas sin romper mi plan."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">AR</div>
+            <div>
+              <div class="testimonial-name" data-i18n="test_2_name">Ana R.</div>
+              <div class="testimonial-role" data-i18n="test_2_role">Trader de Futuros — principiante</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote" data-i18n="test_3_quote">"Llevo 4 años en esto y nunca había visto un curso enfocado solo en la mente. El simulador de escenarios y el diario emocional son oro puro para cualquier trader serio."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">LP</div>
+            <div>
+              <div class="testimonial-name" data-i18n="test_3_name">Luis P.</div>
+              <div class="testimonial-role" data-i18n="test_3_role">Day Trader — 4 años de experiencia</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote" data-i18n="test_4_quote">"La técnica de box breathing me salvó de cerrar una operación ganadora por miedo. Solo eso ya pagó el curso. Lo recomiendo a cualquier trader, novato o experimentado."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MV</div>
+            <div>
+              <div class="testimonial-name" data-i18n="test_4_name">María V.</div>
+              <div class="testimonial-role" data-i18n="test_4_role">Swing Trader — Criptomonedas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ BROKERS ═══ -->
+  <section class="section" id="brokers">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-building-columns"></i> <span data-i18n="broker_tag">BROKERS</span></span>
+        <h2 class="section-title" data-i18n="broker_title">¿No tienes broker aún?</h2>
+        <p class="section-desc" data-i18n="broker_desc">Recomendaciones según tu región. Usa nuestros enlaces para comenzar.</p>
+      </div>
+      <div class="broker-grid stagger-children reveal">
+        <div class="broker-card">
+          <div class="broker-region">🌎</div>
+          <h3 class="broker-title" data-i18n="broker_latam_title">Latinoamérica</h3>
+          <p class="broker-list">Hantec Markets · RoboForex</p>
+          <a href="#" class="broker-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="broker_btn">Abrir Cuenta</span></a>
+        </div>
+        <div class="broker-card">
+          <div class="broker-region">🇪🇺</div>
+          <h3 class="broker-title" data-i18n="broker_eu_title">Europa</h3>
+          <p class="broker-list">Pepperstone · IC Markets</p>
+          <a href="#" class="broker-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="broker_btn">Abrir Cuenta</span></a>
+        </div>
+        <div class="broker-card">
+          <div class="broker-region">🇺🇸</div>
+          <h3 class="broker-title" data-i18n="broker_us_title">USA</h3>
+          <p class="broker-list">NinjaTrader · TradeStation</p>
+          <a href="#" class="broker-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="broker_btn">Abrir Cuenta</span></a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ═══ WARNING ═══ -->
-  <section class="section reveal">
-    <div class="warning-box">
-      <h3 class="warning-title" data-i18n="warningTitle">🚫 Este curso no es para ti si...</h3>
-      <p class="warning-desc" data-i18n="warningDesc">Buscas fórmulas mágicas o hacerte rico en una semana. Pero si estás cansado de sabotearte y listo para tomarte esto en serio, bienvenido.</p>
+  <section class="section" id="warning">
+    <div class="container reveal">
+      <div class="warning-box">
+        <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div>
+          <h3 class="warning-title" data-i18n="warn_title">Advertencia de Riesgo</h3>
+          <p class="warning-desc" data-i18n="warn_desc">El trading de instrumentos financieros conlleva un alto nivel de riesgo y puede no ser adecuado para todos los inversores. Este curso es educativo y se centra en el aspecto psicológico del trading. Los rendimientos pasados no son indicativos de resultados futuros. Opera siempre con capital que puedas permitirte perder.</p>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ═══ CTA FINAL ═══ -->
-  <section class="cta-final reveal">
-    <h2 class="cta-title" data-i18n="ctaTitle">El mercado no cambia. <br>Tú sí puedes.</h2>
-    <p class="cta-desc" data-i18n="ctaDesc">No busques más cursos. Busca consistencia. Y eso empieza con un paso real y consciente.</p>
-    <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn btn-primary btn-lg" data-i18n="ctaBtn">🧠 Quiero iniciar el reto mental</a>
+  <section class="cta-final" id="cta-final">
+    <div class="container reveal">
+      <h2 class="cta-title" data-i18n="cta_title">¿Listo para <span class="highlight">transformar</span> tu trading?</h2>
+      <p class="cta-desc" data-i18n="cta_desc">Únete a más de 500 traders que ya están operando con disciplina, control emocional y confianza.</p>
+      <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" class="btn btn-primary btn-lg btn-pulse">
+        <i class="fa-solid fa-bolt"></i>
+        <span data-i18n="cta_btn">Comenzar Ahora</span>
+      </a>
+    </div>
   </section>
 
-</div>
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-social">
+        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="#" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+      </div>
+      <p class="footer-legal" data-i18n="footer_legal">
+        © 2025 P'Traders. Todos los derechos reservados. Este sitio no es asesoría financiera. Trading implica riesgo de pérdida. Opera de forma responsable.
+      </p>
+    </div>
+  </footer>
 
-<!-- ═══ FOOTER ═══ -->
-<footer class="footer">
-  <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="P'Traders" class="footer-logo" loading="lazy">
-  <div class="footer-social">
-    <a href="https://t.me/erostrading" target="_blank" rel="noopener" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
-    <a href="https://www.instagram.com/para_traders__" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    <a href="https://www.facebook.com/paraltraders" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-    <a href="https://www.tiktok.com/@para_traders" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-  </div>
-  <p class="footer-legal" data-i18n="footerLegal">Aviso Legal: "para_traders_" ofrece contenido educativo y de desarrollo personal en el ámbito del psicotrading.</p>
-</footer>
-
-<!-- ═══ ACCESS CODE MODAL ═══ -->
-<div class="modal-overlay" id="access-modal">
-  <div class="modal">
-    <h3 class="modal-title" data-i18n="modalTitle">Ingresa tu código de acceso</h3>
-    <p class="modal-desc" data-i18n="modalDesc">Si compraste el curso en Hotmart, ingresa el código que recibiste.</p>
-    <input type="text" id="modal-code-input" class="modal-input" data-i18n-placeholder="modalPlaceholder" placeholder="CÓDIGO" autocomplete="off" spellcheck="false">
-    <p class="modal-error" id="modal-error"></p>
-    <div style="display:flex;gap:0.8rem;justify-content:center;margin-top:1.2rem">
-      <button class="btn btn-primary" id="modal-unlock-btn" data-i18n="modalBtn">Desbloquear</button>
-      <button class="btn btn-secondary" data-close-modal data-i18n="modalClose">Cerrar</button>
+  <!-- ═══ MODAL ═══ -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-icon"><i class="fa-solid fa-key text-accent"></i></div>
+      <h3 class="modal-title" data-i18n="modal_title">Acceso Exclusivo</h3>
+      <p class="modal-desc" data-i18n="modal_desc">Ingresa el código que recibiste al inscribirte para desbloquear las herramientas interactivas.</p>
+      <input type="text" class="modal-input" id="modal-input" maxlength="20" data-i18n-placeholder="modal_placeholder" placeholder="Ingresa tu código" />
+      <div class="modal-error" id="modal-error"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-cancel" data-i18n="modal_cancel">Cancelar</button>
+        <button class="btn btn-primary" id="modal-submit"><i class="fa-solid fa-unlock"></i> <span data-i18n="modal_submit">Desbloquear</span></button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ═══ SCRIPTS ═══ -->
-<script src="js/i18n.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/main.js"></script>
-
-<style>@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>
-
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

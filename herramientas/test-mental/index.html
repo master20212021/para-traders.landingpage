@@ -14,17 +14,17 @@
     /* ── Tool-specific styles ──────────── */
     .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
 
-    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: var(--transition); }
-    .tool-back:hover { color: var(--cyan); }
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
 
     .tool-header { text-align: center; margin-bottom: 3rem; }
     .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
     .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
-    .tool-header .module-badge { display: inline-block; background: var(--cyan-dim); color: var(--cyan); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
     .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
 
     .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
-    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
     .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
 
     .question-card {
@@ -33,16 +33,16 @@
       border-radius: var(--radius);
       padding: 1.8rem;
       margin-bottom: 1.2rem;
-      transition: var(--transition);
+      transition: all var(--duration) var(--ease-out);
     }
-    .question-card:hover { border-color: var(--cyan-glow); }
+    .question-card:hover { border-color: var(--accent-glow); }
     .question-card.answered { border-color: rgba(0, 229, 255, 0.25); }
 
     .question-number {
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 700;
-      color: var(--cyan);
+      color: var(--accent);
       letter-spacing: 0.08em;
       margin-bottom: 0.5rem;
     }
@@ -87,24 +87,24 @@
       height: 44px;
       border-radius: 12px;
       border: 1px solid var(--glass-border);
-      background: var(--panel);
+      background: var(--surface);
       color: var(--text);
       font-family: var(--font-mono);
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: var(--transition);
+      transition: all var(--duration) var(--ease-out);
     }
     .scale-btn:hover {
-      border-color: var(--cyan);
-      background: var(--cyan-dim);
+      border-color: var(--accent);
+      background: var(--accent-dim);
       transform: scale(1.08);
     }
     .scale-btn.selected {
-      background: var(--cyan);
+      background: var(--accent);
       color: var(--bg);
-      border-color: var(--cyan);
-      box-shadow: 0 0 20px var(--cyan-glow);
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
     }
 
     .submit-area {
@@ -144,6 +144,7 @@
       mask-composite: exclude;
       -webkit-mask-composite: xor;
     }
+    .score-circle { --line: var(--border); }
     .score-value {
       font-family: var(--font-mono);
       font-size: 2.5rem;
@@ -186,7 +187,7 @@
     .bar-track {
       flex: 1;
       height: 10px;
-      background: var(--panel);
+      background: var(--surface);
       border-radius: 5px;
       overflow: hidden;
     }
@@ -215,7 +216,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: var(--panel);
+      background: var(--surface);
       color: var(--text);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-sm);
@@ -223,10 +224,10 @@
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      transition: var(--transition);
+      transition: all var(--duration) var(--ease-out);
       text-decoration: none;
     }
-    .btn-download:hover { border-color: var(--cyan); color: var(--cyan); }
+    .btn-download:hover { border-color: var(--accent); color: var(--accent); }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
@@ -241,16 +242,13 @@
 </head>
 <body>
 
-<div class="bg-grid"></div>
-<div class="bg-orbs">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-</div>
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
 
 <!-- Topbar -->
 <nav class="topbar">
   <a href="/" class="brand">
-    <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="P'Traders" class="brand-logo">
     <span class="brand-text">P'TRADERS</span>
   </a>
   <div class="topbar-actions">
@@ -562,15 +560,15 @@
     if (total < 10) {
       zone = t.tmZoneGreen;
       message = t.tmMsgGreen;
-      color = "var(--mint)";
+      color = "var(--emerald)";
     } else if (total <= 20) {
       zone = t.tmZoneYellow;
       message = t.tmMsgYellow;
-      color = "var(--gold)";
+      color = "var(--amber)";
     } else {
       zone = t.tmZoneRed;
       message = t.tmMsgRed;
-      color = "var(--red)";
+      color = "var(--rose)";
     }
 
     const shortLabels = [t.tmResQ1Short, t.tmResQ2Short, t.tmResQ3Short, t.tmResQ4Short, t.tmResQ5Short];

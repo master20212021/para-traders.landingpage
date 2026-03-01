@@ -1,295 +1,401 @@
 /* ═══════════════════════════════════════════
-   P'TRADERS — Main Application JS
+   P'TRADERS — Main Application v2.0
+   Particles, counters, FAQ, analyzer, tools
    ═══════════════════════════════════════════ */
 
-document.addEventListener("DOMContentLoaded", () => {
-  // ── Language System ─────────────────────
+(() => {
+  "use strict";
+
+  // ── State ────────────────────────────────
   let currentLang = localStorage.getItem("pt_lang") || "es";
 
-  function setLang(lang) {
-    currentLang = lang;
-    localStorage.setItem("pt_lang", lang);
-    document.documentElement.lang = lang;
+  // ── DOM Ready ────────────────────────────
+  document.addEventListener("DOMContentLoaded", () => {
+    initParticles();
+    initLanguage();
+    initTopbarScroll();
+    initScrollReveal();
+    initStatCounters();
+    initFAQ();
+    initToolCards();
+    initModal();
+    initAnalyzer();
+    initDemoButton();
+  });
 
-    // Update all [data-i18n] elements
+  // ═══ PARTICLE CANVAS ═══════════════════════
+  function initParticles() {
+    const canvas = document.getElementById("particles-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let w, h;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    function createParticles() {
+      particles = [];
+      const count = Math.min(Math.floor((w * h) / 15000), 80);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.5 + 0.3,
+          dx: (Math.random() - 0.5) * 0.3,
+          dy: (Math.random() - 0.5) * 0.3,
+          alpha: Math.random() * 0.5 + 0.1,
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (const p of particles) {
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0) p.x = w;
+        if (p.x > w) p.x = 0;
+        if (p.y < 0) p.y = h;
+        if (p.y > h) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 212, 255, ${p.alpha})`;
+        ctx.fill();
+      }
+      // Draw connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 212, 255, ${0.06 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    createParticles();
+    draw();
+    window.addEventListener("resize", () => {
+      resize();
+      createParticles();
+    });
+  }
+
+  // ═══ LANGUAGE SYSTEM ═══════════════════════
+  function initLanguage() {
+    const langBtns = document.querySelectorAll(".lang-btn");
+    langBtns.forEach((btn) => {
+      if (btn.dataset.lang === currentLang) btn.classList.add("active");
+      else btn.classList.remove("active");
+      btn.addEventListener("click", () => {
+        currentLang = btn.dataset.lang;
+        localStorage.setItem("pt_lang", currentLang);
+        langBtns.forEach((b) => b.classList.toggle("active", b.dataset.lang === currentLang));
+        applyLanguage();
+      });
+    });
+    applyLanguage();
+  }
+
+  function applyLanguage() {
+    const strings = i18n[currentLang];
+    if (!strings) return;
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
-      const text = i18n[lang]?.[key];
-      if (text) el.innerHTML = text;
+      if (strings[key]) {
+        if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+          // skip — handled by placeholder
+        } else {
+          el.innerHTML = strings[key];
+        }
+      }
     });
-
-    // Update all [data-i18n-placeholder]
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
       const key = el.getAttribute("data-i18n-placeholder");
-      const text = i18n[lang]?.[key];
-      if (text) el.placeholder = text;
+      if (strings[key]) el.placeholder = strings[key];
     });
+    document.documentElement.lang = currentLang;
+  }
 
-    // Toggle lang buttons
-    document.querySelectorAll(".lang-btn").forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.lang === lang);
+  // ═══ TOPBAR SCROLL ═════════════════════════
+  function initTopbarScroll() {
+    const topbar = document.getElementById("topbar");
+    if (!topbar) return;
+    const check = () => topbar.classList.toggle("scrolled", window.scrollY > 60);
+    window.addEventListener("scroll", check, { passive: true });
+    check();
+  }
+
+  // ═══ SCROLL REVEAL ═════════════════════════
+  function initScrollReveal() {
+    const reveals = document.querySelectorAll(".reveal");
+    if (!reveals.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    reveals.forEach((el) => observer.observe(el));
+  }
+
+  // ═══ STAT COUNTERS ═════════════════════════
+  function initStatCounters() {
+    const statNumbers = document.querySelectorAll(".stat-number[data-target]");
+    if (!statNumbers.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    statNumbers.forEach((el) => observer.observe(el));
+  }
+
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target, 10);
+    const duration = 2000;
+    const start = performance.now();
+    const suffix = target >= 100 ? "+" : target === 24 ? "/7" : "";
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(ease * target);
+      el.textContent = current + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  // ═══ FAQ ACCORDION ═════════════════════════
+  function initFAQ() {
+    document.querySelectorAll(".faq-question").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".faq-item");
+        const isOpen = item.classList.contains("open");
+        // Close all
+        document.querySelectorAll(".faq-item.open").forEach((i) => i.classList.remove("open"));
+        if (!isOpen) item.classList.add("open");
+      });
     });
   }
 
-  // Init language
-  setLang(currentLang);
-
-  // Lang button clicks
-  document.querySelectorAll(".lang-btn").forEach((btn) => {
-    btn.addEventListener("click", () => setLang(btn.dataset.lang));
-  });
-
-  // ── Access Code Modal ───────────────────
-  const modal = document.getElementById("access-modal");
-  const modalInput = document.getElementById("modal-code-input");
-  const modalError = document.getElementById("modal-error");
-  const modalBtn = document.getElementById("modal-unlock-btn");
-
-  function openModal() {
-    if (modal) {
-      modal.classList.add("active");
-      setTimeout(() => modalInput?.focus(), 300);
-    }
-  }
-
-  function closeModal() {
-    if (modal) {
-      modal.classList.remove("active");
-      if (modalInput) modalInput.value = "";
-      if (modalError) modalError.textContent = "";
-      if (modalInput) modalInput.classList.remove("error", "success");
-    }
-  }
-
-  // Open modal triggers
-  document.querySelectorAll("[data-open-modal]").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      openModal();
+  // ═══ TOOL CARDS ════════════════════════════
+  function initToolCards() {
+    updateToolStates();
+    document.querySelectorAll(".tool-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        if (Auth.isUnlocked()) {
+          navigateToTool(card.dataset.tool);
+        } else {
+          openModal();
+        }
+      });
     });
-  });
+  }
 
-  // Close modal
-  document.querySelectorAll("[data-close-modal]").forEach((el) => {
-    el.addEventListener("click", closeModal);
-  });
-
-  // Click outside to close
-  modal?.addEventListener("click", (e) => {
-    if (e.target === modal) closeModal();
-  });
-
-  // Unlock button
-  modalBtn?.addEventListener("click", () => {
-    const code = modalInput?.value || "";
-    if (Auth.unlock(code)) {
-      modalInput.classList.remove("error");
-      modalInput.classList.add("success");
-      modalError.textContent = "";
-
-      // Show success message
-      const successText = i18n[currentLang]?.modalSuccess || "Unlocked!";
-      modalError.style.color = "var(--mint)";
-      modalError.textContent = successText;
-
-      setTimeout(() => {
-        closeModal();
-        updateToolsState();
-        modalError.style.color = "";
-      }, 1200);
-    } else {
-      modalInput.classList.add("error");
-      const errorText = i18n[currentLang]?.modalError || "Invalid code.";
-      modalError.textContent = errorText;
-      setTimeout(() => modalInput.classList.remove("error"), 400);
-    }
-  });
-
-  // Enter key on input
-  modalInput?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") modalBtn?.click();
-  });
-
-  // ── Tools State ─────────────────────────
-  function updateToolsState() {
+  function updateToolStates() {
     const unlocked = Auth.isUnlocked();
     document.querySelectorAll(".tool-card").forEach((card) => {
       card.classList.toggle("locked", !unlocked);
     });
-
-    // Show/hide unlock button vs access label
-    const unlockBtns = document.querySelectorAll("[data-show-locked]");
-    const accessLabels = document.querySelectorAll("[data-show-unlocked]");
-
-    unlockBtns.forEach((el) => el.classList.toggle("hidden", unlocked));
-    accessLabels.forEach((el) => el.classList.toggle("hidden", !unlocked));
-
-    // Update tool card links
-    document.querySelectorAll(".tool-card").forEach((card) => {
-      if (unlocked) {
-        card.style.cursor = "pointer";
-      } else {
-        card.style.cursor = "default";
-      }
-    });
   }
 
-  updateToolsState();
-
-  // Tool card clicks
-  document.querySelectorAll(".tool-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      if (!Auth.isUnlocked()) return;
-      const href = card.dataset.toolHref;
-      if (href) window.location.href = href;
-    });
-  });
-
-  // ── Scroll Reveal ───────────────────────
-  const revealElements = document.querySelectorAll(".reveal");
-
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          revealObserver.unobserve(entry.target);
+  function navigateToTool(toolSlug) {
+    if (!toolSlug) return;
+    const toolRoutes = {
+      "test-mental": "herramientas/test-mental/index.html",
+    };
+    const route = toolRoutes[toolSlug];
+    if (route) {
+      window.location.href = route;
+    } else {
+      // Tool not yet built — show coming soon
+      const card = document.querySelector(`[data-tool="${toolSlug}"]`);
+      if (card) {
+        const name = card.querySelector(".tool-name");
+        if (name) {
+          const original = name.textContent;
+          name.textContent = currentLang === "es" ? "🚧 Próximamente..." : "🚧 Coming soon...";
+          name.style.color = "var(--amber)";
+          setTimeout(() => {
+            name.textContent = original;
+            name.style.color = "";
+          }, 2000);
         }
-      });
-    },
-    { threshold: 0.1 }
-  );
-
-  revealElements.forEach((el) => revealObserver.observe(el));
-
-  // ── Emotion Analyzer ────────────────────
-  const analyzeBtn = document.getElementById("analyze-btn");
-  const analyzerText = document.getElementById("analyzer-text");
-  const analyzerResult = document.getElementById("analyzer-result");
-  const analyzerLoader = document.getElementById("analyzer-loader");
-  const analyzerTool = document.getElementById("analyzer-tool");
-  const analyzerLocked = document.getElementById("analyzer-locked-msg");
-
-  const MAX_USES = 1;
-  const USES_KEY = "pt_analyzer_used";
-
-  function getAnalyzerUses() {
-    const today = new Date().toDateString();
-    const stored = localStorage.getItem(USES_KEY + "_date");
-    if (stored !== today) {
-      localStorage.setItem(USES_KEY + "_date", today);
-      localStorage.setItem(USES_KEY, "0");
-      return 0;
-    }
-    return parseInt(localStorage.getItem(USES_KEY) || "0", 10);
-  }
-
-  function checkAnalyzerState() {
-    const uses = getAnalyzerUses();
-    if (uses >= MAX_USES && !Auth.isUnlocked()) {
-      analyzerTool?.classList.add("hidden");
-      analyzerLocked?.classList.remove("hidden");
+      }
     }
   }
 
-  checkAnalyzerState();
+  // ═══ MODAL ═════════════════════════════════
+  function initModal() {
+    const overlay = document.getElementById("modal-overlay");
+    const input = document.getElementById("modal-input");
+    const submit = document.getElementById("modal-submit");
+    const cancel = document.getElementById("modal-cancel");
+    const error = document.getElementById("modal-error");
 
-  analyzeBtn?.addEventListener("click", async () => {
-    const uses = getAnalyzerUses();
-    if (uses >= MAX_USES && !Auth.isUnlocked()) {
-      checkAnalyzerState();
-      return;
-    }
+    if (!overlay) return;
 
-    const text = analyzerText?.value?.trim();
-    if (!text) return;
-
-    analyzeBtn.disabled = true;
-    analyzeBtn.textContent = "...";
-    analyzerResult?.classList.add("hidden");
-    analyzerLoader?.classList.remove("hidden");
-
-    try {
-      const prompt = `Analiza el siguiente texto de un trader e identifica las emociones dominantes (ej: miedo, avaricia, frustración, confianza), los posibles sesgos cognitivos (ej: aversión a la pérdida, FOMO, sesgo de confirmación) y ofrece una sugerencia corta y accionable. Responde en ${currentLang === "es" ? "español" : "inglés"}. El texto es: "${text}"`;
-
-      const payload = {
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              emociones: { type: "ARRAY", items: { type: "STRING" } },
-              sesgos: { type: "ARRAY", items: { type: "STRING" } },
-              sugerencia: { type: "STRING" },
-            },
-          },
-        },
-      };
-
-      const apiKey = "AIzaSyDebuUKPwhlHqkBMfTxYF6oM_WSYbs6QEI";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) throw new Error(`API Error: ${response.status}`);
-
-      const result = await response.json();
-      const data = JSON.parse(result.candidates[0].content.parts[0].text);
-
-      // Render results
-      const t = i18n[currentLang];
-      let html = "";
-
-      if (data.emociones?.length) {
-        html += `<h4 class="text-cyan" style="margin-bottom:0.5rem">${t.analyzerEmotions}:</h4>
-          <div class="flex flex-wrap gap-1 mb-3">${data.emociones.map((e) => `<span class="tag tag-cyan">${e}</span>`).join("")}</div>`;
-      }
-
-      if (data.sesgos?.length) {
-        html += `<h4 class="text-cyan" style="margin-bottom:0.5rem;color:var(--orange)">${t.analyzerBiases}:</h4>
-          <div class="flex flex-wrap gap-1 mb-3">${data.sesgos.map((s) => `<span class="tag tag-orange">${s}</span>`).join("")}</div>`;
-      }
-
-      if (data.sugerencia) {
-        html += `<h4 style="margin-bottom:0.5rem;color:var(--mint)">${t.analyzerSuggestion}:</h4>
-          <p class="text-muted" style="font-style:italic">"${data.sugerencia}"</p>`;
-      }
-
-      analyzerResult.innerHTML = html;
-      analyzerResult.classList.remove("hidden");
-
-      // Increment uses
-      const newUses = uses + 1;
-      localStorage.setItem(USES_KEY, newUses.toString());
-
-      if (newUses >= MAX_USES && !Auth.isUnlocked()) {
-        setTimeout(checkAnalyzerState, 5000);
-      }
-    } catch (err) {
-      console.error("Analyzer error:", err);
-      analyzerResult.innerHTML = `<p style="color:var(--red)">Error: ${err.message}</p>`;
-      analyzerResult.classList.remove("hidden");
-    } finally {
-      analyzerLoader?.classList.add("hidden");
-      const t = i18n[currentLang];
-      analyzeBtn.disabled = false;
-      analyzeBtn.textContent = t.analyzerBtn;
-    }
-  });
-
-  // ── Smooth Scroll for anchor links ──────
-  document.querySelectorAll('a[href^="#"]').forEach((a) => {
-    a.addEventListener("click", (e) => {
-      const target = document.querySelector(a.getAttribute("href"));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+    submit.addEventListener("click", () => {
+      const code = input.value.trim();
+      if (!code) return;
+      if (Auth.unlock(code)) {
+        input.classList.remove("error");
+        input.classList.add("success");
+        error.textContent = i18n[currentLang]?.modal_success || "¡Acceso concedido!";
+        error.style.color = "var(--emerald)";
+        setTimeout(() => {
+          closeModal();
+          updateToolStates();
+        }, 800);
+      } else {
+        input.classList.add("error");
+        error.textContent = i18n[currentLang]?.modal_error || "Código incorrecto.";
+        error.style.color = "";
       }
     });
-  });
-});
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") submit.click();
+    });
+
+    cancel.addEventListener("click", closeModal);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeModal();
+    });
+  }
+
+  function openModal() {
+    const overlay = document.getElementById("modal-overlay");
+    const input = document.getElementById("modal-input");
+    const error = document.getElementById("modal-error");
+    if (!overlay) return;
+    overlay.classList.add("active");
+    input.value = "";
+    input.classList.remove("error", "success");
+    error.textContent = "";
+    error.style.color = "";
+    document.body.style.overflow = "hidden";
+    setTimeout(() => input.focus(), 300);
+  }
+
+  function closeModal() {
+    const overlay = document.getElementById("modal-overlay");
+    if (!overlay) return;
+    overlay.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  // ═══ EMOTION ANALYZER ═════════════════════
+  function initAnalyzer() {
+    const btn = document.getElementById("analyzer-btn");
+    const input = document.getElementById("analyzer-input");
+    const result = document.getElementById("analyzer-result");
+    if (!btn || !input || !result) return;
+
+    btn.addEventListener("click", async () => {
+      const text = input.value.trim();
+      if (!text || text.length < 10) return;
+
+      const strings = i18n[currentLang] || {};
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner" style="animation:spin 1s linear infinite"></i> ${strings.analyzer_loading || "Analizando..."}`;
+      result.classList.add("hidden");
+
+      try {
+        const lang = currentLang === "en" ? "English" : "Spanish";
+        const prompt = `You are a trading psychology expert. Analyze this trader's emotional state written in ${lang}. Respond ONLY in ${lang} with this exact format:
+
+EMOTIONS: [list 2-3 dominant emotions]
+BIASES: [list 1-2 cognitive biases detected]
+RISK: [Low/Medium/High]
+RECOMMENDATION: [2-3 sentences of practical advice]
+
+Text: "${text}"`;
+
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDebuUKPwhlHqkBMfTxYF6oM_WSYbs6QEI`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+          }
+        );
+
+        const data = await res.json();
+        const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+        if (!raw) throw new Error("No response");
+
+        // Parse
+        const emotions = raw.match(/EMOCIONES?:(.+)/i)?.[1]?.trim() || raw.match(/EMOTIONS?:(.+)/i)?.[1]?.trim() || "";
+        const biases = raw.match(/SESGOS?:(.+)/i)?.[1]?.trim() || raw.match(/BIASES?:(.+)/i)?.[1]?.trim() || "";
+        const risk = raw.match(/RIESGO:(.+)/i)?.[1]?.trim() || raw.match(/RISK:(.+)/i)?.[1]?.trim() || "";
+        const rec = raw.match(/RECOMENDACI[ÓO]N:(.+)/is)?.[1]?.trim() || raw.match(/RECOMMENDATION:(.+)/is)?.[1]?.trim() || "";
+
+        const riskColor = risk.toLowerCase().includes("alto") || risk.toLowerCase().includes("high") ? "tag-orange" : risk.toLowerCase().includes("medio") || risk.toLowerCase().includes("medium") ? "tag-cyan" : "tag-mint";
+
+        result.innerHTML = `
+          <div style="margin-bottom:1rem">
+            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Emociones detectadas" : "Detected emotions"}:</strong><br/>
+            ${emotions.split(/[,·]/).map((e) => `<span class="tag tag-cyan">${e.trim()}</span>`).join("")}
+          </div>
+          <div style="margin-bottom:1rem">
+            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Sesgos cognitivos" : "Cognitive biases"}:</strong><br/>
+            ${biases.split(/[,·]/).map((b) => `<span class="tag tag-orange">${b.trim()}</span>`).join("")}
+          </div>
+          <div style="margin-bottom:1rem">
+            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Nivel de riesgo" : "Risk level"}:</strong>
+            <span class="tag ${riskColor}">${risk}</span>
+          </div>
+          <div>
+            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Recomendación" : "Recommendation"}:</strong>
+            <p style="color:var(--text-secondary);font-size:0.88rem;line-height:1.65;margin-top:0.3rem;">${rec}</p>
+          </div>
+        `;
+        result.classList.remove("hidden");
+      } catch (err) {
+        result.innerHTML = `<p style="color:var(--rose);font-size:0.88rem;">${strings.analyzer_error || "Error al analizar."}</p>`;
+        result.classList.remove("hidden");
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="analyzer_btn">${strings.analyzer_btn || "Analizar mis Emociones"}</span>`;
+    });
+  }
+
+  // ═══ DEMO BUTTON ═══════════════════════════
+  function initDemoButton() {
+    const btn = document.getElementById("btn-demo");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      document.getElementById("roadmap")?.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+})();
