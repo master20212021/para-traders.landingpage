@@ -458,11 +458,9 @@ button { font-family: inherit; cursor: pointer; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .stat-item:nth-child(2)::after { display: none; }
   .outcomes-grid { grid-template-columns: 1fr; }
-  .about-grid { grid-template-columns: 1fr; text-align: center; }
-  .about-card-body { padding: 1.8rem 1.5rem 1.2rem; }
-  .about-credentials { padding: 1.2rem 1.5rem; }
-  .about-quote { text-align: left; }
-  .about-credentials { justify-content: center; }
+  .about-body { flex-direction: column; padding: 1.8rem 1.5rem 1.2rem; gap: 1rem; align-items: center; text-align: center; }
+  .about-quote-bar { padding: 1rem 1.5rem; }
+  .about-footer { padding: 1.2rem 1.5rem; }
   .roadmap-timeline::before { left: 20px; }
   .roadmap-marker { width: 42px; height: 42px; font-size: 0.7rem; }
   .roadmap-item { gap: 1rem; }
@@ -502,10 +500,11 @@ button { font-family: inherit; cursor: pointer; }
   .app-phone { width: 160px; height: 300px; }
   .container { padding: 0 1rem; }
   .section-tag { font-size: 0.65rem; padding: 0.25rem 0.7rem; }
+  .about-body { padding: 1.5rem 1.2rem 1rem; gap: 0.8rem; }
   .about-text { font-size: 0.92rem; }
-  .about-quote { font-size: 0.92rem; padding: 0.8rem 1rem; }
-  .about-card-body { padding: 1.5rem 1.2rem 1rem; }
-  .about-credentials { padding: 1rem 1.2rem; gap: 0.5rem; }
+  .about-quote { font-size: 0.88rem; }
+  .about-quote-bar { padding: 0.8rem 1.2rem; gap: 0.7rem; }
+  .about-footer { padding: 1rem 1.2rem; gap: 0.5rem; }
   .credential { font-size: 0.72rem; padding: 0.3rem 0.65rem; }
   .cta-title { font-size: clamp(1.5rem, 6vw, 2.2rem); }
   .cta-desc { font-size: 0.92rem; }
