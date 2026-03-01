@@ -4,7 +4,7 @@
 
 const Auth = (() => {
   // Access code — change this to update the code students receive
-  const VALID_CODE = "PTRADERS2026";
+  const VALID_CODE = "XK7-PT26-9F3M";
   const STORAGE_KEY = "pt_access";
 
   function isUnlocked() {

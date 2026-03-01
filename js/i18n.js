@@ -166,8 +166,8 @@ const i18n = {
 
     // Modal
     modal_title: "Acceso Exclusivo",
-    modal_desc: "Ingresa el código que recibiste al inscribirte para desbloquear las herramientas interactivas.",
-    modal_placeholder: "Ingresa tu código",
+    modal_desc: "Ingresa tu clave única de acceso. La recibiste al adquirir el curso.",
+    modal_placeholder: "Ej: XK7-XXXX-XXXX",
     modal_submit: "Desbloquear",
     modal_cancel: "Cancelar",
     modal_error: "Código incorrecto. Inténtalo de nuevo.",
@@ -337,8 +337,8 @@ const i18n = {
 
     // Modal
     modal_title: "Exclusive Access",
-    modal_desc: "Enter the code you received upon enrollment to unlock the interactive tools.",
-    modal_placeholder: "Enter your code",
+    modal_desc: "Enter your unique access key. You received it when you purchased the course.",
+    modal_placeholder: "E.g.: XK7-XXXX-XXXX",
     modal_submit: "Unlock",
     modal_cancel: "Cancel",
     modal_error: "Incorrect code. Try again.",
