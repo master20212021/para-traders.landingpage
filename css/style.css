@@ -249,16 +249,7 @@ button { font-family: inherit; cursor: pointer; }
 .lock-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
 .lock-text { font-size: 0.75rem; font-weight: 600; color: var(--accent); }
 
-/* ── Analyzer ──────────────────────────────────────────── */
-.analyzer-box { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 2.5rem; max-width: 700px; margin: 0 auto; }
-.analyzer-textarea {
-  width: 100%; min-height: 130px; background: var(--bg); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 1rem 1.2rem; font-family: var(--font-body);
-  font-size: 0.95rem; color: var(--text); resize: vertical; transition: all var(--duration); line-height: 1.6;
-}
-.analyzer-textarea::placeholder { color: var(--muted); }
-.analyzer-textarea:focus { outline: none; border-color: rgba(var(--accent-rgb), 0.4); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08); }
-.analyzer-result { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.5rem; margin-top: 1.5rem; }
+/* ── Tags ──────────────────────────────────────────────── */
 .tag { display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 600; margin: 0.15rem; }
 .tag-cyan { background: rgba(var(--accent-rgb), 0.1); color: var(--accent); }
 .tag-orange { background: rgba(245,158,11,0.12); color: var(--amber); }
@@ -278,6 +269,64 @@ button { font-family: inherit; cursor: pointer; }
   border-radius: var(--radius-xs); transition: all var(--duration) var(--ease-out);
 }
 .broker-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); transform: translateY(-1px); }
+
+/* ── App Promo ─────────────────────────────────────────── */
+.app-promo {
+  display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: center;
+  background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius);
+  padding: clamp(2rem, 4vw, 3.5rem); position: relative; overflow: hidden;
+}
+.app-promo::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad-accent); }
+.app-promo-content .section-title { text-align: left; margin-bottom: 0.8rem; }
+.app-desc { font-size: 1rem; color: var(--text-secondary); line-height: 1.75; margin-bottom: 1.5rem; }
+.app-features { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 2rem; }
+.app-feature {
+  display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500;
+  color: var(--text-secondary); padding: 0.5rem 0.8rem; background: rgba(var(--accent-rgb), 0.04);
+  border-radius: var(--radius-xs); border: 1px solid rgba(var(--accent-rgb), 0.08);
+}
+.app-feature i { color: var(--accent); font-size: 0.9rem; width: 18px; text-align: center; }
+.app-buttons { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+.app-store-btn {
+  display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1.3rem;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text); font-size: 1rem; transition: all var(--duration) var(--ease-out); text-decoration: none;
+}
+.app-store-btn i { font-size: 1.6rem; }
+.app-store-btn:hover { border-color: var(--border-hover); background: var(--accent-dim); transform: translateY(-2px); }
+.app-store-small { display: block; font-size: 0.6rem; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; line-height: 1; }
+.app-store-name { display: block; font-size: 0.95rem; font-weight: 700; line-height: 1.3; }
+.app-coming-soon { font-size: 0.8rem; color: var(--accent); font-weight: 500; display: flex; align-items: center; gap: 0.4rem; }
+.app-coming-soon i { font-size: 0.75rem; }
+.app-promo-visual { display: flex; justify-content: center; }
+.app-phone {
+  width: 220px; height: 400px; background: var(--bg); border: 2px solid rgba(var(--accent-rgb), 0.2);
+  border-radius: 28px; padding: 12px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.app-phone::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; background: var(--surface-2); border-radius: 2px; }
+.app-phone-screen { height: 100%; background: var(--surface); border-radius: 18px; padding: 1.8rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; overflow: hidden; }
+.app-screen-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; }
+.app-screen-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.5; }
+.app-screen-title { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); letter-spacing: 1px; }
+.app-screen-item {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.7rem; font-size: 0.7rem; font-weight: 500;
+  color: var(--text-secondary); background: rgba(255,255,255,0.03); border-radius: var(--radius-xs);
+  border: 1px solid transparent; transition: all var(--duration);
+}
+.app-screen-item i { color: var(--muted); font-size: 0.65rem; width: 14px; text-align: center; }
+.app-screen-item.active { background: var(--accent-dim); border-color: rgba(var(--accent-rgb), 0.2); color: var(--text); }
+.app-screen-item.active i { color: var(--accent); }
+.app-screen-bar { margin-top: auto; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--indigo)); opacity: 0.6; }
+@media (max-width: 768px) {
+  .app-promo { grid-template-columns: 1fr; }
+  .app-promo-visual { order: -1; }
+  .app-phone { width: 180px; height: 330px; }
+  .app-features { grid-template-columns: 1fr; }
+  .app-promo-content .section-title { text-align: center; }
+  .app-desc { text-align: center; }
+  .app-buttons { justify-content: center; }
+  .app-coming-soon { justify-content: center; }
+}
 
 /* ── Testimonials ──────────────────────────────────────── */
 .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }

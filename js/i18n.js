@@ -102,14 +102,16 @@ const i18n = {
     tool_11_desc: "Formaliza tu compromiso contigo mismo. Tu manifiesto personal de trader disciplinado.",
     tool_locked: "Requiere acceso",
 
-    // Analyzer
-    analyzer_tag: "PRUEBA GRATIS",
-    analyzer_title: "Analizador de Emociones — IA",
-    analyzer_desc: "Escribe lo que sientes sobre tu trading y nuestra IA identificará tus emociones dominantes, sesgos cognitivos y te dará una recomendación personalizada.",
-    analyzer_placeholder: "Ejemplo: Hoy perdí 3 operaciones seguidas y siento que el mercado está en mi contra...",
-    analyzer_btn: "Analizar mis Emociones",
-    analyzer_loading: "Analizando con IA...",
-    analyzer_error: "Error al analizar. Intenta de nuevo.",
+    // App
+    app_tag: "NUEVA APP",
+    app_title: "Todas tus herramientas en el bolsillo",
+    app_desc: "Analizador de emociones con IA, analizador de gráficos, checklist pre-mercado, diario emocional y las 11 herramientas del curso — todo comprimido en una sola app. Aumenta tu productividad y acierto operando desde cualquier lugar.",
+    app_feat_1: "Analizador de Emociones IA",
+    app_feat_2: "Analizador de Gráficos IA",
+    app_feat_3: "11 Herramientas Integradas",
+    app_feat_4: "Notificaciones Inteligentes",
+    app_available: "Próximamente en",
+    app_soon: "Lanzamiento muy pronto — Incluida gratis con el curso",
 
     // FAQ
     faq_tag: "FAQ",
@@ -271,14 +273,16 @@ const i18n = {
     tool_11_desc: "Formalize your commitment to yourself. Your personal manifesto as a disciplined trader.",
     tool_locked: "Access required",
 
-    // Analyzer
-    analyzer_tag: "FREE TRIAL",
-    analyzer_title: "Emotion Analyzer — AI",
-    analyzer_desc: "Write what you feel about your trading and our AI will identify your dominant emotions, cognitive biases, and give you a personalized recommendation.",
-    analyzer_placeholder: "Example: Today I lost 3 trades in a row and I feel the market is against me...",
-    analyzer_btn: "Analyze My Emotions",
-    analyzer_loading: "Analyzing with AI...",
-    analyzer_error: "Analysis error. Try again.",
+    // App
+    app_tag: "NEW APP",
+    app_title: "All your tools in your pocket",
+    app_desc: "AI emotion analyzer, chart analyzer, pre-market checklist, emotional journal, and all 11 course tools — compressed into a single app. Boost your productivity and accuracy by trading from anywhere.",
+    app_feat_1: "AI Emotion Analyzer",
+    app_feat_2: "AI Chart Analyzer",
+    app_feat_3: "11 Integrated Tools",
+    app_feat_4: "Smart Notifications",
+    app_available: "Coming soon to",
+    app_soon: "Launching very soon — Included free with the course",
 
     // FAQ
     faq_tag: "FAQ",

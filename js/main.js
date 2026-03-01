@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════
    P'TRADERS — Main Application v2.0
-   Particles, counters, FAQ, analyzer, tools
+   Particles, counters, FAQ, tools
    ═══════════════════════════════════════════ */
 
 (() => {
@@ -19,7 +19,6 @@
     initFAQ();
     initToolCards();
     initModal();
-    initAnalyzer();
     initDemoButton();
   });
 
@@ -310,84 +309,6 @@
     if (!overlay) return;
     overlay.classList.remove("active");
     document.body.style.overflow = "";
-  }
-
-  // ═══ EMOTION ANALYZER ═════════════════════
-  function initAnalyzer() {
-    const btn = document.getElementById("analyzer-btn");
-    const input = document.getElementById("analyzer-input");
-    const result = document.getElementById("analyzer-result");
-    if (!btn || !input || !result) return;
-
-    btn.addEventListener("click", async () => {
-      const text = input.value.trim();
-      if (!text || text.length < 10) return;
-
-      const strings = i18n[currentLang] || {};
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner" style="animation:spin 1s linear infinite"></i> ${strings.analyzer_loading || "Analizando..."}`;
-      result.classList.add("hidden");
-
-      try {
-        const lang = currentLang === "en" ? "English" : "Spanish";
-        const prompt = `You are a trading psychology expert. Analyze this trader's emotional state written in ${lang}. Respond ONLY in ${lang} with this exact format:
-
-EMOTIONS: [list 2-3 dominant emotions]
-BIASES: [list 1-2 cognitive biases detected]
-RISK: [Low/Medium/High]
-RECOMMENDATION: [2-3 sentences of practical advice]
-
-Text: "${text}"`;
-
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDebuUKPwhlHqkBMfTxYF6oM_WSYbs6QEI`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-          }
-        );
-
-        const data = await res.json();
-        const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-
-        if (!raw) throw new Error("No response");
-
-        // Parse
-        const emotions = raw.match(/EMOCIONES?:(.+)/i)?.[1]?.trim() || raw.match(/EMOTIONS?:(.+)/i)?.[1]?.trim() || "";
-        const biases = raw.match(/SESGOS?:(.+)/i)?.[1]?.trim() || raw.match(/BIASES?:(.+)/i)?.[1]?.trim() || "";
-        const risk = raw.match(/RIESGO:(.+)/i)?.[1]?.trim() || raw.match(/RISK:(.+)/i)?.[1]?.trim() || "";
-        const rec = raw.match(/RECOMENDACI[ÓO]N:(.+)/is)?.[1]?.trim() || raw.match(/RECOMMENDATION:(.+)/is)?.[1]?.trim() || "";
-
-        const riskColor = risk.toLowerCase().includes("alto") || risk.toLowerCase().includes("high") ? "tag-orange" : risk.toLowerCase().includes("medio") || risk.toLowerCase().includes("medium") ? "tag-cyan" : "tag-mint";
-
-        result.innerHTML = `
-          <div style="margin-bottom:1rem">
-            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Emociones detectadas" : "Detected emotions"}:</strong><br/>
-            ${emotions.split(/[,·]/).map((e) => `<span class="tag tag-cyan">${e.trim()}</span>`).join("")}
-          </div>
-          <div style="margin-bottom:1rem">
-            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Sesgos cognitivos" : "Cognitive biases"}:</strong><br/>
-            ${biases.split(/[,·]/).map((b) => `<span class="tag tag-orange">${b.trim()}</span>`).join("")}
-          </div>
-          <div style="margin-bottom:1rem">
-            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Nivel de riesgo" : "Risk level"}:</strong>
-            <span class="tag ${riskColor}">${risk}</span>
-          </div>
-          <div>
-            <strong style="color:var(--text);font-size:0.85rem;">${currentLang === "es" ? "Recomendación" : "Recommendation"}:</strong>
-            <p style="color:var(--text-secondary);font-size:0.88rem;line-height:1.65;margin-top:0.3rem;">${rec}</p>
-          </div>
-        `;
-        result.classList.remove("hidden");
-      } catch (err) {
-        result.innerHTML = `<p style="color:var(--rose);font-size:0.88rem;">${strings.analyzer_error || "Error al analizar."}</p>`;
-        result.classList.remove("hidden");
-      }
-
-      btn.disabled = false;
-      btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="analyzer_btn">${strings.analyzer_btn || "Analizar mis Emociones"}</span>`;
-    });
   }
 
   // ═══ DEMO BUTTON ═══════════════════════════
