@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrato de Compromiso — P'Traders</title>
+  <meta name="description" content="Formaliza tu compromiso como trader disciplinado. Herramienta del Módulo 6.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Form Sections ─────────────────── */
+    .form-section {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .form-section h2 {
+      font-size: 1.1rem; font-weight: 800;
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-bottom: 1.5rem; padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    /* ── Input Styles ──────────────────── */
+    .field-group { margin-bottom: 1.2rem; }
+    .field-group label {
+      display: block; font-size: 0.8rem; font-weight: 700;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em;
+      font-family: var(--font-mono); margin-bottom: 0.4rem;
+    }
+    .field-group input[type="text"],
+    .field-group select,
+    .field-group textarea {
+      width: 100%; background: var(--bg-elevated); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xs); color: var(--text); font-family: var(--font-body);
+      font-size: 0.9rem; padding: 0.7rem 1rem; transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+    .field-group input:focus,
+    .field-group select:focus,
+    .field-group textarea:focus { outline: none; border-color: var(--accent); }
+    .field-group textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .field-group .char-count {
+      font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: 0.3rem;
+      font-family: var(--font-mono);
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* ── Commitment Items ──────────────── */
+    .commitment-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.2rem;
+      margin-bottom: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-out);
+      user-select: none;
+    }
+    .commitment-item:hover { border-color: rgba(var(--accent-rgb), 0.3); }
+    .commitment-item.checked { border-color: var(--emerald); background: rgba(16, 185, 129, 0.06); }
+
+    .commitment-check {
+      flex-shrink: 0; width: 28px; height: 28px;
+      border: 2px solid var(--glass-border); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s var(--ease-spring);
+      margin-top: 2px;
+    }
+    .commitment-item.checked .commitment-check {
+      background: var(--emerald); border-color: var(--emerald);
+      animation: checkPop 0.35s var(--ease-spring);
+    }
+    .commitment-check svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 3; fill: none;
+      stroke-linecap: round; stroke-linejoin: round;
+      opacity: 0; transform: scale(0);
+      transition: all 0.3s var(--ease-spring);
+    }
+    .commitment-item.checked .commitment-check svg { opacity: 1; transform: scale(1); }
+    .commitment-text { font-size: 0.92rem; line-height: 1.5; flex: 1; }
+    .commitment-text .commitment-inline-input {
+      display: inline-block; width: 52px; background: var(--bg-elevated);
+      border: 1px solid var(--glass-border); border-radius: var(--radius-xs);
+      color: var(--accent); font-family: var(--font-mono); font-weight: 700;
+      font-size: 0.88rem; text-align: center; padding: 0.15rem 0.3rem;
+      transition: border-color 0.3s;
+    }
+    .commitment-text .commitment-inline-input:focus { outline: none; border-color: var(--accent); }
+    @keyframes checkPop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+    .commitment-counter {
+      text-align: center; margin-top: 1rem; font-family: var(--font-mono);
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .commitment-counter .count-value { color: var(--emerald); font-weight: 700; }
+
+    /* ── Signature Canvas ──────────────── */
+    .signature-area { text-align: center; }
+    .signature-canvas-wrap {
+      position: relative; display: inline-block;
+      background: var(--surface); border: 2px dashed var(--glass-border);
+      border-radius: var(--radius-sm); overflow: hidden;
+      cursor: crosshair; touch-action: none;
+      width: 100%; max-width: 500px;
+    }
+    .signature-canvas-wrap.has-signature { border-style: solid; border-color: var(--accent); }
+    #signature-canvas { display: block; width: 100%; height: 180px; }
+    .signature-label {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-size: 0.85rem; color: var(--muted); pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .signature-canvas-wrap.has-signature .signature-label { opacity: 0; }
+    .signature-line {
+      position: absolute; bottom: 30px; left: 10%; right: 10%;
+      border-bottom: 1px solid rgba(148, 163, 200, 0.2);
+      pointer-events: none;
+    }
+    .btn-clear-sig {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--surface); color: var(--muted);
+      border: 1px solid var(--glass-border); border-radius: var(--radius-xs);
+      padding: 0.45rem 1rem; font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; margin-top: 0.8rem; transition: all 0.3s;
+      font-family: var(--font-body);
+    }
+    .btn-clear-sig:hover { border-color: var(--rose); color: var(--rose); }
+    .sig-timestamp {
+      font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);
+      margin-top: 0.6rem;
+    }
+
+    /* ── Generate Button ───────────────── */
+    .btn-generate {
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      width: 100%; margin: 2rem 0;
+      background: linear-gradient(135deg, var(--accent), #2668ff);
+      color: #fff; border: none; border-radius: var(--radius-sm);
+      padding: 1.1rem 2rem; font-size: 1.05rem; font-weight: 800;
+      font-family: var(--font-body); cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      box-shadow: 0 4px 20px var(--accent-glow);
+      letter-spacing: 0.02em;
+    }
+    .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
+    .btn-generate:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── Certificate / Contract Preview ── */
+    .certificate-wrap {
+      display: none; margin: 2rem 0;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .certificate-wrap.visible { display: block; }
+
+    .certificate {
+      position: relative;
+      background: linear-gradient(180deg, #0d1526 0%, #0a1020 100%);
+      border: 2px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 3rem 2.5rem;
+      max-width: 700px; margin: 0 auto;
+      box-shadow: 0 0 60px rgba(251, 191, 36, 0.08), inset 0 0 80px rgba(251, 191, 36, 0.03);
+      overflow: hidden;
+    }
+
+    /* Corner decorations */
+    .certificate::before,
+    .certificate::after {
+      content: ""; position: absolute; width: 60px; height: 60px;
+      border: 2px solid var(--gold); opacity: 0.3;
+    }
+    .certificate::before { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+    .certificate::after { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+    .cert-corner-bl, .cert-corner-br {
+      position: absolute; width: 60px; height: 60px;
+      border: 2px solid var(--gold); opacity: 0.3;
+    }
+    .cert-corner-bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+    .cert-corner-br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+    .cert-logo { display: flex; justify-content: center; margin-bottom: 1.2rem; }
+    .cert-logo img { height: 36px; filter: brightness(1.1); }
+    .cert-title {
+      text-align: center; font-family: var(--font-mono);
+      font-size: clamp(1rem, 3vw, 1.35rem); font-weight: 800;
+      color: var(--gold); letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 0.3rem;
+    }
+    .cert-number {
+      text-align: center; font-family: var(--font-mono);
+      font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+    .cert-divider {
+      height: 1px; margin: 1.5rem auto;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0.3; max-width: 80%;
+    }
+    .cert-identity {
+      text-align: center; margin-bottom: 1.5rem;
+    }
+    .cert-name {
+      font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 800;
+      background: var(--grad-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 0.2rem;
+    }
+    .cert-alias {
+      font-size: 0.85rem; color: var(--muted); font-style: italic;
+    }
+    .cert-experience {
+      font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;
+    }
+    .cert-commitments-title {
+      font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 1rem; text-align: center;
+    }
+    .cert-commitment-list { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+    .cert-commitment-list li {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 0.85rem; color: var(--text-secondary);
+      padding: 0.4rem 0; line-height: 1.5;
+    }
+    .cert-commitment-list li .check-icon { color: var(--emerald); flex-shrink: 0; font-size: 0.9rem; }
+    .cert-promise-title {
+      font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700;
+      color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 0.6rem; text-align: center;
+    }
+    .cert-promise {
+      font-style: italic; font-size: 0.9rem; color: var(--text-secondary);
+      text-align: center; line-height: 1.7; margin-bottom: 1.5rem;
+      padding: 0 1rem;
+    }
+    .cert-signature-area {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 1rem;
+    }
+    .cert-sig-img { max-width: 220px; max-height: 80px; margin-bottom: 0.3rem; }
+    .cert-sig-line { width: 200px; border-bottom: 1px solid var(--gold); opacity: 0.4; margin-bottom: 0.3rem; }
+    .cert-sig-name { font-size: 0.82rem; color: var(--text-secondary); }
+    .cert-timestamp {
+      text-align: center; font-family: var(--font-mono);
+      font-size: 0.7rem; color: var(--muted); margin-bottom: 1.5rem;
+    }
+    .cert-seal {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: var(--radius-full); padding: 0.45rem 1.2rem;
+      font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase;
+      margin: 0 auto; width: fit-content;
+    }
+    .cert-seal-icon { font-size: 1rem; }
+
+    /* ── Actions Bar ───────────────────── */
+    .actions-bar {
+      display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 2rem; margin-bottom: 1rem;
+    }
+    .btn-action {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
+      padding: 0.7rem 1.2rem; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all var(--duration) var(--ease-out);
+      text-decoration: none; font-family: var(--font-body);
+    }
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-action.cta {
+      background: linear-gradient(135deg, var(--accent), #2668ff);
+      color: #fff; border: none; font-weight: 700;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-action.cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px var(--accent-glow); }
+
+    /* ── Animations ─────────────────────── */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .hidden { display: none !important; }
+
+    /* ── Responsive ─────────────────────── */
+    @media (max-width: 640px) {
+      .field-row { grid-template-columns: 1fr; }
+      .certificate { padding: 2rem 1.5rem; }
+      .cert-name { font-size: 1.3rem; }
+      .actions-bar { flex-direction: column; align-items: stretch; }
+      .btn-action { justify-content: center; }
+    }
+
+    /* ── Print Styles ──────────────────── */
+    @media print {
+      body { background: #fff !important; color: #111 !important; }
+      .bg-noise, .bg-glow, .topbar, .tool-back, .instructions,
+      .form-section, .btn-generate, .actions-bar { display: none !important; }
+      .tool-page { padding: 0; max-width: 100%; }
+      .tool-header { display: none; }
+      .certificate-wrap { display: block !important; margin: 0; }
+      .certificate {
+        background: #fff !important; border-color: #c9a227 !important;
+        box-shadow: none !important; color: #111 !important;
+        padding: 2.5rem 2rem; max-width: 100%;
+      }
+      .certificate::before, .certificate::after,
+      .cert-corner-bl, .cert-corner-br { border-color: #c9a227 !important; opacity: 0.5; }
+      .cert-title { color: #c9a227 !important; -webkit-text-fill-color: #c9a227 !important; }
+      .cert-name { -webkit-text-fill-color: #1a365d !important; color: #1a365d !important; }
+      .cert-number, .cert-alias, .cert-experience,
+      .cert-timestamp, .cert-sig-name { color: #555 !important; }
+      .cert-commitment-list li { color: #333 !important; }
+      .cert-commitment-list li .check-icon { color: #059669 !important; }
+      .cert-promise { color: #333 !important; }
+      .cert-divider { background: linear-gradient(to right, transparent, #c9a227, transparent) !important; }
+      .cert-commitments-title, .cert-promise-title { color: #c9a227 !important; }
+      .cert-seal { background: rgba(201, 162, 39, 0.1) !important; border-color: #c9a227 !important; color: #c9a227 !important; }
+      .cert-sig-line { border-color: #c9a227 !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="ccBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">📜</div>
+    <span class="module-badge" data-i18n="ccModule">MÓDULO 6</span>
+    <h1 data-i18n="ccTitle">Contrato de Compromiso</h1>
+    <p data-i18n="ccSubtitle">Formaliza tu compromiso contigo mismo. Este contrato es un pacto personal que refleja tu decisión de operar con disciplina, control y respeto por tu proceso.</p>
+  </div>
+
+  <div class="instructions">
+    <h3 data-i18n="ccInstrTitle">📜 Antes de firmar</h3>
+    <p data-i18n="ccInstrDesc">Este no es un documento cualquiera. Es tu declaración personal como trader. Léelo con seriedad, complétalo con honestidad, y fírmalo con la convicción de que estás comprometido con tu transformación. Guárdalo y revísalo cada vez que necesites recordar por qué empezaste.</p>
+  </div>
+
+  <!-- ── SECTION 1: Identity ────────── -->
+  <div class="form-section" id="section-identity">
+    <h2>👤 <span data-i18n="ccSec1Title">Mi Identidad como Trader</span></h2>
+    <div class="field-row">
+      <div class="field-group">
+        <label data-i18n="ccFullName">Nombre Completo</label>
+        <input type="text" id="input-fullname" maxlength="80" data-i18n-placeholder="ccFullNamePH" placeholder="Tu nombre completo">
+      </div>
+      <div class="field-group">
+        <label data-i18n="ccAlias">Nombre de Trader (opcional)</label>
+        <input type="text" id="input-alias" maxlength="40" data-i18n-placeholder="ccAliasPH" placeholder="Tu alias de trading">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label data-i18n="ccDate">Fecha</label>
+        <input type="text" id="input-date" readonly>
+      </div>
+      <div class="field-group">
+        <label data-i18n="ccExperience">He estado operando por</label>
+        <select id="input-experience">
+          <option value="lt6m" data-i18n="ccExpOpt1">Menos de 6 meses</option>
+          <option value="6to12m" data-i18n="ccExpOpt2">6-12 meses</option>
+          <option value="1to2y" data-i18n="ccExpOpt3">1-2 años</option>
+          <option value="2plus" data-i18n="ccExpOpt4">Más de 2 años</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: Commitments ─────── -->
+  <div class="form-section" id="section-commitments">
+    <h2>✊ <span data-i18n="ccSec2Title">Mis Compromisos</span></h2>
+
+    <div class="commitment-item" data-commit="1">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text" data-i18n="ccCommit1">Siempre operaré con un plan escrito</div>
+    </div>
+    <div class="commitment-item" data-commit="2">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text" data-i18n="ccCommit2">Respetaré mi stop loss sin moverlo</div>
+    </div>
+    <div class="commitment-item" data-commit="3">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text" data-i18n="ccCommit3">No operaré por impulso ni venganza</div>
+    </div>
+    <div class="commitment-item" data-commit="4">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text" data-i18n="ccCommit4">Aceptaré las pérdidas como parte del proceso</div>
+    </div>
+    <div class="commitment-item" data-commit="5">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text" data-i18n="ccCommit5">Haré mi checklist antes de cada sesión</div>
+    </div>
+    <div class="commitment-item" data-commit="6">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text" data-i18n="ccCommit6">Registraré mis emociones en mi diario</div>
+    </div>
+    <div class="commitment-item" data-commit="7">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text">
+        <span data-i18n="ccCommit7Pre">No arriesgaré más del </span>
+        <input type="number" class="commitment-inline-input" id="input-risk-pct" min="1" max="5" value="2">
+        <span data-i18n="ccCommit7Post">% por operación</span>
+      </div>
+    </div>
+    <div class="commitment-item" data-commit="8">
+      <div class="commitment-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="commitment-text">
+        <span data-i18n="ccCommit8Pre">Mi máximo de operaciones diarias será </span>
+        <input type="number" class="commitment-inline-input" id="input-max-trades" min="1" max="20" value="3">
+      </div>
+    </div>
+
+    <div class="commitment-counter">
+      <span class="count-value" id="commit-count">0</span> / 8 <span data-i18n="ccCommitCount">compromisos aceptados</span>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Personal Promise ── -->
+  <div class="form-section" id="section-promise">
+    <h2>💎 <span data-i18n="ccSec3Title">Mi Promesa Personal</span></h2>
+    <div class="field-group">
+      <label data-i18n="ccPromiseLabel">Escribe tu promesa personal como trader</label>
+      <textarea id="input-promise" maxlength="300" data-i18n-placeholder="ccPromisePH" placeholder="¿A qué te comprometes? ¿Por qué este camino? Escribe con el corazón..."></textarea>
+      <div class="char-count"><span id="promise-chars">0</span> / 300</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: Signature ─────── -->
+  <div class="form-section" id="section-signature">
+    <h2>✍️ <span data-i18n="ccSec4Title">Firma</span></h2>
+    <div class="signature-area">
+      <div class="signature-canvas-wrap" id="sig-wrap">
+        <canvas id="signature-canvas"></canvas>
+        <span class="signature-label" data-i18n="ccSigLabel">Dibuja tu firma aquí</span>
+        <div class="signature-line"></div>
+      </div>
+      <br>
+      <button class="btn-clear-sig" id="btn-clear-sig"><i class="fas fa-eraser"></i> <span data-i18n="ccSigClear">Limpiar firma</span></button>
+      <div class="sig-timestamp" id="sig-timestamp"></div>
+    </div>
+  </div>
+
+  <!-- ── Generate Button ──────────── -->
+  <button class="btn-generate" id="btn-generate" disabled>
+    <i class="fas fa-file-signature"></i> <span data-i18n="ccGenerate">Generar Contrato</span>
+  </button>
+
+  <!-- ── Certificate Preview ──────── -->
+  <div class="certificate-wrap" id="certificate-wrap">
+    <div class="certificate" id="certificate">
+      <div class="cert-corner-bl"></div>
+      <div class="cert-corner-br"></div>
+      <div class="cert-logo"><img src="../../logo.svg" alt="P'Traders"></div>
+      <div class="cert-title" id="cert-title">CONTRATO DE COMPROMISO DEL TRADER</div>
+      <div class="cert-number" id="cert-number"></div>
+      <div class="cert-divider"></div>
+      <div class="cert-identity">
+        <div class="cert-name" id="cert-name"></div>
+        <div class="cert-alias" id="cert-alias"></div>
+        <div class="cert-experience" id="cert-experience"></div>
+      </div>
+      <div class="cert-divider"></div>
+      <div class="cert-commitments-title" data-i18n="ccCertCommitmentsTitle">Compromisos Asumidos</div>
+      <ul class="cert-commitment-list" id="cert-commitments"></ul>
+      <div class="cert-divider"></div>
+      <div class="cert-promise-title" data-i18n="ccCertPromiseTitle">Promesa Personal</div>
+      <div class="cert-promise" id="cert-promise"></div>
+      <div class="cert-divider"></div>
+      <div class="cert-signature-area">
+        <img class="cert-sig-img" id="cert-sig-img" alt="Signature">
+        <div class="cert-sig-line"></div>
+        <div class="cert-sig-name" id="cert-sig-name"></div>
+      </div>
+      <div class="cert-timestamp" id="cert-timestamp"></div>
+      <div class="cert-seal">
+        <span class="cert-seal-icon">🏅</span>
+        <span data-i18n="ccSealText">P'Traders Certified Commitment</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-bar" id="actions-bar">
+      <button class="btn-action" id="btn-save"><i class="fas fa-save"></i> <span data-i18n="ccSave">Guardar</span></button>
+      <button class="btn-action" id="btn-download"><i class="fas fa-download"></i> <span data-i18n="ccDownload">Descargar .txt</span></button>
+      <button class="btn-action" id="btn-download-img"><i class="fas fa-image"></i> <span data-i18n="ccDownloadImg">Descargar Imagen</span></button>
+      <button class="btn-action" id="btn-print"><i class="fas fa-print"></i> <span data-i18n="ccPrint">Imprimir</span></button>
+      <button class="btn-action" id="btn-new"><i class="fas fa-plus"></i> <span data-i18n="ccNew">Nuevo Contrato</span></button>
+      <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" class="btn-action cta">
+        <i class="fas fa-rocket"></i> <span data-i18n="ccCta">Accede al Curso Completo</span>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══════════════════════════════════════════
+   CONTRATO DE COMPROMISO — P'Traders
+   Module 6 Tool — Self-contained IIFE
+   ═══════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  /* ── i18n dictionary ─────────────────── */
+  const dict = {
+    es: {
+      ccBack: "Volver al inicio",
+      ccModule: "MÓDULO 6",
+      ccTitle: "Contrato de Compromiso",
+      ccSubtitle: "Formaliza tu compromiso contigo mismo. Este contrato es un pacto personal que refleja tu decisión de operar con disciplina, control y respeto por tu proceso.",
+      ccInstrTitle: "📜 Antes de firmar",
+      ccInstrDesc: "Este no es un documento cualquiera. Es tu declaración personal como trader. Léelo con seriedad, complétalo con honestidad, y fírmalo con la convicción de que estás comprometido con tu transformación. Guárdalo y revísalo cada vez que necesites recordar por qué empezaste.",
+      ccSec1Title: "Mi Identidad como Trader",
+      ccFullName: "Nombre Completo",
+      ccFullNamePH: "Tu nombre completo",
+      ccAlias: "Nombre de Trader (opcional)",
+      ccAliasPH: "Tu alias de trading",
+      ccDate: "Fecha",
+      ccExperience: "He estado operando por",
+      ccExpOpt1: "Menos de 6 meses",
+      ccExpOpt2: "6-12 meses",
+      ccExpOpt3: "1-2 años",
+      ccExpOpt4: "Más de 2 años",
+      ccSec2Title: "Mis Compromisos",
+      ccCommit1: "Siempre operaré con un plan escrito",
+      ccCommit2: "Respetaré mi stop loss sin moverlo",
+      ccCommit3: "No operaré por impulso ni venganza",
+      ccCommit4: "Aceptaré las pérdidas como parte del proceso",
+      ccCommit5: "Haré mi checklist antes de cada sesión",
+      ccCommit6: "Registraré mis emociones en mi diario",
+      ccCommit7Pre: "No arriesgaré más del ",
+      ccCommit7Post: "% por operación",
+      ccCommit8Pre: "Mi máximo de operaciones diarias será ",
+      ccCommitCount: "compromisos aceptados",
+      ccSec3Title: "Mi Promesa Personal",
+      ccPromiseLabel: "Escribe tu promesa personal como trader",
+      ccPromisePH: "¿A qué te comprometes? ¿Por qué este camino? Escribe con el corazón...",
+      ccSec4Title: "Firma",
+      ccSigLabel: "Dibuja tu firma aquí",
+      ccSigClear: "Limpiar firma",
+      ccGenerate: "Generar Contrato",
+      ccCertTitle: "CONTRATO DE COMPROMISO DEL TRADER",
+      ccCertCommitmentsTitle: "Compromisos Asumidos",
+      ccCertPromiseTitle: "Promesa Personal",
+      ccSealText: "P'Traders Certified Commitment",
+      ccSave: "Guardar",
+      ccDownload: "Descargar .txt",
+      ccDownloadImg: "Descargar Imagen",
+      ccPrint: "Imprimir",
+      ccNew: "Nuevo Contrato",
+      ccCta: "Accede al Curso Completo",
+      ccExpLabel_lt6m: "Menos de 6 meses de experiencia",
+      ccExpLabel_6to12m: "6-12 meses de experiencia",
+      ccExpLabel_1to2y: "1-2 años de experiencia",
+      ccExpLabel_2plus: "Más de 2 años de experiencia",
+      ccSavedMsg: "✅ Contrato guardado correctamente",
+      ccFullNameRequired: "Ingresa tu nombre completo",
+      ccSignRequired: "Dibuja tu firma para continuar",
+      ccCommitRequired: "Acepta al menos un compromiso",
+      ccExportHeader: "CONTRATO DE COMPROMISO DEL TRADER — P'TRADERS",
+      ccExportCommitments: "COMPROMISOS ASUMIDOS",
+      ccExportPromise: "PROMESA PERSONAL",
+      ccExportSigned: "Firmado digitalmente por",
+      ccExportDate: "Fecha",
+      ccExportNumber: "Contrato Nº",
+    },
+    en: {
+      ccBack: "Back to home",
+      ccModule: "MODULE 6",
+      ccTitle: "Commitment Contract",
+      ccSubtitle: "Formalize your commitment to yourself. This contract is a personal pact that reflects your decision to trade with discipline, control, and respect for your process.",
+      ccInstrTitle: "📜 Before you sign",
+      ccInstrDesc: "This is not just any document. It's your personal declaration as a trader. Read it seriously, complete it honestly, and sign it with the conviction that you are committed to your transformation. Save it and review it whenever you need to remember why you started.",
+      ccSec1Title: "My Identity as Trader",
+      ccFullName: "Full Name",
+      ccFullNamePH: "Your full name",
+      ccAlias: "Trading Name (optional)",
+      ccAliasPH: "Your trading alias",
+      ccDate: "Date",
+      ccExperience: "I have been trading for",
+      ccExpOpt1: "Less than 6 months",
+      ccExpOpt2: "6-12 months",
+      ccExpOpt3: "1-2 years",
+      ccExpOpt4: "More than 2 years",
+      ccSec2Title: "My Commitments",
+      ccCommit1: "I will always trade with a written plan",
+      ccCommit2: "I will respect my stop loss without moving it",
+      ccCommit3: "I will not trade on impulse or revenge",
+      ccCommit4: "I will accept losses as part of the process",
+      ccCommit5: "I will do my checklist before each session",
+      ccCommit6: "I will log my emotions in my journal",
+      ccCommit7Pre: "I will not risk more than ",
+      ccCommit7Post: "% per trade",
+      ccCommit8Pre: "My max daily trades will be ",
+      ccCommitCount: "commitments accepted",
+      ccSec3Title: "My Personal Promise",
+      ccPromiseLabel: "Write your personal promise as a trader",
+      ccPromisePH: "What are you committing to? Why this path? Write from the heart...",
+      ccSec4Title: "Signature",
+      ccSigLabel: "Draw your signature here",
+      ccSigClear: "Clear signature",
+      ccGenerate: "Generate Contract",
+      ccCertTitle: "TRADER'S COMMITMENT CONTRACT",
+      ccCertCommitmentsTitle: "Commitments Assumed",
+      ccCertPromiseTitle: "Personal Promise",
+      ccSealText: "P'Traders Certified Commitment",
+      ccSave: "Save",
+      ccDownload: "Download .txt",
+      ccDownloadImg: "Download Image",
+      ccPrint: "Print",
+      ccNew: "New Contract",
+      ccCta: "Access the Full Course",
+      ccExpLabel_lt6m: "Less than 6 months of experience",
+      ccExpLabel_6to12m: "6-12 months of experience",
+      ccExpLabel_1to2y: "1-2 years of experience",
+      ccExpLabel_2plus: "More than 2 years of experience",
+      ccSavedMsg: "✅ Contract saved successfully",
+      ccFullNameRequired: "Enter your full name",
+      ccSignRequired: "Draw your signature to continue",
+      ccCommitRequired: "Accept at least one commitment",
+      ccExportHeader: "TRADER'S COMMITMENT CONTRACT — P'TRADERS",
+      ccExportCommitments: "COMMITMENTS ASSUMED",
+      ccExportPromise: "PERSONAL PROMISE",
+      ccExportSigned: "Digitally signed by",
+      ccExportDate: "Date",
+      ccExportNumber: "Contract Nº",
+    }
+  };
+
+  /* ── Merge into global i18n ──────────── */
+  if (typeof i18n !== "undefined") {
+    Object.assign(i18n.es, dict.es);
+    Object.assign(i18n.en, dict.en);
+  }
+
+  /* ── Language helpers ────────────────── */
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function t(key) {
+    if (typeof i18n !== "undefined" && i18n[currentLang] && i18n[currentLang][key]) return i18n[currentLang][key];
+    return dict[currentLang]?.[key] || dict.es[key] || key;
+  }
+
+  function applyLang() {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const val = t(key);
+      if (val) el.textContent = val;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      const val = t(key);
+      if (val) el.placeholder = val;
+    });
+    // Translate select options
+    document.querySelectorAll("select option[data-i18n]").forEach(opt => {
+      const key = opt.getAttribute("data-i18n");
+      const val = t(key);
+      if (val) opt.textContent = val;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+    document.documentElement.lang = currentLang;
+  }
+
+  /* ── DOM refs ────────────────────────── */
+  const inputFullname   = document.getElementById("input-fullname");
+  const inputAlias      = document.getElementById("input-alias");
+  const inputDate       = document.getElementById("input-date");
+  const inputExperience = document.getElementById("input-experience");
+  const inputRiskPct    = document.getElementById("input-risk-pct");
+  const inputMaxTrades  = document.getElementById("input-max-trades");
+  const inputPromise    = document.getElementById("input-promise");
+  const promiseChars    = document.getElementById("promise-chars");
+  const commitCount     = document.getElementById("commit-count");
+  const btnGenerate     = document.getElementById("btn-generate");
+  const certWrap        = document.getElementById("certificate-wrap");
+
+  /* ── Auto-fill date ──────────────────── */
+  const now = new Date();
+  const dateStr = now.toLocaleDateString(currentLang === "en" ? "en-US" : "es-ES", {
+    year: "numeric", month: "long", day: "numeric"
+  });
+  inputDate.value = dateStr;
+
+  /* ── Promise char counter ────────────── */
+  inputPromise.addEventListener("input", () => {
+    promiseChars.textContent = inputPromise.value.length;
+    validateForm();
+  });
+
+  /* ── Commitment toggles ──────────────── */
+  const commitmentItems = document.querySelectorAll(".commitment-item");
+  const commitStates = {};
+
+  commitmentItems.forEach(item => {
+    const key = item.dataset.commit;
+    commitStates[key] = false;
+
+    item.addEventListener("click", (e) => {
+      // Don't toggle when clicking inline inputs
+      if (e.target.classList.contains("commitment-inline-input")) return;
+      commitStates[key] = !commitStates[key];
+      item.classList.toggle("checked", commitStates[key]);
+      updateCommitCount();
+      validateForm();
+    });
+  });
+
+  function updateCommitCount() {
+    const count = Object.values(commitStates).filter(Boolean).length;
+    commitCount.textContent = count;
+  }
+
+  /* ── Signature pad ───────────────────── */
+  const canvas = document.getElementById("signature-canvas");
+  const ctx = canvas.getContext("2d");
+  const sigWrap = document.getElementById("sig-wrap");
+  let isDrawing = false;
+  let hasSigned = false;
+
+  function resizeCanvas() {
+    const rect = sigWrap.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = 180 * dpr;
+    canvas.style.height = "180px";
+    ctx.scale(dpr, dpr);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = "#00d4ff";
+  }
+  resizeCanvas();
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  function startDrawing(e) {
+    e.preventDefault();
+    isDrawing = true;
+    const pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function draw(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    hasSigned = true;
+    sigWrap.classList.add("has-signature");
+  }
+
+  function stopDrawing(e) {
+    if (isDrawing) {
+      isDrawing = false;
+      ctx.closePath();
+      validateForm();
+    }
+  }
+
+  // Mouse events
+  canvas.addEventListener("mousedown", startDrawing);
+  canvas.addEventListener("mousemove", draw);
+  canvas.addEventListener("mouseup", stopDrawing);
+  canvas.addEventListener("mouseleave", stopDrawing);
+
+  // Touch events
+  canvas.addEventListener("touchstart", startDrawing, { passive: false });
+  canvas.addEventListener("touchmove", draw, { passive: false });
+  canvas.addEventListener("touchend", stopDrawing);
+  canvas.addEventListener("touchcancel", stopDrawing);
+
+  // Clear signature
+  document.getElementById("btn-clear-sig").addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hasSigned = false;
+    sigWrap.classList.remove("has-signature");
+    validateForm();
+  });
+
+  // Resize handler
+  let sigResizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(sigResizeTimer);
+    sigResizeTimer = setTimeout(() => {
+      // Save current drawing
+      const imgData = canvas.toDataURL();
+      resizeCanvas();
+      // Restore drawing
+      if (hasSigned) {
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0, canvas.width / (window.devicePixelRatio || 1), 180);
+        };
+        img.src = imgData;
+      }
+    }, 250);
+  });
+
+  /* ── Form validation ─────────────────── */
+  function validateForm() {
+    const hasName = inputFullname.value.trim().length > 0;
+    const hasCommits = Object.values(commitStates).filter(Boolean).length > 0;
+    btnGenerate.disabled = !(hasName && hasCommits && hasSigned);
+  }
+
+  inputFullname.addEventListener("input", validateForm);
+
+  /* ── Generate contract ───────────────── */
+  function generateContractNumber() {
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    return `PT-${now.getFullYear()}-${rand}`;
+  }
+
+  function getExperienceLabel(val) {
+    const map = { lt6m: "ccExpLabel_lt6m", "6to12m": "ccExpLabel_6to12m", "1to2y": "ccExpLabel_1to2y", "2plus": "ccExpLabel_2plus" };
+    return t(map[val] || map.lt6m);
+  }
+
+  function getCommitmentTexts() {
+    const texts = [];
+    commitmentItems.forEach(item => {
+      const key = item.dataset.commit;
+      if (!commitStates[key]) return;
+      if (key === "7") {
+        texts.push(t("ccCommit7Pre") + inputRiskPct.value + t("ccCommit7Post"));
+      } else if (key === "8") {
+        texts.push(t("ccCommit8Pre") + inputMaxTrades.value);
+      } else {
+        texts.push(t("ccCommit" + key));
+      }
+    });
+    return texts;
+  }
+
+  btnGenerate.addEventListener("click", () => {
+    // Validate
+    if (!inputFullname.value.trim()) { alert(t("ccFullNameRequired")); return; }
+    if (Object.values(commitStates).filter(Boolean).length === 0) { alert(t("ccCommitRequired")); return; }
+    if (!hasSigned) { alert(t("ccSignRequired")); return; }
+
+    // Fill certificate
+    const contractNum = generateContractNumber();
+    document.getElementById("cert-title").textContent = t("ccCertTitle");
+    document.getElementById("cert-number").textContent = contractNum;
+    document.getElementById("cert-name").textContent = inputFullname.value.trim();
+
+    const alias = inputAlias.value.trim();
+    const certAliasEl = document.getElementById("cert-alias");
+    certAliasEl.textContent = alias ? `"${alias}"` : "";
+    certAliasEl.style.display = alias ? "block" : "none";
+
+    document.getElementById("cert-experience").textContent = getExperienceLabel(inputExperience.value);
+
+    // Commitments list
+    const certCommitList = document.getElementById("cert-commitments");
+    certCommitList.innerHTML = "";
+    getCommitmentTexts().forEach(text => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="check-icon">✓</span> ${text}`;
+      certCommitList.appendChild(li);
+    });
+
+    // Promise
+    document.getElementById("cert-promise").textContent = inputPromise.value.trim() || "—";
+
+    // Signature image
+    document.getElementById("cert-sig-img").src = canvas.toDataURL("image/png");
+    document.getElementById("cert-sig-name").textContent = inputFullname.value.trim();
+
+    // Timestamp
+    const ts = new Date();
+    const tsStr = ts.toLocaleString(currentLang === "en" ? "en-US" : "es-ES", {
+      year: "numeric", month: "long", day: "numeric",
+      hour: "2-digit", minute: "2-digit", second: "2-digit"
+    });
+    document.getElementById("cert-timestamp").textContent = tsStr;
+    document.getElementById("sig-timestamp").textContent = tsStr;
+
+    // Show certificate
+    certWrap.classList.add("visible");
+    certWrap.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Store contract data for save/export
+    window._contractData = {
+      number: contractNum,
+      name: inputFullname.value.trim(),
+      alias: alias,
+      date: dateStr,
+      experience: getExperienceLabel(inputExperience.value),
+      commitments: getCommitmentTexts(),
+      promise: inputPromise.value.trim(),
+      timestamp: tsStr,
+      signatureData: canvas.toDataURL("image/png"),
+    };
+  });
+
+  /* ── Save to localStorage ────────────── */
+  document.getElementById("btn-save").addEventListener("click", () => {
+    if (!window._contractData) return;
+    localStorage.setItem("pt_commitment_contract", JSON.stringify(window._contractData));
+    showToast(t("ccSavedMsg"));
+  });
+
+  /* ── Download .txt ───────────────────── */
+  document.getElementById("btn-download").addEventListener("click", () => {
+    if (!window._contractData) return;
+    const d = window._contractData;
+    const sep = "═".repeat(50);
+    let txt = "";
+    txt += sep + "\n";
+    txt += "  " + t("ccExportHeader") + "\n";
+    txt += sep + "\n\n";
+    txt += t("ccExportNumber") + ": " + d.number + "\n";
+    txt += t("ccExportDate") + ": " + d.date + "\n\n";
+    txt += d.name + "\n";
+    if (d.alias) txt += `"${d.alias}"\n`;
+    txt += d.experience + "\n\n";
+    txt += "─".repeat(40) + "\n";
+    txt += "  " + t("ccExportCommitments") + "\n";
+    txt += "─".repeat(40) + "\n\n";
+    d.commitments.forEach(c => { txt += "  ✓ " + c + "\n"; });
+    txt += "\n";
+    txt += "─".repeat(40) + "\n";
+    txt += "  " + t("ccExportPromise") + "\n";
+    txt += "─".repeat(40) + "\n\n";
+    txt += "  " + (d.promise || "—") + "\n\n";
+    txt += sep + "\n";
+    txt += t("ccExportSigned") + ": " + d.name + "\n";
+    txt += t("ccExportDate") + ": " + d.timestamp + "\n";
+    txt += sep + "\n";
+
+    const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `compromiso-${d.number}.txt`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  /* ── Download Image (Canvas render) ── */
+  document.getElementById("btn-download-img").addEventListener("click", () => {
+    if (!window._contractData) return;
+    const d = window._contractData;
+    renderContractImage(d).then(dataUrl => {
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `compromiso-${d.number}.png`;
+      a.click();
+    });
+  });
+
+  function renderContractImage(d) {
+    return new Promise(resolve => {
+      const W = 900, H = 1200;
+      const c = document.createElement("canvas");
+      c.width = W; c.height = H;
+      const cx = c.getContext("2d");
+
+      // Background
+      const bgGrad = cx.createLinearGradient(0, 0, 0, H);
+      bgGrad.addColorStop(0, "#0d1526");
+      bgGrad.addColorStop(1, "#0a1020");
+      cx.fillStyle = bgGrad;
+      cx.fillRect(0, 0, W, H);
+
+      // Gold border
+      cx.strokeStyle = "#fbbf24";
+      cx.lineWidth = 3;
+      cx.strokeRect(20, 20, W - 40, H - 40);
+
+      // Corner decorations
+      const cLen = 50;
+      cx.strokeStyle = "rgba(251, 191, 36, 0.5)";
+      cx.lineWidth = 2;
+      // Top-left
+      cx.beginPath(); cx.moveTo(35, 35 + cLen); cx.lineTo(35, 35); cx.lineTo(35 + cLen, 35); cx.stroke();
+      // Top-right
+      cx.beginPath(); cx.moveTo(W - 35 - cLen, 35); cx.lineTo(W - 35, 35); cx.lineTo(W - 35, 35 + cLen); cx.stroke();
+      // Bottom-left
+      cx.beginPath(); cx.moveTo(35, H - 35 - cLen); cx.lineTo(35, H - 35); cx.lineTo(35 + cLen, H - 35); cx.stroke();
+      // Bottom-right
+      cx.beginPath(); cx.moveTo(W - 35 - cLen, H - 35); cx.lineTo(W - 35, H - 35); cx.lineTo(W - 35, H - 35 - cLen); cx.stroke();
+
+      let y = 70;
+
+      // Title
+      cx.font = "bold 14px 'JetBrains Mono', monospace";
+      cx.fillStyle = "#fbbf24";
+      cx.textAlign = "center";
+      cx.fillText("P'TRADERS", W / 2, y);
+      y += 40;
+
+      cx.font = "bold 22px 'JetBrains Mono', monospace";
+      cx.fillStyle = "#fbbf24";
+      cx.fillText(t("ccCertTitle"), W / 2, y);
+      y += 28;
+
+      cx.font = "500 11px 'JetBrains Mono', monospace";
+      cx.fillStyle = "#64748b";
+      cx.fillText(d.number, W / 2, y);
+      y += 35;
+
+      // Divider
+      const divGrad = cx.createLinearGradient(W * 0.15, 0, W * 0.85, 0);
+      divGrad.addColorStop(0, "transparent");
+      divGrad.addColorStop(0.5, "rgba(251, 191, 36, 0.4)");
+      divGrad.addColorStop(1, "transparent");
+      cx.strokeStyle = divGrad;
+      cx.lineWidth = 1;
+      cx.beginPath(); cx.moveTo(W * 0.15, y); cx.lineTo(W * 0.85, y); cx.stroke();
+      y += 35;
+
+      // Name
+      cx.font = "800 28px Inter, sans-serif";
+      cx.fillStyle = "#00d4ff";
+      cx.fillText(d.name, W / 2, y);
+      y += 24;
+
+      if (d.alias) {
+        cx.font = "italic 14px Inter, sans-serif";
+        cx.fillStyle = "#94a3c8";
+        cx.fillText(`"${d.alias}"`, W / 2, y);
+        y += 22;
+      }
+
+      cx.font = "400 13px Inter, sans-serif";
+      cx.fillStyle = "#94a3c8";
+      cx.fillText(d.experience, W / 2, y);
+      y += 35;
+
+      // Divider
+      cx.strokeStyle = divGrad;
+      cx.beginPath(); cx.moveTo(W * 0.15, y); cx.lineTo(W * 0.85, y); cx.stroke();
+      y += 30;
+
+      // Commitments title
+      cx.font = "bold 11px 'JetBrains Mono', monospace";
+      cx.fillStyle = "#fbbf24";
+      cx.fillText(t("ccCertCommitmentsTitle").toUpperCase(), W / 2, y);
+      y += 28;
+
+      // Commitments
+      cx.textAlign = "left";
+      cx.font = "400 13px Inter, sans-serif";
+      cx.fillStyle = "#94a3c8";
+      d.commitments.forEach(text => {
+        cx.fillStyle = "#10b981";
+        cx.fillText("✓", 80, y);
+        cx.fillStyle = "#c8d5e8";
+        cx.fillText(text, 105, y);
+        y += 24;
+      });
+      y += 15;
+
+      // Divider
+      cx.textAlign = "center";
+      cx.strokeStyle = divGrad;
+      cx.beginPath(); cx.moveTo(W * 0.15, y); cx.lineTo(W * 0.85, y); cx.stroke();
+      y += 30;
+
+      // Promise title
+      cx.font = "bold 11px 'JetBrains Mono', monospace";
+      cx.fillStyle = "#fbbf24";
+      cx.fillText(t("ccCertPromiseTitle").toUpperCase(), W / 2, y);
+      y += 25;
+
+      // Promise text (word wrap)
+      cx.font = "italic 13px Inter, sans-serif";
+      cx.fillStyle = "#c8d5e8";
+      const promiseText = d.promise || "—";
+      const maxLineW = W - 160;
+      const lines = wrapText(cx, promiseText, maxLineW);
+      lines.forEach(line => {
+        cx.fillText(line, W / 2, y);
+        y += 20;
+      });
+      y += 25;
+
+      // Divider
+      cx.strokeStyle = divGrad;
+      cx.beginPath(); cx.moveTo(W * 0.15, y); cx.lineTo(W * 0.85, y); cx.stroke();
+      y += 30;
+
+      // Signature
+      const sigImg = new Image();
+      sigImg.onload = () => {
+        const sigW = 200, sigH = 70;
+        cx.drawImage(sigImg, (W - sigW) / 2, y, sigW, sigH);
+        y += sigH + 8;
+
+        // Signature line
+        cx.strokeStyle = "rgba(251, 191, 36, 0.4)";
+        cx.lineWidth = 1;
+        cx.beginPath(); cx.moveTo(W / 2 - 100, y); cx.lineTo(W / 2 + 100, y); cx.stroke();
+        y += 18;
+
+        cx.font = "400 12px Inter, sans-serif";
+        cx.fillStyle = "#94a3c8";
+        cx.textAlign = "center";
+        cx.fillText(d.name, W / 2, y);
+        y += 28;
+
+        // Timestamp
+        cx.font = "500 10px 'JetBrains Mono', monospace";
+        cx.fillStyle = "#64748b";
+        cx.fillText(d.timestamp, W / 2, y);
+        y += 35;
+
+        // Seal
+        cx.font = "bold 10px 'JetBrains Mono', monospace";
+        cx.fillStyle = "#fbbf24";
+        cx.fillText("🏅  P'TRADERS CERTIFIED COMMITMENT", W / 2, y);
+
+        resolve(c.toDataURL("image/png"));
+      };
+      sigImg.src = d.signatureData;
+    });
+  }
+
+  function wrapText(ctx, text, maxW) {
+    const words = text.split(" ");
+    const lines = [];
+    let current = "";
+    words.forEach(word => {
+      const test = current ? current + " " + word : word;
+      if (ctx.measureText(test).width > maxW && current) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = test;
+      }
+    });
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  /* ── Print ───────────────────────────── */
+  document.getElementById("btn-print").addEventListener("click", () => {
+    window.print();
+  });
+
+  /* ── New Contract ────────────────────── */
+  document.getElementById("btn-new").addEventListener("click", () => {
+    // Reset form
+    inputFullname.value = "";
+    inputAlias.value = "";
+    inputExperience.selectedIndex = 0;
+    inputRiskPct.value = 2;
+    inputMaxTrades.value = 3;
+    inputPromise.value = "";
+    promiseChars.textContent = "0";
+
+    // Reset commitments
+    commitmentItems.forEach(item => {
+      const key = item.dataset.commit;
+      commitStates[key] = false;
+      item.classList.remove("checked");
+    });
+    updateCommitCount();
+
+    // Clear signature
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hasSigned = false;
+    sigWrap.classList.remove("has-signature");
+    document.getElementById("sig-timestamp").textContent = "";
+
+    // Hide certificate
+    certWrap.classList.remove("visible");
+    btnGenerate.disabled = true;
+
+    window._contractData = null;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  /* ── Toast notification ──────────────── */
+  function showToast(msg) {
+    let toast = document.getElementById("toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "toast";
+      toast.style.cssText = `
+        position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+        background: var(--surface); border: 1px solid var(--emerald);
+        color: var(--emerald); padding: 0.8rem 1.5rem; border-radius: var(--radius-sm);
+        font-size: 0.88rem; font-weight: 600; z-index: 300;
+        opacity: 0; transition: all 0.4s var(--ease-out);
+        pointer-events: none; font-family: var(--font-body);
+      `;
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    toast.style.transform = "translateX(-50%) translateY(0)";
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      toast.style.transform = "translateX(-50%) translateY(20px)";
+    }, 2500);
+  }
+
+  /* ── Load saved contract ─────────────── */
+  function loadSavedContract() {
+    const saved = localStorage.getItem("pt_commitment_contract");
+    if (!saved) return;
+    try {
+      const d = JSON.parse(saved);
+      inputFullname.value = d.name || "";
+      inputAlias.value = d.alias || "";
+      if (d.promise) inputPromise.value = d.promise;
+      promiseChars.textContent = inputPromise.value.length;
+
+      // Restore signature
+      if (d.signatureData) {
+        const img = new Image();
+        img.onload = () => {
+          resizeCanvas();
+          ctx.drawImage(img, 0, 0, canvas.width / (window.devicePixelRatio || 1), 180);
+          hasSigned = true;
+          sigWrap.classList.add("has-signature");
+          validateForm();
+        };
+        img.src = d.signatureData;
+      }
+    } catch (e) { /* ignore corrupt data */ }
+  }
+
+  /* ── Language switcher ───────────────── */
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentLang = btn.dataset.lang;
+      localStorage.setItem("pt_lang", currentLang);
+      // Update date
+      const d = new Date();
+      inputDate.value = d.toLocaleDateString(currentLang === "en" ? "en-US" : "es-ES", {
+        year: "numeric", month: "long", day: "numeric"
+      });
+      applyLang();
+    });
+  });
+
+  /* ── Init ─────────────────────────────── */
+  loadSavedContract();
+  applyLang();
+  validateForm();
+
+})();
+</script>
+</body>
+</html>

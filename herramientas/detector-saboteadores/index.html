@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detector de Saboteadores — P'Traders</title>
+  <meta name="description" content="Descubre los saboteadores mentales que destruyen tus resultados en trading. Herramienta interactiva del Módulo 2.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 800px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Progress ────────────────────────── */
+    .progress-bar-container {
+      background: var(--surface);
+      border-radius: 6px;
+      height: 8px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #2668ff);
+      border-radius: 6px;
+      transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 0%;
+    }
+    .progress-text {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── Scenario Cards ─────────────────── */
+    .scenario-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      margin-bottom: 1.2rem;
+      transition: all var(--duration) var(--ease-out);
+      animation: fadeInUp 0.4s ease both;
+    }
+    .scenario-card:nth-child(2) { animation-delay: 0.04s; }
+    .scenario-card:nth-child(3) { animation-delay: 0.08s; }
+    .scenario-card:nth-child(4) { animation-delay: 0.12s; }
+    .scenario-card:nth-child(5) { animation-delay: 0.16s; }
+    .scenario-card:nth-child(6) { animation-delay: 0.20s; }
+    .scenario-card:nth-child(7) { animation-delay: 0.24s; }
+    .scenario-card:nth-child(8) { animation-delay: 0.28s; }
+    .scenario-card:nth-child(9) { animation-delay: 0.32s; }
+    .scenario-card:nth-child(10) { animation-delay: 0.36s; }
+
+    .scenario-card:hover { border-color: var(--accent-glow); }
+    .scenario-card.answered { border-color: rgba(0, 229, 255, 0.25); }
+
+    .scenario-number {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+    }
+
+    .scenario-situation {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .option-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      width: 100%;
+      text-align: left;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 0.9rem 1.2rem;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      line-height: 1.5;
+    }
+    .option-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      transform: translateX(4px);
+    }
+    .option-btn.selected {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .option-letter {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      transition: all var(--duration) var(--ease-out);
+    }
+    .option-btn.selected .option-letter {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .option-text { flex: 1; }
+
+    /* ── Submit Area ─────────────────────── */
+    .submit-area {
+      text-align: center;
+      margin-top: 2.5rem;
+    }
+
+    /* ── Results Panel ──────────────────── */
+    .results-panel {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 2rem;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .saboteur-reveal {
+      margin: 0 auto 2rem;
+      max-width: 480px;
+    }
+    .saboteur-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .saboteur-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.3rem;
+    }
+    .saboteur-subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+    .saboteur-desc {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .saboteur-advice {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .saboteur-advice h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 0.8rem;
+    }
+    .saboteur-advice ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .saboteur-advice li {
+      position: relative;
+      padding-left: 1.4rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+    .saboteur-advice li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── Secondary Patterns ─────────────── */
+    .secondary-section { margin: 2rem 0; text-align: left; }
+    .secondary-section h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .result-bars { margin: 1.5rem 0; text-align: left; }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .bar-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      width: 130px;
+      flex-shrink: 0;
+      text-align: right;
+      line-height: 1.3;
+    }
+    .bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--surface);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .bar-value {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 30px;
+      flex-shrink: 0;
+    }
+    .bar-icon {
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .secondary-card {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .secondary-card:nth-child(2) { animation-delay: 0.08s; }
+    .secondary-card:nth-child(3) { animation-delay: 0.16s; }
+    .secondary-card:nth-child(4) { animation-delay: 0.24s; }
+    .secondary-card:nth-child(5) { animation-delay: 0.32s; }
+
+    .secondary-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
+    .secondary-info { flex: 1; }
+    .secondary-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .secondary-score {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 0.4rem;
+    }
+    .secondary-score.high { background: rgba(251,113,133,0.15); color: var(--rose); }
+    .secondary-score.mid { background: rgba(251,191,36,0.15); color: var(--amber); }
+    .secondary-score.low { background: rgba(52,211,153,0.15); color: var(--emerald); }
+    .secondary-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Actions ────────────────────────── */
+    .result-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1.3rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      text-decoration: none;
+    }
+    .btn-download:hover { border-color: var(--accent); color: var(--accent); }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .scenario-card { padding: 1.3rem; }
+      .option-btn { padding: 0.7rem 1rem; font-size: 0.85rem; }
+      .bar-label { width: 100px; font-size: 0.7rem; }
+    }
+    @media (max-width: 480px) {
+      .bar-label { width: 80px; font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="dsBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">🔍</div>
+    <span class="module-badge" data-i18n="dsModule">MÓDULO 2</span>
+    <h1 data-i18n="dsTitle">Detector de Saboteadores</h1>
+    <p data-i18n="dsSubtitle">Tu peor enemigo en el trading tiene nombre. Responde estos 10 escenarios con total honestidad y descubrirás los patrones inconscientes que destruyen tus resultados.</p>
+  </div>
+
+  <div class="instructions">
+    <h3 data-i18n="dsHowTitle">🎯 Cómo funciona</h3>
+    <p data-i18n="dsHowDesc">Lee cada escenario de trading y elige la respuesta que <strong>más se parece</strong> a lo que realmente harías (no lo que "deberías" hacer). No hay respuestas correctas. Al final descubrirás tu perfil de saboteador dominante.</p>
+  </div>
+
+  <!-- Progress -->
+  <p class="progress-text" id="progress-text" data-i18n="dsProgress">0 / 10</p>
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progress-bar"></div>
+  </div>
+
+  <!-- Scenarios Container -->
+  <div id="scenarios-container">
+
+    <!-- Q1 -->
+    <div class="scenario-card" data-q="1">
+      <span class="scenario-number" data-i18n="dsQ1Label">ESCENARIO 1 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ1">Un trade va en tu contra. Ya perdiste el 50% de lo que estabas dispuesto a arriesgar.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ1A">Sigo mi plan, mi stop está donde lo puse por una razón.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ1B">Muevo el stop un poco más abajo, seguro que rebota.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ1C">Cierro todo en pánico, no soporto verlo más.</span></button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="scenario-card" data-q="2">
+      <span class="scenario-number" data-i18n="dsQ2Label">ESCENARIO 2 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ2">Acabas de ganar 3 trades seguidos. Te sientes en racha.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ2A">Sigo con mi plan y mi tamaño de posición habitual.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ2B">Aumento el tamaño de posición, estoy caliente.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ2C">Me siento invencible, abro más operaciones de lo normal.</span></button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="scenario-card" data-q="3">
+      <span class="scenario-number" data-i18n="dsQ3Label">ESCENARIO 3 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ3">Te perdiste un movimiento enorme. El par que estabas vigilando subió un 5% sin ti.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ3A">Lo acepto, espero el próximo setup que cumpla mis reglas.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ3B">Persigo el precio y entro tarde, algo queda por ganar.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ3C">Me frustro y fuerzo un trade en otro par para compensar.</span></button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="scenario-card" data-q="4">
+      <span class="scenario-number" data-i18n="dsQ4Label">ESCENARIO 4 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ4">Alcanzaste tu límite de pérdida diaria.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ4A">Cierro la plataforma. Mañana es otro día.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ4B">"Una más para recuperar" y vuelvo a entrar.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ4C">Cambio a otro par o timeframe para seguir operando.</span></button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="scenario-card" data-q="5">
+      <span class="scenario-number" data-i18n="dsQ5Label">ESCENARIO 5 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ5">Alguien en un grupo de Telegram dice "compren ahora, esto se va al cielo".</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ5A">Ignoro completamente, sigo mi propio análisis.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ5B">Abro la posición inmediatamente, esa persona sabe.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ5C">Empiezo a dudar de mi propio análisis y lo modifico.</span></button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="scenario-card" data-q="6">
+      <span class="scenario-number" data-i18n="dsQ6Label">ESCENARIO 6 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ6">Miras tu P&L del día y ves -$200.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ6A">Acepto, reviso si seguí mi plan y anoto en el diario.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ6B">Doblo la posición para recuperar rápido.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ6C">Me quedo mirando la pantalla esperando que vuelva, sin hacer nada.</span></button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="scenario-card" data-q="7">
+      <span class="scenario-number" data-i18n="dsQ7Label">ESCENARIO 7 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ7">Ayer ganaste mucho dinero. Hoy te sientas a operar.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ7A">Mismo plan, mismo riesgo. Ayer fue ayer.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ7B">Arriesgo más, total tengo "colchón" de ganancias.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ7C">Salto el análisis, me siento confiado, entro más rápido.</span></button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="scenario-card" data-q="8">
+      <span class="scenario-number" data-i18n="dsQ8Label">ESCENARIO 8 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ8">El mercado está lateral, sin dirección clara. Llevas 2 horas sin ver un setup.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ8A">No opero. Sin setup claro, no hay trade.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ8B">Opero igual, necesito "hacer algo", no puedo quedarme quieto.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ8C">Bajo de temporalidad para encontrar algo que operar.</span></button>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="scenario-card" data-q="9">
+      <span class="scenario-number" data-i18n="dsQ9Label">ESCENARIO 9 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ9">Tu stop loss acaba de saltar.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ9A">Lo registro en mi diario y paso al siguiente setup.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ9B">Reentro inmediatamente en la misma dirección.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ9C">Furioso, abro un trade en dirección contraria para "vengarte" del mercado.</span></button>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="scenario-card" data-q="10">
+      <span class="scenario-number" data-i18n="dsQ10Label">ESCENARIO 10 / 10</span>
+      <p class="scenario-situation" data-i18n="dsQ10">Fin de mes. Tu balance está ligeramente negativo.</p>
+      <div class="option-buttons">
+        <button class="option-btn" data-option="A"><span class="option-letter">A</span><span class="option-text" data-i18n="dsQ10A">Acepto los resultados, reviso mi diario y ajusto para el próximo mes.</span></button>
+        <button class="option-btn" data-option="B"><span class="option-letter">B</span><span class="option-text" data-i18n="dsQ10B">Fuerzo trades los últimos días para cerrar en verde.</span></button>
+        <button class="option-btn" data-option="C"><span class="option-letter">C</span><span class="option-text" data-i18n="dsQ10C">Me siento un fracasado, esto no es para mí.</span></button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="submit-area" id="submit-area">
+    <button class="btn btn-primary btn-lg" id="submit-test" disabled data-i18n="dsSubmit">Revelar mi saboteador</button>
+    <p class="text-muted mt-1" id="progress-hint" data-i18n="dsProgressHint" style="font-size:0.85rem">Responde los 10 escenarios para continuar</p>
+  </div>
+
+  <!-- Results (hidden initially) -->
+  <div id="results-panel" class="hidden"></div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══ Detector de Saboteadores — Tool Logic ═══ */
+(() => {
+  // ── Saboteur Profiles ───────────────────
+  const SABOTEURS = {
+    negador: {
+      icon: '🙈', color: '#a855f7',
+      es: {
+        name: 'El Negador',
+        subtitle: 'THE DENIER',
+        desc: 'Tu saboteador dominante es El Negador. Te niegas a aceptar la realidad del mercado. Mueves stops, esperas rebotes milagrosos y te dices "seguro que vuelve". Esta negación te hace mantener posiciones perdedoras mucho más allá de lo racional, convirtiendo pérdidas pequeñas en catástrofes.',
+        advice: [
+          'Nunca muevas un stop loss una vez colocado — es tu línea de defensa, no una sugerencia.',
+          'Antes de cada trade, escribe: "Si pierdo $X, lo acepto completamente."',
+          'Practica el ejercicio del Módulo 2: di en voz alta "Estoy perdiendo y eso está bien."',
+          'Lleva un registro de cuántas veces mueves el stop — la consciencia es el primer paso.'
+        ]
+      },
+      en: {
+        name: 'The Denier',
+        subtitle: 'THE DENIER',
+        desc: 'Your dominant saboteur is The Denier. You refuse to accept market reality. You move stops, hope for miraculous bounces, and tell yourself "it\'ll come back for sure." This denial keeps you in losing positions far beyond reason, turning small losses into catastrophes.',
+        advice: [
+          'Never move a stop loss once placed — it\'s your line of defense, not a suggestion.',
+          'Before each trade, write: "If I lose $X, I fully accept it."',
+          'Practice the Module 2 exercise: say out loud "I\'m losing and that\'s okay."',
+          'Track how many times you move your stop — awareness is the first step.'
+        ]
+      }
+    },
+    vengador: {
+      icon: '😤', color: '#ff4d6a',
+      es: {
+        name: 'El Vengador',
+        subtitle: 'THE AVENGER',
+        desc: 'Tu saboteador dominante es El Vengador. Cuando el mercado te golpea, no lo aceptas — buscas venganza. Reentradas impulsivas, trades en dirección contraria por rabia, doblar posiciones para "demostrarle al mercado". Este patrón emocional convierte una mala operación en una espiral de destrucción.',
+        advice: [
+          'Regla inquebrantable: después de un stop, espera mínimo 15 minutos antes de operar.',
+          'Si sientes rabia o frustración, cierra la plataforma inmediatamente — no es debilidad, es profesionalismo.',
+          'Lleva un "contador de venganza": anota cada vez que operas por emoción y no por plan.',
+          'Recuerda: el mercado no sabe que existes. No puedes vengarte de algo impersonal.'
+        ]
+      },
+      en: {
+        name: 'The Avenger',
+        subtitle: 'THE AVENGER',
+        desc: 'Your dominant saboteur is The Avenger. When the market hits you, you don\'t accept it — you seek revenge. Impulsive re-entries, trades in the opposite direction out of rage, doubling positions to "show the market." This emotional pattern turns one bad trade into a destruction spiral.',
+        advice: [
+          'Unbreakable rule: after a stop, wait at least 15 minutes before trading.',
+          'If you feel anger or frustration, close the platform immediately — it\'s not weakness, it\'s professionalism.',
+          'Keep a "revenge counter": note every time you trade from emotion, not from plan.',
+          'Remember: the market doesn\'t know you exist. You can\'t take revenge on something impersonal.'
+        ]
+      }
+    },
+    impulsivo: {
+      icon: '⚡', color: '#ff8a3a',
+      es: {
+        name: 'El Impulsivo',
+        subtitle: 'THE IMPULSIVE',
+        desc: 'Tu saboteador dominante es El Impulsivo. FOMO te gobierna. Entras sin plan, persigues precios, no puedes quedarte quieto y necesitas "hacer algo". Cada movimiento del mercado es una oportunidad que no puedes dejar pasar. Esta urgencia constante te lleva a sobreoperar y destruir tu cuenta.',
+        advice: [
+          'Establece un máximo de 3 trades por día — calidad sobre cantidad.',
+          'Antes de abrir cualquier trade, escribe tu setup y razón. Si no puedes, no operes.',
+          'Practica el "test de los 5 minutos": si quieres entrar, espera 5 minutos. ¿Sigue siendo buen trade?',
+          'La mejor operación es la que NO haces. El mercado siempre da otra oportunidad.'
+        ]
+      },
+      en: {
+        name: 'The Impulsive',
+        subtitle: 'THE IMPULSIVE',
+        desc: 'Your dominant saboteur is The Impulsive. FOMO rules you. You enter without a plan, chase prices, can\'t stay still, and need to "do something." Every market move is an opportunity you can\'t miss. This constant urgency leads to overtrading and account destruction.',
+        advice: [
+          'Set a maximum of 3 trades per day — quality over quantity.',
+          'Before opening any trade, write your setup and reason. If you can\'t, don\'t trade.',
+          'Practice the "5-minute test": if you want to enter, wait 5 minutes. Is it still a good trade?',
+          'The best trade is the one you DON\'T take. The market always offers another chance.'
+        ]
+      }
+    },
+    perfeccionista: {
+      icon: '🎯', color: '#2668ff',
+      es: {
+        name: 'El Perfeccionista',
+        subtitle: 'THE PERFECTIONIST',
+        desc: 'Tu saboteador dominante es El Perfeccionista. No puedes aceptar pérdidas ni resultados negativos. Fuerzas trades para "terminar en verde", doblas para recuperar y te obsesionas con el P&L. Esta necesidad de perfección te ciega ante la realidad: perder es parte del negocio.',
+        advice: [
+          'Cambia tu métrica de éxito: de "ganar dinero" a "seguir el plan". Un trade perdedor siguiendo el plan es un éxito.',
+          'Define tu expectativa realista: incluso los mejores traders pierden el 40-50% de sus trades.',
+          'Deja de mirar el P&L durante la sesión — evalúa solo al final del día.',
+          'Acepta que los meses negativos existen. Son parte del camino, no un fracaso.'
+        ]
+      },
+      en: {
+        name: 'The Perfectionist',
+        subtitle: 'THE PERFECTIONIST',
+        desc: 'Your dominant saboteur is The Perfectionist. You can\'t accept losses or negative results. You force trades to "end green," double down to recover, and obsess over P&L. This need for perfection blinds you to reality: losing is part of the business.',
+        advice: [
+          'Change your success metric: from "making money" to "following the plan." A losing trade following the plan is a success.',
+          'Define realistic expectations: even the best traders lose 40-50% of their trades.',
+          'Stop watching P&L during the session — evaluate only at end of day.',
+          'Accept that negative months exist. They\'re part of the journey, not failure.'
+        ]
+      }
+    },
+    seguidor: {
+      icon: '🐑', color: '#00e5ff',
+      es: {
+        name: 'El Seguidor',
+        subtitle: 'THE FOLLOWER',
+        desc: 'Tu saboteador dominante es El Seguidor. Dependes de la opinión de otros para operar. Grupos de Telegram, "gurús", señales… cualquier voz externa tiene más peso que tu propio análisis. Esta dependencia te impide desarrollar confianza en tu sistema y te convierte en una marioneta del mercado.',
+        advice: [
+          'Silencia TODOS los grupos de trading durante tu sesión operativa.',
+          'Antes de mirar cualquier opinión externa, escribe tu análisis propio y comprometételo.',
+          'Lleva un registro: ¿cuántos trades fueron idea tuya vs. de otro? Sé honesto.',
+          'Tu objetivo del mes: operar 100% con tu propio análisis. Cero señales externas.'
+        ]
+      },
+      en: {
+        name: 'The Follower',
+        subtitle: 'THE FOLLOWER',
+        desc: 'Your dominant saboteur is The Follower. You depend on others\' opinions to trade. Telegram groups, "gurus," signals… any external voice carries more weight than your own analysis. This dependency prevents you from building confidence in your system and turns you into a market puppet.',
+        advice: [
+          'Mute ALL trading groups during your trading session.',
+          'Before looking at any external opinion, write your own analysis and commit to it.',
+          'Keep a record: how many trades were your idea vs. someone else\'s? Be honest.',
+          'Your goal this month: trade 100% with your own analysis. Zero external signals.'
+        ]
+      }
+    }
+  };
+
+  // ── Answer → Saboteur Mapping ────────────
+  // Each question maps: option → { saboteur, points }
+  // A = healthy (0 points), B/C = saboteur pattern
+  const ANSWER_MAP = {
+    1: { A: null, B: { s: 'negador', p: 2 }, C: { s: 'vengador', p: 1 } },
+    2: { A: null, B: { s: 'impulsivo', p: 2 }, C: { s: 'impulsivo', p: 2 } },
+    3: { A: null, B: { s: 'impulsivo', p: 2 }, C: { s: 'vengador', p: 1 } },
+    4: { A: null, B: { s: 'perfeccionista', p: 2 }, C: { s: 'impulsivo', p: 1 } },
+    5: { A: null, B: { s: 'seguidor', p: 2 }, C: { s: 'seguidor', p: 1 } },
+    6: { A: null, B: { s: 'vengador', p: 2 }, C: { s: 'negador', p: 2 } },
+    7: { A: null, B: { s: 'impulsivo', p: 1 }, C: { s: 'impulsivo', p: 2 } },
+    8: { A: null, B: { s: 'impulsivo', p: 2 }, C: { s: 'impulsivo', p: 1 } },
+    9: { A: null, B: { s: 'negador', p: 1 }, C: { s: 'vengador', p: 2 } },
+    10: { A: null, B: { s: 'perfeccionista', p: 2 }, C: { s: 'perfeccionista', p: 1 } }
+  };
+
+  // ── i18n for this tool ──────────────────
+  const toolI18n = {
+    es: {
+      dsBack: "Volver al inicio",
+      dsModule: "MÓDULO 2",
+      dsTitle: "Detector de Saboteadores",
+      dsSubtitle: "Tu peor enemigo en el trading tiene nombre. Responde estos 10 escenarios con total honestidad y descubrirás los patrones inconscientes que destruyen tus resultados.",
+      dsHowTitle: "🎯 Cómo funciona",
+      dsHowDesc: 'Lee cada escenario de trading y elige la respuesta que <strong>más se parece</strong> a lo que realmente harías (no lo que "deberías" hacer). No hay respuestas correctas. Al final descubrirás tu perfil de saboteador dominante.',
+      dsProgress: "0 / 10",
+      dsProgressHint: "Responde los 10 escenarios para continuar",
+      dsProgressDone: "¡Listo! Revela tu saboteador.",
+      dsSubmit: "Revelar mi saboteador",
+      dsQ1Label: "ESCENARIO 1 / 10",
+      dsQ1: "Un trade va en tu contra. Ya perdiste el 50% de lo que estabas dispuesto a arriesgar.",
+      dsQ1A: "Sigo mi plan, mi stop está donde lo puse por una razón.",
+      dsQ1B: "Muevo el stop un poco más abajo, seguro que rebota.",
+      dsQ1C: "Cierro todo en pánico, no soporto verlo más.",
+      dsQ2Label: "ESCENARIO 2 / 10",
+      dsQ2: "Acabas de ganar 3 trades seguidos. Te sientes en racha.",
+      dsQ2A: "Sigo con mi plan y mi tamaño de posición habitual.",
+      dsQ2B: "Aumento el tamaño de posición, estoy caliente.",
+      dsQ2C: "Me siento invencible, abro más operaciones de lo normal.",
+      dsQ3Label: "ESCENARIO 3 / 10",
+      dsQ3: "Te perdiste un movimiento enorme. El par que estabas vigilando subió un 5% sin ti.",
+      dsQ3A: "Lo acepto, espero el próximo setup que cumpla mis reglas.",
+      dsQ3B: "Persigo el precio y entro tarde, algo queda por ganar.",
+      dsQ3C: "Me frustro y fuerzo un trade en otro par para compensar.",
+      dsQ4Label: "ESCENARIO 4 / 10",
+      dsQ4: "Alcanzaste tu límite de pérdida diaria.",
+      dsQ4A: "Cierro la plataforma. Mañana es otro día.",
+      dsQ4B: '"Una más para recuperar" y vuelvo a entrar.',
+      dsQ4C: "Cambio a otro par o timeframe para seguir operando.",
+      dsQ5Label: "ESCENARIO 5 / 10",
+      dsQ5: 'Alguien en un grupo de Telegram dice "compren ahora, esto se va al cielo".',
+      dsQ5A: "Ignoro completamente, sigo mi propio análisis.",
+      dsQ5B: "Abro la posición inmediatamente, esa persona sabe.",
+      dsQ5C: "Empiezo a dudar de mi propio análisis y lo modifico.",
+      dsQ6Label: "ESCENARIO 6 / 10",
+      dsQ6: "Miras tu P&L del día y ves -$200.",
+      dsQ6A: "Acepto, reviso si seguí mi plan y anoto en el diario.",
+      dsQ6B: "Doblo la posición para recuperar rápido.",
+      dsQ6C: "Me quedo mirando la pantalla esperando que vuelva, sin hacer nada.",
+      dsQ7Label: "ESCENARIO 7 / 10",
+      dsQ7: "Ayer ganaste mucho dinero. Hoy te sientas a operar.",
+      dsQ7A: "Mismo plan, mismo riesgo. Ayer fue ayer.",
+      dsQ7B: 'Arriesgo más, total tengo "colchón" de ganancias.',
+      dsQ7C: "Salto el análisis, me siento confiado, entro más rápido.",
+      dsQ8Label: "ESCENARIO 8 / 10",
+      dsQ8: "El mercado está lateral, sin dirección clara. Llevas 2 horas sin ver un setup.",
+      dsQ8A: "No opero. Sin setup claro, no hay trade.",
+      dsQ8B: 'Opero igual, necesito "hacer algo", no puedo quedarme quieto.',
+      dsQ8C: "Bajo de temporalidad para encontrar algo que operar.",
+      dsQ9Label: "ESCENARIO 9 / 10",
+      dsQ9: "Tu stop loss acaba de saltar.",
+      dsQ9A: "Lo registro en mi diario y paso al siguiente setup.",
+      dsQ9B: "Reentro inmediatamente en la misma dirección.",
+      dsQ9C: 'Furioso, abro un trade en dirección contraria para "vengarte" del mercado.',
+      dsQ10Label: "ESCENARIO 10 / 10",
+      dsQ10: "Fin de mes. Tu balance está ligeramente negativo.",
+      dsQ10A: "Acepto los resultados, reviso mi diario y ajusto para el próximo mes.",
+      dsQ10B: "Fuerzo trades los últimos días para cerrar en verde.",
+      dsQ10C: "Me siento un fracasado, esto no es para mí.",
+      dsResultTitle: "TU SABOTEADOR DOMINANTE",
+      dsSecondaryTitle: "📊 Mapa completo de saboteadores",
+      dsSecondaryDesc: "Estos son todos los patrones detectados en tus respuestas:",
+      dsHealthy: "Respuestas saludables",
+      dsHealthyMsg: "¡Excelente! No se detectaron patrones de sabotaje. Tus respuestas indican disciplina y control emocional sólido. Sigue así.",
+      dsRetake: "🔄 Repetir test",
+      dsDownload: "📥 Descargar resultado",
+      dsCta: "🔥 Quiero el curso completo",
+      dsAdviceTitle: "💡 Plan de acción:",
+      dsScoreLabel: "puntos",
+      dsNegador: "El Negador",
+      dsVengador: "El Vengador",
+      dsImpulsivo: "El Impulsivo",
+      dsPerfeccionista: "El Perfeccionista",
+      dsSeguidor: "El Seguidor"
+    },
+    en: {
+      dsBack: "Back to home",
+      dsModule: "MODULE 2",
+      dsTitle: "Saboteur Detector",
+      dsSubtitle: "Your worst enemy in trading has a name. Answer these 10 scenarios with total honesty and discover the unconscious patterns destroying your results.",
+      dsHowTitle: "🎯 How it works",
+      dsHowDesc: 'Read each trading scenario and choose the response that <strong>most closely matches</strong> what you\'d actually do (not what you "should" do). There are no right answers. At the end you\'ll discover your dominant saboteur profile.',
+      dsProgress: "0 / 10",
+      dsProgressHint: "Answer all 10 scenarios to continue",
+      dsProgressDone: "Ready! Reveal your saboteur.",
+      dsSubmit: "Reveal my saboteur",
+      dsQ1Label: "SCENARIO 1 / 10",
+      dsQ1: "A trade is going against you. You've already lost 50% of what you were willing to risk.",
+      dsQ1A: "I follow my plan, my stop is where I placed it for a reason.",
+      dsQ1B: "I move the stop a bit lower, it'll surely bounce back.",
+      dsQ1C: "I close everything in panic, I can't stand watching anymore.",
+      dsQ2Label: "SCENARIO 2 / 10",
+      dsQ2: "You just won 3 trades in a row. You're feeling on a streak.",
+      dsQ2A: "I stick to my plan and my usual position size.",
+      dsQ2B: "I increase my position size, I'm on fire.",
+      dsQ2C: "I feel invincible, I open more trades than usual.",
+      dsQ3Label: "SCENARIO 3 / 10",
+      dsQ3: "You missed a huge move. The pair you were watching went up 5% without you.",
+      dsQ3A: "I accept it, I'll wait for the next setup that meets my rules.",
+      dsQ3B: "I chase the price and enter late, there's still something to gain.",
+      dsQ3C: "I get frustrated and force a trade on another pair to compensate.",
+      dsQ4Label: "SCENARIO 4 / 10",
+      dsQ4: "You've hit your daily loss limit.",
+      dsQ4A: "I close the platform. Tomorrow is another day.",
+      dsQ4B: '"Just one more to recover" and I re-enter.',
+      dsQ4C: "I switch to another pair or timeframe to keep trading.",
+      dsQ5Label: "SCENARIO 5 / 10",
+      dsQ5: 'Someone in a Telegram group says "buy now, this is going to the moon."',
+      dsQ5A: "I completely ignore it, I follow my own analysis.",
+      dsQ5B: "I open the position immediately, that person knows.",
+      dsQ5C: "I start doubting my own analysis and modify it.",
+      dsQ6Label: "SCENARIO 6 / 10",
+      dsQ6: "You look at your daily P&L and see -$200.",
+      dsQ6A: "I accept it, review if I followed my plan and log it in my journal.",
+      dsQ6B: "I double my position to recover quickly.",
+      dsQ6C: "I stare at the screen hoping it comes back, doing nothing.",
+      dsQ7Label: "SCENARIO 7 / 10",
+      dsQ7: "Yesterday you made a lot of money. Today you sit down to trade.",
+      dsQ7A: "Same plan, same risk. Yesterday was yesterday.",
+      dsQ7B: 'I risk more, I have a "cushion" from yesterday\'s gains.',
+      dsQ7C: "I skip the analysis, I feel confident, I enter faster.",
+      dsQ8Label: "SCENARIO 8 / 10",
+      dsQ8: "The market is choppy, no clear direction. You haven't seen a setup for 2 hours.",
+      dsQ8A: "I don't trade. No clear setup, no trade.",
+      dsQ8B: 'I trade anyway, I need to "do something," I can\'t sit still.',
+      dsQ8C: "I go to a lower timeframe to find something to trade.",
+      dsQ9Label: "SCENARIO 9 / 10",
+      dsQ9: "Your stop loss just got hit.",
+      dsQ9A: "I log it in my journal and move on to the next setup.",
+      dsQ9B: "I re-enter immediately in the same direction.",
+      dsQ9C: 'Furious, I open a trade in the opposite direction to "get back" at the market.',
+      dsQ10Label: "SCENARIO 10 / 10",
+      dsQ10: "End of month. Your balance is slightly negative.",
+      dsQ10A: "I accept the results, review my journal and adjust for next month.",
+      dsQ10B: "I force trades in the last few days to close in the green.",
+      dsQ10C: "I feel like a failure, this isn't for me.",
+      dsResultTitle: "YOUR DOMINANT SABOTEUR",
+      dsSecondaryTitle: "📊 Complete saboteur map",
+      dsSecondaryDesc: "These are all the patterns detected in your answers:",
+      dsHealthy: "Healthy responses",
+      dsHealthyMsg: "Excellent! No sabotage patterns detected. Your responses indicate solid discipline and emotional control. Keep it up.",
+      dsRetake: "🔄 Retake test",
+      dsDownload: "📥 Download result",
+      dsCta: "🔥 I want the full course",
+      dsAdviceTitle: "💡 Action plan:",
+      dsScoreLabel: "points",
+      dsNegador: "The Denier",
+      dsVengador: "The Avenger",
+      dsImpulsivo: "The Impulsive",
+      dsPerfeccionista: "The Perfectionist",
+      dsSeguidor: "The Follower"
+    }
+  };
+
+  // Merge with global i18n
+  if (typeof i18n !== 'undefined') {
+    Object.keys(toolI18n).forEach(lang => {
+      if (!i18n[lang]) i18n[lang] = {};
+      Object.assign(i18n[lang], toolI18n[lang]);
+    });
+  }
+
+  // ── Language System ─────────────────────
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("pt_lang", lang);
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const text = (i18n && i18n[lang] && i18n[lang][key]) || (toolI18n[lang] && toolI18n[lang][key]);
+      if (text) el.innerHTML = text;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+    updateProgress();
+  }
+
+  setLang(currentLang);
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+
+  // ── Quiz Logic ──────────────────────────
+  const answers = {};
+  const TOTAL_Q = 10;
+  const submitBtn = document.getElementById("submit-test");
+  const progressBar = document.getElementById("progress-bar");
+  const progressText = document.getElementById("progress-text");
+  const progressHint = document.getElementById("progress-hint");
+  const resultsPanel = document.getElementById("results-panel");
+
+  // Handle option clicks
+  document.querySelectorAll(".scenario-card").forEach(card => {
+    const q = parseInt(card.dataset.q);
+    card.querySelectorAll(".option-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        card.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        card.classList.add("answered");
+        answers[q] = btn.dataset.option;
+        updateProgress();
+      });
+    });
+  });
+
+  function updateProgress() {
+    const count = Object.keys(answers).length;
+    const pct = (count / TOTAL_Q) * 100;
+    progressBar.style.width = pct + '%';
+    progressText.textContent = `${count} / ${TOTAL_Q}`;
+
+    const t = toolI18n[currentLang];
+    if (count >= TOTAL_Q) {
+      submitBtn.disabled = false;
+      progressHint.textContent = t.dsProgressDone;
+    } else {
+      submitBtn.disabled = true;
+      progressHint.textContent = t.dsProgressHint;
+    }
+  }
+
+  // Submit
+  submitBtn.addEventListener("click", () => {
+    if (Object.keys(answers).length < TOTAL_Q) return;
+    showResults();
+  });
+
+  function computeScores() {
+    const scores = { negador: 0, vengador: 0, impulsivo: 0, perfeccionista: 0, seguidor: 0 };
+    let healthyCount = 0;
+
+    for (let q = 1; q <= TOTAL_Q; q++) {
+      const option = answers[q];
+      const mapping = ANSWER_MAP[q][option];
+      if (mapping === null) {
+        healthyCount++;
+      } else {
+        scores[mapping.s] += mapping.p;
+      }
+    }
+
+    return { scores, healthyCount };
+  }
+
+  function showResults() {
+    const t = toolI18n[currentLang];
+    const { scores, healthyCount } = computeScores();
+
+    // Find dominant saboteur
+    const sortedSaboteurs = Object.entries(scores)
+      .sort((a, b) => b[1] - a[1]);
+
+    const maxScore = sortedSaboteurs[0][1];
+    const allHealthy = maxScore === 0;
+
+    let html = '<div class="results-panel">';
+    html += `<p style="font-family:var(--font-mono);font-size:0.75rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;margin-bottom:1.5rem">${t.dsResultTitle}</p>`;
+
+    if (allHealthy) {
+      // All healthy responses
+      html += `
+        <div class="saboteur-reveal">
+          <span class="saboteur-icon">✅</span>
+          <p class="saboteur-name" style="color:var(--emerald)">${t.dsHealthy}</p>
+          <p class="saboteur-desc">${t.dsHealthyMsg}</p>
+        </div>`;
+    } else {
+      const dominantKey = sortedSaboteurs[0][0];
+      const dominant = SABOTEURS[dominantKey];
+      const profile = dominant[currentLang];
+
+      html += `
+        <div class="saboteur-reveal">
+          <span class="saboteur-icon">${dominant.icon}</span>
+          <p class="saboteur-name" style="color:${dominant.color}">${profile.name}</p>
+          <p class="saboteur-subtitle" style="color:${dominant.color}">${profile.subtitle}</p>
+          <p class="saboteur-desc">${profile.desc}</p>
+        </div>
+        <div class="saboteur-advice">
+          <h4>${t.dsAdviceTitle}</h4>
+          <ul>${profile.advice.map(a => `<li>${a}</li>`).join('')}</ul>
+        </div>`;
+    }
+
+    // All saboteur bars
+    const saboteurOrder = ['negador', 'vengador', 'impulsivo', 'perfeccionista', 'seguidor'];
+    const saboteurLabels = {
+      es: { negador: 'El Negador', vengador: 'El Vengador', impulsivo: 'El Impulsivo', perfeccionista: 'El Perfeccionista', seguidor: 'El Seguidor' },
+      en: { negador: 'The Denier', vengador: 'The Avenger', impulsivo: 'The Impulsive', perfeccionista: 'The Perfectionist', seguidor: 'The Follower' }
+    };
+
+    // Max possible per saboteur for percentage
+    const maxPossible = Math.max(...Object.values(scores), 1);
+
+    html += `<div class="secondary-section">`;
+    html += `<h3>${t.dsSecondaryTitle}</h3>`;
+    html += `<p style="text-align:center;font-size:0.85rem;color:var(--muted);margin-bottom:1.5rem">${t.dsSecondaryDesc}</p>`;
+    html += `<div class="result-bars">`;
+
+    saboteurOrder.forEach(key => {
+      const s = SABOTEURS[key];
+      const val = scores[key];
+      const pct = maxPossible > 0 ? (val / 6) * 100 : 0; // max theoretical is ~6 pts per saboteur
+      html += `
+        <div class="bar-row">
+          <span class="bar-icon">${s.icon}</span>
+          <span class="bar-label">${saboteurLabels[currentLang][key]}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:${s.color}" data-width="${Math.min(pct, 100)}%"></div></div>
+          <span class="bar-value" style="color:${s.color}">${val}</span>
+        </div>`;
+    });
+
+    html += `</div>`; // result-bars
+
+    // Secondary saboteur cards (those with score > 0, excluding dominant)
+    const secondaries = sortedSaboteurs.filter(([k, v]) => v > 0).slice(allHealthy ? 0 : 1);
+    if (secondaries.length > 0) {
+      secondaries.forEach(([key, score]) => {
+        const s = SABOTEURS[key];
+        const profile = s[currentLang];
+        const level = score >= 4 ? 'high' : score >= 2 ? 'mid' : 'low';
+        html += `
+          <div class="secondary-card">
+            <span class="secondary-icon">${s.icon}</span>
+            <div class="secondary-info">
+              <p class="secondary-name" style="color:${s.color}">${profile.name}</p>
+              <span class="secondary-score ${level}">${score} ${t.dsScoreLabel}</span>
+              <p class="secondary-desc">${profile.desc.substring(0, 120)}…</p>
+            </div>
+          </div>`;
+      });
+    }
+
+    html += `</div>`; // secondary-section
+
+    // Actions
+    html += `
+      <div class="result-actions">
+        <button class="btn-download" id="retake-btn">${t.dsRetake}</button>
+        <button class="btn-download" id="download-btn">${t.dsDownload}</button>
+      </div>
+      <div style="margin-top:2rem">
+        <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn btn-primary">${t.dsCta}</a>
+      </div>`;
+
+    html += '</div>'; // results-panel
+
+    resultsPanel.innerHTML = html;
+    resultsPanel.classList.remove("hidden");
+
+    // Animate bars
+    setTimeout(() => {
+      resultsPanel.querySelectorAll(".bar-fill").forEach(bar => {
+        bar.style.width = bar.dataset.width;
+      });
+    }, 100);
+
+    // Scroll to results
+    resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Hide questions
+    document.getElementById("scenarios-container").style.display = "none";
+    document.getElementById("submit-area").style.display = "none";
+    document.querySelector(".instructions").style.display = "none";
+    document.querySelector(".progress-bar-container").style.display = "none";
+    document.querySelector(".progress-text").style.display = "none";
+
+    // Retake
+    document.getElementById("retake-btn")?.addEventListener("click", retake);
+    // Download
+    document.getElementById("download-btn")?.addEventListener("click", downloadResult);
+  }
+
+  function retake() {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+    document.querySelectorAll(".scenario-card").forEach(c => c.classList.remove("answered"));
+    resultsPanel.classList.add("hidden");
+    resultsPanel.innerHTML = "";
+    document.getElementById("scenarios-container").style.display = "";
+    document.getElementById("submit-area").style.display = "";
+    document.querySelector(".instructions").style.display = "";
+    document.querySelector(".progress-bar-container").style.display = "";
+    document.querySelector(".progress-text").style.display = "";
+    submitBtn.disabled = true;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function downloadResult() {
+    const t = toolI18n[currentLang];
+    const { scores, healthyCount } = computeScores();
+    const sortedSaboteurs = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const maxScore = sortedSaboteurs[0][1];
+    const allHealthy = maxScore === 0;
+
+    const saboteurLabels = {
+      es: { negador: 'El Negador', vengador: 'El Vengador', impulsivo: 'El Impulsivo', perfeccionista: 'El Perfeccionista', seguidor: 'El Seguidor' },
+      en: { negador: 'The Denier', vengador: 'The Avenger', impulsivo: 'The Impulsive', perfeccionista: 'The Perfectionist', seguidor: 'The Follower' }
+    };
+
+    let text = `═══════════════════════════════════════\n`;
+    text += `  P'TRADERS — ${t.dsTitle}\n`;
+    text += `  ${new Date().toLocaleDateString()}\n`;
+    text += `═══════════════════════════════════════\n\n`;
+
+    if (allHealthy) {
+      text += `${t.dsHealthy}\n`;
+      text += `${t.dsHealthyMsg}\n\n`;
+    } else {
+      const dominantKey = sortedSaboteurs[0][0];
+      const dominant = SABOTEURS[dominantKey];
+      const profile = dominant[currentLang];
+
+      text += `${t.dsResultTitle}\n`;
+      text += `${dominant.icon} ${profile.name} (${profile.subtitle})\n\n`;
+      text += `${profile.desc}\n\n`;
+      text += `${t.dsAdviceTitle}\n`;
+      profile.advice.forEach(a => { text += `  → ${a}\n`; });
+      text += `\n`;
+    }
+
+    text += `───────────────────────────────────────\n`;
+    text += `${t.dsSecondaryTitle.replace('📊 ', '')}\n`;
+    text += `───────────────────────────────────────\n\n`;
+
+    sortedSaboteurs.forEach(([key, score]) => {
+      const s = SABOTEURS[key];
+      const label = saboteurLabels[currentLang][key];
+      const bar = '█'.repeat(score) + '░'.repeat(Math.max(0, 6 - score));
+      text += `${s.icon} ${label}: ${bar} ${score} ${t.dsScoreLabel}\n`;
+    });
+
+    text += `\n${currentLang === 'es' ? 'Respuestas saludables' : 'Healthy responses'}: ${healthyCount}/10\n`;
+
+    text += `\n───────────────────────────────────────\n`;
+    text += currentLang === 'es'
+      ? `Tus respuestas:\n`
+      : `Your answers:\n`;
+
+    for (let q = 1; q <= TOTAL_Q; q++) {
+      const qKey = `dsQ${q}`;
+      const aKey = `dsQ${q}${answers[q]}`;
+      text += `  ${q}. [${answers[q]}] ${toolI18n[currentLang][aKey] || ''}\n`;
+    }
+
+    text += `\n— P'Traders | www.paratrades.com\n`;
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `detector-saboteadores-ptraders-${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist Pre-Mercado — P'Traders</title>
+  <meta name="description" content="Revisa tu estado psicológico antes de cada sesión de trading. Checklist profesional basado en el Módulo 4.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Category Cards ─────────────────── */
+    .category-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .category-card:nth-child(2) { animation-delay: 0.08s; }
+    .category-card:nth-child(3) { animation-delay: 0.16s; }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+      border-bottom: 1px solid transparent;
+    }
+    .category-header:hover { background: rgba(255,255,255,0.02); }
+    .category-card.open .category-header { border-bottom-color: var(--glass-border); }
+
+    .category-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .category-title { font-size: 1.05rem; font-weight: 700; color: var(--text); flex: 1; }
+    .category-count {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+    }
+    .category-chevron {
+      color: var(--muted);
+      font-size: 0.8rem;
+      transition: transform 0.3s var(--ease-out);
+    }
+    .category-card.open .category-chevron { transform: rotate(180deg); }
+
+    .category-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .category-card.open .category-body { max-height: 600px; }
+
+    .category-items { padding: 0.8rem 1.5rem 1.2rem; }
+
+    /* header color bars */
+    .category-card[data-cat="mental"] .category-header { border-left: 4px solid var(--accent); }
+    .category-card[data-cat="prep"] .category-header { border-left: 4px solid var(--amber); }
+    .category-card[data-cat="discipline"] .category-header { border-left: 4px solid var(--emerald); }
+
+    /* ── Checklist Items ────────────────── */
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-item:hover { background: rgba(255,255,255,0.02); border-radius: 8px; margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; }
+
+    .check-text {
+      flex: 1;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+      transition: all 0.3s;
+    }
+    .check-item.checked .check-text { color: var(--muted); }
+
+    .check-status {
+      font-size: 1.1rem;
+      width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+      transition: all 0.3s var(--ease-spring);
+    }
+    .check-status.on { animation: popIn 0.3s var(--ease-spring); }
+
+    /* ── Custom Toggle Switch ───────────── */
+    .toggle-switch {
+      position: relative;
+      width: 56px;
+      height: 30px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      border-radius: 15px;
+      transition: all 0.35s var(--ease-out);
+    }
+    .toggle-track::before {
+      content: '✕';
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.65rem;
+      color: rgba(244, 63, 94, 0.7);
+      transition: opacity 0.2s;
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      left: 2px;
+      top: 2px;
+      background: #f43f5e;
+      border-radius: 50%;
+      transition: all 0.35s var(--ease-spring);
+      box-shadow: 0 2px 8px rgba(244, 63, 94, 0.3);
+    }
+    .toggle-switch input:checked + .toggle-track {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+    .toggle-switch input:checked + .toggle-track::before {
+      content: '✓';
+      left: 10px;
+      right: auto;
+      color: rgba(16, 185, 129, 0.7);
+    }
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(26px);
+      background: #10b981;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4), 0 0 12px rgba(16, 185, 129, 0.2);
+    }
+
+    /* ── Readiness Meter ────────────────── */
+    .meter-section {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      animation: fadeInUp 0.5s ease both;
+      animation-delay: 0.24s;
+    }
+    .meter-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: var(--font-mono);
+      margin-bottom: 1.5rem;
+    }
+
+    .meter-ring-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 1.5rem;
+    }
+    .meter-ring-bg, .meter-ring-fill {
+      position: absolute;
+      inset: 0;
+    }
+    .meter-ring-bg circle, .meter-ring-fill circle {
+      fill: none;
+      stroke-width: 10;
+      cx: 90;
+      cy: 90;
+      r: 76;
+    }
+    .meter-ring-bg circle { stroke: var(--surface); }
+    .meter-ring-fill circle {
+      stroke: var(--emerald);
+      stroke-linecap: round;
+      stroke-dasharray: 477.52;
+      stroke-dashoffset: 477.52;
+      transform: rotate(-90deg);
+      transform-origin: center;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.5s;
+    }
+    .meter-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .meter-score {
+      font-family: var(--font-mono);
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1;
+      transition: color 0.5s;
+    }
+    .meter-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      font-family: var(--font-mono);
+    }
+
+    /* ── Verdict ────────────────────────── */
+    .verdict-box {
+      padding: 1.2rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      transition: all 0.5s;
+      text-align: center;
+    }
+    .verdict-box.green { background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .verdict-box.yellow { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .verdict-box.orange { background: rgba(249, 115, 22, 0.12); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .verdict-box.red { background: rgba(244, 63, 94, 0.12); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); }
+
+    .motivation-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Pending Items ──────────────────── */
+    .pending-section { margin-top: 1rem; }
+    .pending-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--rose);
+      margin-bottom: 0.5rem;
+    }
+    .pending-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .pending-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding: 0.4rem 0.8rem;
+      background: rgba(244, 63, 94, 0.06);
+      border-radius: var(--radius-sm);
+    }
+    .pending-item::before { content: '✕'; color: var(--rose); font-size: 0.75rem; font-weight: 700; }
+
+    /* ── Streak Badge ───────────────────── */
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(245, 158, 11, 0.10));
+      border: 1px solid rgba(249, 115, 22, 0.25);
+      border-radius: var(--radius-full);
+      padding: 0.6rem 1.2rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #f97316;
+      margin-bottom: 1.5rem;
+    }
+    .streak-badge .fire { font-size: 1.1rem; }
+
+    /* ── Actions ────────────────────────── */
+    .actions-bar {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      text-decoration: none;
+      font-family: var(--font-body);
+    }
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-action.reset:hover { border-color: var(--rose); color: var(--rose); }
+    .btn-action.cta {
+      background: linear-gradient(135deg, var(--accent), #2668ff);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-action.cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px var(--accent-glow); }
+
+    /* ── Animations ─────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 480px) {
+      .category-items { padding: 0.6rem 1rem 1rem; }
+      .check-item { gap: 0.7rem; }
+      .meter-ring-wrap { width: 150px; height: 150px; }
+      .meter-ring-bg circle, .meter-ring-fill circle { cx: 75; cy: 75; r: 62; }
+      .meter-score { font-size: 2rem; }
+      .actions-bar { flex-direction: column; align-items: stretch; }
+      .btn-action { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="cpBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">✅</div>
+    <span class="module-badge" data-i18n="cpModule">MÓDULO 4</span>
+    <h1 data-i18n="cpTitle">Checklist Pre-Mercado</h1>
+    <p data-i18n="cpSubtitle">Revisa tu estado psicológico antes de cada sesión. Los traders profesionales no operan sin completar su checklist primero.</p>
+  </div>
+
+  <div class="instructions">
+    <h3 data-i18n="cpInstrTitle">📋 Cómo usar este checklist</h3>
+    <p data-i18n="cpInstrDesc">Activa cada ítem que puedas confirmar honestamente ANTES de abrir tu plataforma. Si tu puntuación es baja, respeta la señal: el mercado estará ahí mañana. Proteger tu capital empieza aquí.</p>
+  </div>
+
+  <!-- Streak badge -->
+  <div id="streak-container" class="hidden" style="text-align:center;">
+    <div class="streak-badge">
+      <span class="fire">🔥</span>
+      <span id="streak-text"></span>
+    </div>
+  </div>
+
+  <!-- ── Category Cards ────────────────── -->
+  <div id="categories-container">
+
+    <!-- Category 1: Mental State -->
+    <div class="category-card open" data-cat="mental">
+      <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="category-icon">🧠</span>
+        <span class="category-title" data-i18n="cpCat1">Estado Mental</span>
+        <span class="category-count" id="count-mental">0 / 4</span>
+        <i class="fas fa-chevron-down category-chevron"></i>
+      </div>
+      <div class="category-body">
+        <div class="category-items">
+          <div class="check-item" data-idx="0">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ1">¿Dormí al menos 7 horas?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="1">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ2">¿Mi nivel de estrés es bajo?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="2">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ3">¿Estoy emocionalmente estable?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="3">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ4">¿Hice mi ejercicio de respiración?</span>
+            <span class="check-status">❌</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category 2: Preparation -->
+    <div class="category-card open" data-cat="prep">
+      <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="category-icon">📋</span>
+        <span class="category-title" data-i18n="cpCat2">Preparación</span>
+        <span class="category-count" id="count-prep">0 / 4</span>
+        <i class="fas fa-chevron-down category-chevron"></i>
+      </div>
+      <div class="category-body">
+        <div class="category-items">
+          <div class="check-item" data-idx="4">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ5">¿Leí mi plan de trading?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="5">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ6">¿Tengo claros mis niveles?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="6">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ7">¿Definí mi máximo de operaciones hoy?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="7">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ8">¿Definí mi límite de pérdida diaria?</span>
+            <span class="check-status">❌</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category 3: Discipline -->
+    <div class="category-card open" data-cat="discipline">
+      <div class="category-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="category-icon">🛡️</span>
+        <span class="category-title" data-i18n="cpCat3">Disciplina</span>
+        <span class="category-count" id="count-discipline">0 / 4</span>
+        <i class="fas fa-chevron-down category-chevron"></i>
+      </div>
+      <div class="category-body">
+        <div class="category-items">
+          <div class="check-item" data-idx="8">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ9">¿Estoy operando por plan y no por impulso?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="9">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ10">¿Estoy recuperado de la sesión anterior?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="10">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ11">¿Acepto que puedo perder hoy y está bien?</span>
+            <span class="check-status">❌</span>
+          </div>
+          <div class="check-item" data-idx="11">
+            <label class="toggle-switch">
+              <input type="checkbox" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="check-text" data-i18n="cpQ12">¿Tengo mi diario listo para registrar?</span>
+            <span class="check-status">❌</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Readiness Meter ───────────────── -->
+  <div class="meter-section">
+    <div class="meter-title" data-i18n="cpMeterTitle">NIVEL DE PREPARACIÓN</div>
+    <div class="meter-ring-wrap">
+      <svg class="meter-ring-bg" viewBox="0 0 180 180">
+        <circle></circle>
+      </svg>
+      <svg class="meter-ring-fill" viewBox="0 0 180 180">
+        <circle id="meter-circle"></circle>
+      </svg>
+      <div class="meter-center">
+        <div class="meter-score" id="meter-score">0</div>
+        <div class="meter-label">/ 12</div>
+      </div>
+    </div>
+
+    <div id="verdict-box" class="verdict-box red" data-i18n="cpVerdict0">🔴 No operes hoy</div>
+    <div id="motivation-text" class="motivation-text" data-i18n="cpMotiv0">Tu mente no está lista. Protege tu capital y vuelve mañana con más fuerza.</div>
+
+    <!-- Pending items -->
+    <div id="pending-section" class="pending-section">
+      <div class="pending-title" data-i18n="cpPendingTitle">⚠️ Ítems pendientes:</div>
+      <div class="pending-list" id="pending-list"></div>
+    </div>
+  </div>
+
+  <!-- ── Actions ───────────────────────── -->
+  <div class="actions-bar">
+    <button class="btn-action reset" id="btn-reset"><i class="fas fa-redo"></i> <span data-i18n="cpReset">Reiniciar</span></button>
+    <button class="btn-action" id="btn-download"><i class="fas fa-download"></i> <span data-i18n="cpDownload">Descargar .txt</span></button>
+    <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn-action cta"><i class="fas fa-fire"></i> <span data-i18n="cpCta">Quiero el curso completo</span></a>
+  </div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══ Checklist Pre-Mercado — Tool Logic ═══ */
+(() => {
+  /* ── i18n ─────────────────────────────── */
+  const toolI18n = {
+    es: {
+      cpBack: "Volver al inicio",
+      cpModule: "MÓDULO 4",
+      cpTitle: "Checklist Pre-Mercado",
+      cpSubtitle: "Revisa tu estado psicológico antes de cada sesión. Los traders profesionales no operan sin completar su checklist primero.",
+      cpInstrTitle: "📋 Cómo usar este checklist",
+      cpInstrDesc: "Activa cada ítem que puedas confirmar honestamente ANTES de abrir tu plataforma. Si tu puntuación es baja, respeta la señal: el mercado estará ahí mañana. Proteger tu capital empieza aquí.",
+      cpCat1: "Estado Mental",
+      cpCat2: "Preparación",
+      cpCat3: "Disciplina",
+      cpQ1: "¿Dormí al menos 7 horas?",
+      cpQ2: "¿Mi nivel de estrés es bajo?",
+      cpQ3: "¿Estoy emocionalmente estable?",
+      cpQ4: "¿Hice mi ejercicio de respiración?",
+      cpQ5: "¿Leí mi plan de trading?",
+      cpQ6: "¿Tengo claros mis niveles?",
+      cpQ7: "¿Definí mi máximo de operaciones hoy?",
+      cpQ8: "¿Definí mi límite de pérdida diaria?",
+      cpQ9: "¿Estoy operando por plan y no por impulso?",
+      cpQ10: "¿Estoy recuperado de la sesión anterior?",
+      cpQ11: "¿Acepto que puedo perder hoy y está bien?",
+      cpQ12: "¿Tengo mi diario listo para registrar?",
+      cpMeterTitle: "NIVEL DE PREPARACIÓN",
+      cpVerdict12: "🟢 Listo para operar",
+      cpVerdict9: "🟡 Casi listo — revisa los ítems pendientes",
+      cpVerdict6: "🟠 Precaución — mejor espera",
+      cpVerdict0: "🔴 No operes hoy",
+      cpMotiv12: "¡Excelente! Tu mente y tu plan están alineados. Opera con confianza y disciplina.",
+      cpMotiv9: "Estás cerca. Revisa lo que falta y decide si puedes completarlo antes de operar.",
+      cpMotiv6: "Tu preparación es incompleta. El mercado no perdona la improvisación. Tómate un momento.",
+      cpMotiv0: "Tu mente no está lista. Protege tu capital y vuelve mañana con más fuerza.",
+      cpPendingTitle: "⚠️ Ítems pendientes:",
+      cpReset: "Reiniciar",
+      cpDownload: "Descargar .txt",
+      cpCta: "Quiero el curso completo",
+      cpStreak: "{n} días seguidos completando tu checklist",
+      cpStreak1: "1 día completando tu checklist",
+      cpNoPending: "¡Todos los ítems completados!",
+      cpTxtHeader: "CHECKLIST PRE-MERCADO — P'Traders",
+      cpTxtDate: "Fecha",
+      cpTxtScore: "Puntuación",
+      cpTxtVerdict: "Veredicto",
+      cpTxtCategory: "Categoría",
+      cpTxtChecked: "SÍ",
+      cpTxtUnchecked: "NO"
+    },
+    en: {
+      cpBack: "Back to home",
+      cpModule: "MODULE 4",
+      cpTitle: "Pre-Market Checklist",
+      cpSubtitle: "Review your psychological state before each session. Professional traders never trade without completing their checklist first.",
+      cpInstrTitle: "📋 How to use this checklist",
+      cpInstrDesc: "Toggle each item you can honestly confirm BEFORE opening your platform. If your score is low, respect the signal: the market will be there tomorrow. Protecting your capital starts here.",
+      cpCat1: "Mental State",
+      cpCat2: "Preparation",
+      cpCat3: "Discipline",
+      cpQ1: "Did I sleep at least 7 hours?",
+      cpQ2: "Is my stress level low?",
+      cpQ3: "Am I emotionally stable?",
+      cpQ4: "Did I do my breathing exercise?",
+      cpQ5: "Did I read my trading plan?",
+      cpQ6: "Are my levels clear?",
+      cpQ7: "Did I define my max trades today?",
+      cpQ8: "Did I define my daily loss limit?",
+      cpQ9: "Am I trading by plan, not impulse?",
+      cpQ10: "Am I recovered from the last session?",
+      cpQ11: "Do I accept I can lose today and that's okay?",
+      cpQ12: "Is my journal ready to record?",
+      cpMeterTitle: "READINESS LEVEL",
+      cpVerdict12: "🟢 Ready to trade",
+      cpVerdict9: "🟡 Almost ready — review pending items",
+      cpVerdict6: "🟠 Caution — better wait",
+      cpVerdict0: "🔴 Don't trade today",
+      cpMotiv12: "Excellent! Your mind and plan are aligned. Trade with confidence and discipline.",
+      cpMotiv9: "You're close. Review what's missing and decide if you can address it before trading.",
+      cpMotiv6: "Your preparation is incomplete. The market doesn't forgive improvisation. Take a moment.",
+      cpMotiv0: "Your mind isn't ready. Protect your capital and come back stronger tomorrow.",
+      cpPendingTitle: "⚠️ Pending items:",
+      cpReset: "Reset",
+      cpDownload: "Download .txt",
+      cpCta: "I want the full course",
+      cpStreak: "{n} day streak completing your checklist",
+      cpStreak1: "1 day completing your checklist",
+      cpNoPending: "All items completed!",
+      cpTxtHeader: "PRE-MARKET CHECKLIST — P'Traders",
+      cpTxtDate: "Date",
+      cpTxtScore: "Score",
+      cpTxtVerdict: "Verdict",
+      cpTxtCategory: "Category",
+      cpTxtChecked: "YES",
+      cpTxtUnchecked: "NO"
+    }
+  };
+
+  if (typeof i18n !== "undefined") {
+    Object.keys(toolI18n).forEach(lang => {
+      if (!i18n[lang]) i18n[lang] = {};
+      Object.assign(i18n[lang], toolI18n[lang]);
+    });
+  }
+
+  /* ── Language System ──────────────────── */
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function t(key) {
+    return (i18n && i18n[currentLang] && i18n[currentLang][key]) || toolI18n[currentLang]?.[key] || key;
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("pt_lang", lang);
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const text = t(key);
+      if (text && text !== key) el.innerHTML = text;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+    updateUI();
+  }
+
+  setLang(currentLang);
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+
+  /* ── State ────────────────────────────── */
+  const STORAGE_KEY = "pt_checklist_premarket";
+  const STREAK_KEY = "pt_checklist_streak";
+  const TOTAL = 12;
+  const items = document.querySelectorAll(".check-item");
+  const catMap = { mental: [0,1,2,3], prep: [4,5,6,7], discipline: [8,9,10,11] };
+  const qKeys = ["cpQ1","cpQ2","cpQ3","cpQ4","cpQ5","cpQ6","cpQ7","cpQ8","cpQ9","cpQ10","cpQ11","cpQ12"];
+
+  /* ── Circle math ──────────────────────── */
+  const circle = document.getElementById("meter-circle");
+  const isSmall = window.matchMedia("(max-width: 480px)").matches;
+  const R = isSmall ? 62 : 76;
+  const CIRCUMFERENCE = 2 * Math.PI * R;
+  circle.setAttribute("r", R);
+  circle.setAttribute("cx", isSmall ? 75 : 90);
+  circle.setAttribute("cy", isSmall ? 75 : 90);
+  circle.style.strokeDasharray = CIRCUMFERENCE;
+  circle.style.strokeDashoffset = CIRCUMFERENCE;
+
+  /* ── Load saved state ─────────────────── */
+  function todayKey() {
+    return new Date().toISOString().slice(0,10);
+  }
+
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && saved.date === todayKey() && Array.isArray(saved.checks)) {
+        saved.checks.forEach((val, i) => {
+          if (i < TOTAL) {
+            const cb = items[i].querySelector("input[type=checkbox]");
+            cb.checked = val;
+          }
+        });
+      }
+    } catch(e) { /* ignore */ }
+  }
+
+  function saveState() {
+    const checks = Array.from(items).map(it => it.querySelector("input[type=checkbox]").checked);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: todayKey(), checks }));
+  }
+
+  /* ── Streak ───────────────────────────── */
+  function loadStreak() {
+    try {
+      return JSON.parse(localStorage.getItem(STREAK_KEY)) || { count: 0, lastDate: null };
+    } catch(e) { return { count: 0, lastDate: null }; }
+  }
+
+  function updateStreak(score) {
+    const streak = loadStreak();
+    const today = todayKey();
+    if (score === TOTAL) {
+      if (streak.lastDate === today) {
+        // already recorded today
+      } else {
+        // check if yesterday
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yKey = yesterday.toISOString().slice(0,10);
+        if (streak.lastDate === yKey) {
+          streak.count += 1;
+        } else {
+          streak.count = 1;
+        }
+        streak.lastDate = today;
+      }
+    }
+    localStorage.setItem(STREAK_KEY, JSON.stringify(streak));
+    return streak;
+  }
+
+  function renderStreak() {
+    const streak = loadStreak();
+    const container = document.getElementById("streak-container");
+    const textEl = document.getElementById("streak-text");
+    if (streak.count > 0) {
+      container.classList.remove("hidden");
+      if (streak.count === 1) {
+        textEl.textContent = t("cpStreak1");
+      } else {
+        textEl.textContent = t("cpStreak").replace("{n}", streak.count);
+      }
+    } else {
+      container.classList.add("hidden");
+    }
+  }
+
+  /* ── Score color helpers ──────────────── */
+  function scoreColor(score) {
+    if (score === 12) return "#10b981";
+    if (score >= 9) return "#f59e0b";
+    if (score >= 6) return "#f97316";
+    return "#f43f5e";
+  }
+  function scoreZone(score) {
+    if (score === 12) return "green";
+    if (score >= 9) return "yellow";
+    if (score >= 6) return "orange";
+    return "red";
+  }
+  function verdictKey(score) {
+    if (score === 12) return "12";
+    if (score >= 9) return "9";
+    if (score >= 6) return "6";
+    return "0";
+  }
+
+  /* ── Update UI ────────────────────────── */
+  function updateUI() {
+    let total = 0;
+
+    // Update each item's visual state
+    items.forEach((item, i) => {
+      const cb = item.querySelector("input[type=checkbox]");
+      const status = item.querySelector(".check-status");
+      const isChecked = cb.checked;
+      if (isChecked) {
+        total++;
+        item.classList.add("checked");
+        status.textContent = "✅";
+        status.classList.add("on");
+      } else {
+        item.classList.remove("checked");
+        status.textContent = "❌";
+        status.classList.remove("on");
+      }
+    });
+
+    // Category counts
+    Object.entries(catMap).forEach(([cat, indices]) => {
+      const checked = indices.filter(i => items[i].querySelector("input[type=checkbox]").checked).length;
+      const el = document.getElementById("count-" + cat);
+      if (el) el.textContent = checked + " / " + indices.length;
+    });
+
+    // Meter
+    const offset = CIRCUMFERENCE - (total / TOTAL) * CIRCUMFERENCE;
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = scoreColor(total);
+
+    const scoreEl = document.getElementById("meter-score");
+    scoreEl.textContent = total;
+    scoreEl.style.color = scoreColor(total);
+
+    // Verdict
+    const zone = scoreZone(total);
+    const vk = verdictKey(total);
+    const verdictBox = document.getElementById("verdict-box");
+    verdictBox.className = "verdict-box " + zone;
+    verdictBox.textContent = t("cpVerdict" + vk);
+
+    const motivEl = document.getElementById("motivation-text");
+    motivEl.textContent = t("cpMotiv" + vk);
+
+    // Pending items
+    const pendingSection = document.getElementById("pending-section");
+    const pendingList = document.getElementById("pending-list");
+    pendingList.innerHTML = "";
+    const unchecked = [];
+    items.forEach((item, i) => {
+      if (!item.querySelector("input[type=checkbox]").checked) {
+        unchecked.push(i);
+      }
+    });
+    if (unchecked.length === 0) {
+      pendingSection.classList.add("hidden");
+    } else {
+      pendingSection.classList.remove("hidden");
+      unchecked.forEach(i => {
+        const div = document.createElement("div");
+        div.className = "pending-item";
+        div.textContent = t(qKeys[i]);
+        pendingList.appendChild(div);
+      });
+    }
+
+    // Update streak
+    const streak = updateStreak(total);
+    renderStreak();
+
+    // Save
+    saveState();
+  }
+
+  /* ── Attach toggle listeners ──────────── */
+  items.forEach(item => {
+    const cb = item.querySelector("input[type=checkbox]");
+    cb.addEventListener("change", () => {
+      updateUI();
+    });
+  });
+
+  /* ── Reset ────────────────────────────── */
+  document.getElementById("btn-reset").addEventListener("click", () => {
+    items.forEach(item => {
+      item.querySelector("input[type=checkbox]").checked = false;
+    });
+    updateUI();
+  });
+
+  /* ── Download .txt ────────────────────── */
+  document.getElementById("btn-download").addEventListener("click", () => {
+    const date = new Date().toLocaleDateString(currentLang === "es" ? "es-ES" : "en-US", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric"
+    });
+    let total = 0;
+    items.forEach(item => { if (item.querySelector("input[type=checkbox]").checked) total++; });
+
+    const catNames = { mental: t("cpCat1"), prep: t("cpCat2"), discipline: t("cpCat3") };
+    let lines = [];
+    lines.push(t("cpTxtHeader"));
+    lines.push("═".repeat(45));
+    lines.push(t("cpTxtDate") + ": " + date);
+    lines.push(t("cpTxtScore") + ": " + total + " / " + TOTAL);
+    lines.push(t("cpTxtVerdict") + ": " + t("cpVerdict" + verdictKey(total)));
+    lines.push("");
+
+    Object.entries(catMap).forEach(([cat, indices]) => {
+      lines.push("── " + catNames[cat] + " ──");
+      indices.forEach(i => {
+        const checked = items[i].querySelector("input[type=checkbox]").checked;
+        const mark = checked ? t("cpTxtChecked") : t("cpTxtUnchecked");
+        lines.push("[" + mark + "] " + t(qKeys[i]));
+      });
+      lines.push("");
+    });
+
+    const streak = loadStreak();
+    if (streak.count > 0) {
+      lines.push("🔥 " + (streak.count === 1 ? t("cpStreak1") : t("cpStreak").replace("{n}", streak.count)));
+    }
+
+    const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "checklist-premercado-" + todayKey() + ".txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  /* ── Init ─────────────────────────────── */
+  loadState();
+  updateUI();
+
+})();
+</script>
+</body>
+</html>

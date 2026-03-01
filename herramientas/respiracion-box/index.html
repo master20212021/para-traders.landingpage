@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Box Breathing — P'Traders</title>
+  <meta name="description" content="Respiración Box Breathing: técnica guiada de 4 fases para resetear el sistema nervioso antes de operar. Herramienta interactiva del Módulo 3.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Setup Screen ───────────────────── */
+    .setup-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .setup-card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .duration-chips {
+      display: flex;
+      justify-content: center;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .duration-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: var(--radius-full, 50px);
+      border: 1px solid var(--glass-border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      user-select: none;
+      font-family: var(--font-body, Inter, sans-serif);
+    }
+    .duration-chip:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .duration-chip.selected {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+      box-shadow: 0 0 14px var(--accent-glow, rgba(0,255,200,0.25));
+    }
+
+    .sound-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .sound-toggle-row label { cursor: pointer; }
+    .sound-cb { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+
+    .btn-start {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 3rem;
+      border: none;
+      border-radius: var(--radius-full, 50px);
+      background: linear-gradient(135deg, var(--accent), var(--emerald, #34d399));
+      color: var(--bg);
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: var(--font-body, Inter, sans-serif);
+      transition: all 0.3s ease;
+      box-shadow: 0 0 30px var(--accent-glow, rgba(0,255,200,0.2));
+    }
+    .btn-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px var(--accent-glow, rgba(0,255,200,0.35));
+    }
+
+    /* ── Breathing Session ──────────────── */
+    .session-area {
+      text-align: center;
+      animation: fadeInUp 0.5s ease both;
+    }
+
+    /* Box Container */
+    .box-wrap {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 2rem auto;
+    }
+
+    /* The SVG breathing box */
+    .box-svg {
+      width: 100%;
+      height: 100%;
+    }
+    .box-bg-rect {
+      fill: none;
+      stroke: var(--glass-border);
+      stroke-width: 3;
+      rx: 20;
+      ry: 20;
+    }
+    .box-active-path {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: url(#glow);
+      transition: stroke 0.4s ease;
+    }
+    .box-dot {
+      filter: url(#dotGlow);
+      transition: fill 0.4s ease;
+    }
+
+    /* Center text overlay */
+    .box-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .phase-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+      transition: color 0.4s ease;
+    }
+    .countdown-text {
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1;
+      transition: color 0.4s ease;
+    }
+
+    /* Cycle & Progress */
+    .cycle-counter {
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 1rem 0 0.5rem;
+    }
+
+    .progress-wrap {
+      width: 100%;
+      max-width: 400px;
+      margin: 0.5rem auto 2rem;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--emerald, #34d399));
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+    .progress-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      margin-top: 0.3rem;
+    }
+
+    /* Session Controls */
+    .session-controls {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .btn-ctrl {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-full, 50px);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body, Inter, sans-serif);
+      transition: all 0.25s ease;
+    }
+    .btn-ctrl:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ctrl.stop { border-color: var(--rose, #f43f5e); color: var(--rose, #f43f5e); }
+    .btn-ctrl.stop:hover { background: var(--rose, #f43f5e); color: #fff; }
+
+    /* ── Results Screen ─────────────────── */
+    .results-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .results-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .results-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .results-message {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .results-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-family: var(--font-mono, 'JetBrains Mono', monospace);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .results-actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-full, 50px);
+      padding: 0.7rem 1.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      font-family: var(--font-body, Inter, sans-serif);
+    }
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-action.primary {
+      background: linear-gradient(135deg, var(--accent), var(--emerald, #34d399));
+      color: var(--bg);
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 0 20px var(--accent-glow, rgba(0,255,200,0.2));
+    }
+    .btn-action.primary:hover { transform: translateY(-1px); box-shadow: 0 0 30px var(--accent-glow, rgba(0,255,200,0.3)); color: var(--bg); }
+    .btn-action.cta {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+    }
+    .btn-action.cta:hover { transform: translateY(-1px); color: #fff; }
+
+    /* ── Ambient glow behind box ────────── */
+    .ambient-glow {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--accent-glow, rgba(0,255,200,0.08)) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+      transition: opacity 0.5s ease;
+    }
+
+    /* ── Prepare countdown ──────────────── */
+    .prepare-text {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--accent);
+      animation: pulse-scale 1s ease infinite;
+    }
+
+    @keyframes pulse-scale {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.7; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 480px) {
+      .box-wrap { width: 200px; height: 200px; }
+      .countdown-text { font-size: 2.2rem; }
+      .phase-text { font-size: 0.9rem; }
+      .results-stats { gap: 1.2rem; }
+      .duration-chips { gap: 0.5rem; }
+      .session-controls { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="bbBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">🌬️</div>
+    <span class="module-badge" data-i18n="bbModule">MÓDULO 3</span>
+    <h1 data-i18n="bbTitle">Respiración Box Breathing</h1>
+    <p data-i18n="bbSubtitle">Técnica guiada de respiración en 4 fases para resetear tu sistema nervioso y operar con claridad mental.</p>
+  </div>
+
+  <div class="instructions" id="bb-instructions">
+    <h3 data-i18n="bbInstrTitle">🌬️ ¿Qué es Box Breathing?</h3>
+    <p data-i18n="bbInstrDesc">Box Breathing es una técnica usada por Navy SEALs y traders de élite. Consiste en 4 fases de igual duración: inhalar, sostener, exhalar y sostener. Cada ciclo de 16 segundos resetea tu sistema nervioso, reduce el cortisol y te prepara para tomar decisiones con calma.</p>
+  </div>
+
+  <!-- ── Setup Screen ──────────────────── -->
+  <div id="setup-screen" class="setup-card">
+    <h2 data-i18n="bbSelectDuration">Selecciona la duración</h2>
+    <div class="duration-chips">
+      <button class="duration-chip" data-minutes="1">1 min</button>
+      <button class="duration-chip selected" data-minutes="3">3 min</button>
+      <button class="duration-chip" data-minutes="5">5 min</button>
+    </div>
+    <div class="sound-toggle-row">
+      <input type="checkbox" id="bb-sound" class="sound-cb" checked />
+      <label for="bb-sound" data-i18n="bbSoundLabel">Sonido ambiental</label>
+    </div>
+    <button class="btn-start" id="btn-begin">
+      <i class="fas fa-play"></i>
+      <span data-i18n="bbStart">Comenzar</span>
+    </button>
+  </div>
+
+  <!-- ── Session Screen ────────────────── -->
+  <div id="session-screen" class="session-area hidden">
+    <div class="box-wrap">
+      <div class="ambient-glow"></div>
+      <svg class="box-svg" viewBox="0 0 260 260">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="dotGlow">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Background box -->
+        <rect class="box-bg-rect" x="20" y="20" width="220" height="220" />
+        <!-- Active path (drawn progressively) -->
+        <path id="box-path" class="box-active-path" d="" stroke="var(--accent)" />
+        <!-- Traveling dot -->
+        <circle id="box-dot" class="box-dot" cx="20" cy="20" r="7" fill="var(--accent)" />
+      </svg>
+      <div class="box-center">
+        <div class="phase-text" id="phase-text">INHALA</div>
+        <div class="countdown-text" id="countdown-text">4</div>
+      </div>
+    </div>
+
+    <div class="cycle-counter" id="cycle-counter">Ciclo 1 de 4</div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-label" id="progress-label">0%</div>
+    </div>
+
+    <div class="session-controls">
+      <button class="btn-ctrl" id="btn-pause"><i class="fas fa-pause"></i> <span data-i18n="bbPause">Pausa</span></button>
+      <button class="btn-ctrl stop" id="btn-stop"><i class="fas fa-stop"></i> <span data-i18n="bbStop">Detener</span></button>
+    </div>
+  </div>
+
+  <!-- ── Results Screen ────────────────── -->
+  <div id="results-screen" class="hidden"></div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══ Box Breathing — Tool Logic ═══ */
+(() => {
+  /* ── i18n ─────────────────────────────── */
+  const toolI18n = {
+    es: {
+      bbBack: "Volver al inicio",
+      bbModule: "MÓDULO 3",
+      bbTitle: "Respiración Box Breathing",
+      bbSubtitle: "Técnica guiada de respiración en 4 fases para resetear tu sistema nervioso y operar con claridad mental.",
+      bbInstrTitle: "🌬️ ¿Qué es Box Breathing?",
+      bbInstrDesc: "Box Breathing es una técnica usada por Navy SEALs y traders de élite. Consiste en 4 fases de igual duración: inhalar, sostener, exhalar y sostener. Cada ciclo de 16 segundos resetea tu sistema nervioso, reduce el cortisol y te prepara para tomar decisiones con calma.",
+      bbSelectDuration: "Selecciona la duración",
+      bbSoundLabel: "Sonido ambiental",
+      bbStart: "Comenzar",
+      bbPause: "Pausa",
+      bbResume: "Reanudar",
+      bbStop: "Detener",
+      bbInhale: "INHALA",
+      bbHold: "SOSTÉN",
+      bbExhale: "EXHALA",
+      bbCycleOf: "Ciclo {c} de {t}",
+      bbPrepare: "Prepárate...",
+      bbCompleteTitle: "Sesión Completa",
+      bbCompleteMsg: "Tu mente está lista para operar con claridad. El estrés se ha reducido y tu enfoque es más nítido.",
+      bbCycles: "Ciclos",
+      bbDuration: "Duración",
+      bbMinutes: "min",
+      bbRepeat: "🔄 Repetir",
+      bbBackTools: "← Volver",
+      bbCta: "🔥 Quiero el curso completo",
+      bbStoppedTitle: "Sesión Interrumpida",
+      bbStoppedMsg: "Has completado parte de la sesión. Cada respiración cuenta — intenta completar la próxima vez."
+    },
+    en: {
+      bbBack: "Back to home",
+      bbModule: "MODULE 3",
+      bbTitle: "Box Breathing Exercise",
+      bbSubtitle: "Guided 4-phase breathing technique to reset your nervous system and trade with mental clarity.",
+      bbInstrTitle: "🌬️ What is Box Breathing?",
+      bbInstrDesc: "Box Breathing is a technique used by Navy SEALs and elite traders. It consists of 4 equal-duration phases: inhale, hold, exhale, and hold. Each 16-second cycle resets your nervous system, reduces cortisol, and prepares you for calm decision-making.",
+      bbSelectDuration: "Select duration",
+      bbSoundLabel: "Ambient sound",
+      bbStart: "Start",
+      bbPause: "Pause",
+      bbResume: "Resume",
+      bbStop: "Stop",
+      bbInhale: "INHALE",
+      bbHold: "HOLD",
+      bbExhale: "EXHALE",
+      bbCycleOf: "Cycle {c} of {t}",
+      bbPrepare: "Get ready...",
+      bbCompleteTitle: "Session Complete",
+      bbCompleteMsg: "Your mind is ready to trade with clarity. Stress is reduced and your focus is sharper.",
+      bbCycles: "Cycles",
+      bbDuration: "Duration",
+      bbMinutes: "min",
+      bbRepeat: "🔄 Repeat",
+      bbBackTools: "← Back",
+      bbCta: "🔥 I want the full course",
+      bbStoppedTitle: "Session Stopped",
+      bbStoppedMsg: "You completed part of the session. Every breath counts — try completing it next time."
+    }
+  };
+
+  if (typeof i18n !== 'undefined') {
+    Object.keys(toolI18n).forEach(lang => {
+      if (!i18n[lang]) i18n[lang] = {};
+      Object.assign(i18n[lang], toolI18n[lang]);
+    });
+  }
+
+  /* ── Language ─────────────────────────── */
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function t(key) {
+    return i18n[currentLang]?.[key] || toolI18n[currentLang]?.[key] || key;
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("pt_lang", lang);
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const text = i18n[lang]?.[key];
+      if (text) el.innerHTML = text;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+  }
+
+  setLang(currentLang);
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+
+  /* ── DOM refs ─────────────────────────── */
+  const $setup = document.getElementById("setup-screen");
+  const $session = document.getElementById("session-screen");
+  const $results = document.getElementById("results-screen");
+  const $instructions = document.getElementById("bb-instructions");
+  const $phaseText = document.getElementById("phase-text");
+  const $countdown = document.getElementById("countdown-text");
+  const $cycleCtr = document.getElementById("cycle-counter");
+  const $progressFill = document.getElementById("progress-fill");
+  const $progressLabel = document.getElementById("progress-label");
+  const $btnBegin = document.getElementById("btn-begin");
+  const $btnPause = document.getElementById("btn-pause");
+  const $btnStop = document.getElementById("btn-stop");
+  const $boxPath = document.getElementById("box-path");
+  const $boxDot = document.getElementById("box-dot");
+
+  /* ── State ────────────────────────────── */
+  const PHASE_DURATION = 4; // seconds per phase
+  const PHASES = ["inhale", "hold1", "exhale", "hold2"];
+  const CYCLE_TIME = PHASE_DURATION * 4; // 16s
+
+  let selectedMinutes = 3;
+  let totalCycles = 0;
+  let soundEnabled = true;
+
+  let running = false;
+  let paused = false;
+  let currentPhase = 0;    // 0-3
+  let currentCycle = 0;    // 0-based
+  let phaseElapsed = 0;    // ms elapsed in current phase
+  let lastTimestamp = 0;
+  let animFrameId = null;
+  let sessionStartTime = 0;
+
+  /* ── Box geometry ─────────────────────── */
+  // The box path: top-left(20,20) → top-right(240,20) → bottom-right(240,240) → bottom-left(20,240) → back to top-left
+  // Corner radius 20
+  const R = 20;
+  const X1 = 20, Y1 = 20, X2 = 240, Y2 = 240;
+
+  // Corners: TL, TR, BR, BL
+  // Side 0 (inhale):  TL → TR  (top)
+  // Side 1 (hold1):   TR → BR  (right)
+  // Side 2 (exhale):  BR → BL  (bottom, right to left)
+  // Side 3 (hold2):   BL → TL  (left, bottom to top)
+
+  // Straight segment length (excluding corners)
+  const SIDE_LEN = (X2 - X1) - 2 * R; // 180
+
+  function getPointOnSide(side, frac) {
+    // frac: 0..1 along that side
+    switch (side) {
+      case 0: // top: left to right
+        return { x: X1 + R + frac * SIDE_LEN, y: Y1 };
+      case 1: // right: top to bottom
+        return { x: X2, y: Y1 + R + frac * SIDE_LEN };
+      case 2: // bottom: right to left
+        return { x: X2 - R - frac * SIDE_LEN, y: Y2 };
+      case 3: // left: bottom to top
+        return { x: X1, y: Y2 - R - frac * SIDE_LEN };
+    }
+  }
+
+  // Build progressive SVG path for completed sides + partial current side
+  function buildPath(completedSides, currentSideFrac) {
+    // Start at top-left corner start
+    let d = `M ${X1 + R} ${Y1}`;
+
+    const sides = [
+      // side 0: top
+      () => `L ${X2 - R} ${Y1} Q ${X2} ${Y1} ${X2} ${Y1 + R}`,
+      // side 1: right
+      () => `L ${X2} ${Y2 - R} Q ${X2} ${Y2} ${X2 - R} ${Y2}`,
+      // side 2: bottom (right to left)
+      () => `L ${X1 + R} ${Y2} Q ${X1} ${Y2} ${X1} ${Y2 - R}`,
+      // side 3: left (bottom to top)
+      () => `L ${X1} ${Y1 + R} Q ${X1} ${Y1} ${X1 + R} ${Y1}`
+    ];
+
+    const partials = [
+      // side 0 partial: fraction along top
+      (f) => {
+        const endX = X1 + R + f * SIDE_LEN;
+        return `L ${endX} ${Y1}`;
+      },
+      // side 1 partial
+      (f) => {
+        const endY = Y1 + R + f * SIDE_LEN;
+        return `L ${X2} ${endY}`;
+      },
+      // side 2 partial (right to left)
+      (f) => {
+        const endX = X2 - R - f * SIDE_LEN;
+        return `L ${endX} ${Y2}`;
+      },
+      // side 3 partial (bottom to top)
+      (f) => {
+        const endY = Y2 - R - f * SIDE_LEN;
+        return `L ${X1} ${endY}`;
+      }
+    ];
+
+    for (let i = 0; i < completedSides && i < 4; i++) {
+      d += " " + sides[i]();
+    }
+
+    if (completedSides < 4 && currentSideFrac > 0) {
+      // Add corner from previous side if we just entered a new side
+      if (completedSides > 0) {
+        // Corner already included in the completed side
+      }
+      d += " " + partials[completedSides](currentSideFrac);
+    }
+
+    return d;
+  }
+
+  function getDotPosition(side, frac) {
+    // Account for rounded corners: dot travels straight segment
+    const p = getPointOnSide(side, frac);
+    return p;
+  }
+
+  /* ── Phase Colors ─────────────────────── */
+  function getPhaseColor(phase) {
+    switch (phase) {
+      case 0: return "#22d3ee"; // cyan — inhale
+      case 1: return "#34d399"; // emerald — hold
+      case 2: return "#60a5fa"; // soft blue — exhale
+      case 3: return "#34d399"; // emerald — hold
+    }
+  }
+
+  function getPhaseKey(phase) {
+    switch (phase) {
+      case 0: return "bbInhale";
+      case 1: return "bbHold";
+      case 2: return "bbExhale";
+      case 3: return "bbHold";
+    }
+  }
+
+  /* ── Audio (Web Audio API) ────────────── */
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function playTone(freq, duration, type) {
+    if (!soundEnabled || !audioCtx) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type || "sine";
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch (e) { /* silent fail */ }
+  }
+
+  function playPhaseSound(phase) {
+    switch (phase) {
+      case 0: playTone(528, 0.6, "sine"); break;   // inhale — C5
+      case 1: playTone(396, 0.4, "sine"); break;   // hold — G4
+      case 2: playTone(440, 0.6, "sine"); break;   // exhale — A4
+      case 3: playTone(396, 0.4, "sine"); break;   // hold — G4
+    }
+  }
+
+  function playCompleteSound() {
+    if (!soundEnabled || !audioCtx) return;
+    [528, 660, 792].forEach((freq, i) => {
+      setTimeout(() => playTone(freq, 0.8, "sine"), i * 200);
+    });
+  }
+
+  /* ── Duration Chips ───────────────────── */
+  document.querySelectorAll(".duration-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".duration-chip").forEach(c => c.classList.remove("selected"));
+      chip.classList.add("selected");
+      selectedMinutes = parseInt(chip.dataset.minutes);
+    });
+  });
+
+  document.getElementById("bb-sound").addEventListener("change", (e) => {
+    soundEnabled = e.target.checked;
+  });
+
+  /* ── Start Session ────────────────────── */
+  $btnBegin.addEventListener("click", startSession);
+
+  function startSession() {
+    initAudio();
+    totalCycles = Math.round((selectedMinutes * 60) / CYCLE_TIME);
+    if (totalCycles < 1) totalCycles = 1;
+
+    // Transition to session
+    $setup.classList.add("hidden");
+    $instructions.classList.add("hidden");
+    $results.classList.add("hidden");
+    $session.classList.remove("hidden");
+
+    // Reset state
+    currentPhase = 0;
+    currentCycle = 0;
+    phaseElapsed = 0;
+    paused = false;
+    running = false;
+
+    updatePauseBtn();
+
+    // Show prepare countdown
+    $phaseText.textContent = t("bbPrepare");
+    $countdown.textContent = "3";
+    $boxPath.setAttribute("d", "");
+    $boxDot.setAttribute("cx", X1 + R);
+    $boxDot.setAttribute("cy", Y1);
+    $boxDot.setAttribute("fill", getPhaseColor(0));
+    $boxPath.setAttribute("stroke", getPhaseColor(0));
+    updateProgress();
+
+    let prepCount = 3;
+    const prepInterval = setInterval(() => {
+      prepCount--;
+      if (prepCount > 0) {
+        $countdown.textContent = prepCount;
+      } else {
+        clearInterval(prepInterval);
+        beginBreathing();
+      }
+    }, 1000);
+  }
+
+  function beginBreathing() {
+    running = true;
+    paused = false;
+    sessionStartTime = performance.now();
+    phaseElapsed = 0;
+    setPhaseUI();
+    playPhaseSound(0);
+    lastTimestamp = performance.now();
+    animFrameId = requestAnimationFrame(tick);
+  }
+
+  /* ── Animation Loop ───────────────────── */
+  function tick(timestamp) {
+    if (!running) return;
+
+    if (!paused) {
+      const dt = timestamp - lastTimestamp;
+      phaseElapsed += dt;
+
+      const phaseDurationMs = PHASE_DURATION * 1000;
+      const frac = Math.min(phaseElapsed / phaseDurationMs, 1);
+
+      // Update visuals
+      updateBoxVisuals(frac);
+      updateCountdown(frac);
+
+      // Phase complete?
+      if (phaseElapsed >= phaseDurationMs) {
+        phaseElapsed -= phaseDurationMs;
+        currentPhase++;
+
+        if (currentPhase >= 4) {
+          currentPhase = 0;
+          currentCycle++;
+
+          if (currentCycle >= totalCycles) {
+            // Session complete
+            finishSession(false);
+            return;
+          }
+        }
+
+        setPhaseUI();
+        playPhaseSound(currentPhase);
+      }
+
+      updateProgress();
+    }
+
+    lastTimestamp = timestamp;
+    animFrameId = requestAnimationFrame(tick);
+  }
+
+  function setPhaseUI() {
+    const color = getPhaseColor(currentPhase);
+    $phaseText.textContent = t(getPhaseKey(currentPhase));
+    $phaseText.style.color = color;
+    $countdown.style.color = color;
+    $boxPath.setAttribute("stroke", color);
+    $boxDot.setAttribute("fill", color);
+
+    // Update cycle counter
+    const cycleText = t("bbCycleOf")
+      .replace("{c}", currentCycle + 1)
+      .replace("{t}", totalCycles);
+    $cycleCtr.textContent = cycleText;
+  }
+
+  function updateBoxVisuals(frac) {
+    // How many full sides are completed in this cycle
+    const completedSides = currentPhase;
+    const currentFrac = frac;
+
+    const path = buildPath(completedSides, currentFrac);
+    $boxPath.setAttribute("d", path);
+
+    // Dot position
+    const dot = getDotPosition(currentPhase, currentFrac);
+    $boxDot.setAttribute("cx", dot.x);
+    $boxDot.setAttribute("cy", dot.y);
+
+    // Subtle scale on the box based on breathing
+    const boxWrap = document.querySelector(".box-wrap");
+    let scale = 1;
+    if (currentPhase === 0) {
+      // Inhale: grow
+      scale = 1 + frac * 0.04;
+    } else if (currentPhase === 2) {
+      // Exhale: shrink
+      scale = 1.04 - frac * 0.04;
+    } else if (currentPhase === 1) {
+      scale = 1.04;
+    } else {
+      scale = 1;
+    }
+    boxWrap.style.transform = `scale(${scale})`;
+  }
+
+  function updateCountdown(frac) {
+    const remaining = Math.ceil(PHASE_DURATION * (1 - frac));
+    $countdown.textContent = Math.max(remaining, 1);
+  }
+
+  function updateProgress() {
+    const totalPhases = totalCycles * 4;
+    const completedPhases = currentCycle * 4 + currentPhase;
+    const phaseProgress = phaseElapsed / (PHASE_DURATION * 1000);
+    const overall = (completedPhases + phaseProgress) / totalPhases;
+    const pct = Math.min(Math.round(overall * 100), 100);
+    $progressFill.style.width = pct + "%";
+    $progressLabel.textContent = pct + "%";
+  }
+
+  /* ── Pause / Resume ───────────────────── */
+  $btnPause.addEventListener("click", () => {
+    if (!running) return;
+    paused = !paused;
+    if (!paused) {
+      lastTimestamp = performance.now();
+    }
+    updatePauseBtn();
+  });
+
+  function updatePauseBtn() {
+    const icon = $btnPause.querySelector("i");
+    const label = $btnPause.querySelector("span");
+    if (paused) {
+      icon.className = "fas fa-play";
+      label.textContent = t("bbResume");
+    } else {
+      icon.className = "fas fa-pause";
+      label.textContent = t("bbPause");
+    }
+  }
+
+  /* ── Stop ──────────────────────────────── */
+  $btnStop.addEventListener("click", () => {
+    if (running) finishSession(true);
+  });
+
+  /* ── Finish ───────────────────────────── */
+  function finishSession(stopped) {
+    running = false;
+    paused = false;
+    if (animFrameId) cancelAnimationFrame(animFrameId);
+
+    const completedCycles = stopped ? currentCycle : totalCycles;
+    const elapsedMs = performance.now() - sessionStartTime;
+    const elapsedMin = (elapsedMs / 60000).toFixed(1);
+
+    if (!stopped) playCompleteSound();
+
+    // Reset box scale
+    document.querySelector(".box-wrap").style.transform = "scale(1)";
+
+    $session.classList.add("hidden");
+    $results.classList.remove("hidden");
+
+    const titleKey = stopped ? "bbStoppedTitle" : "bbCompleteTitle";
+    const msgKey = stopped ? "bbStoppedMsg" : "bbCompleteMsg";
+
+    $results.innerHTML = `
+      <div class="results-card">
+        <div class="results-icon">${stopped ? "🌬️" : "✅"}</div>
+        <h2 class="results-title">${t(titleKey)}</h2>
+        <p class="results-message">${t(msgKey)}</p>
+
+        <div class="results-stats">
+          <div class="stat-item">
+            <div class="stat-value">${completedCycles}</div>
+            <div class="stat-label">${t("bbCycles")}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">${elapsedMin}</div>
+            <div class="stat-label">${t("bbMinutes")}</div>
+          </div>
+        </div>
+
+        <div class="results-actions">
+          <button class="btn-action primary" id="btn-repeat">${t("bbRepeat")}</button>
+          <a href="/" class="btn-action">${t("bbBackTools")}</a>
+          <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn-action cta">${t("bbCta")}</a>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("btn-repeat").addEventListener("click", resetToSetup);
+  }
+
+  /* ── Reset ────────────────────────────── */
+  function resetToSetup() {
+    $results.classList.add("hidden");
+    $results.innerHTML = "";
+    $session.classList.add("hidden");
+    $setup.classList.remove("hidden");
+    $instructions.classList.remove("hidden");
+
+    // Reset box visuals
+    $boxPath.setAttribute("d", "");
+    $boxDot.setAttribute("cx", X1 + R);
+    $boxDot.setAttribute("cy", Y1);
+    document.querySelector(".box-wrap").style.transform = "scale(1)";
+    $progressFill.style.width = "0%";
+    $progressLabel.textContent = "0%";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+})();
+</script>
+
+</body>
+</html>

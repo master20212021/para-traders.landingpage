@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Escenarios — P'Traders</title>
+  <meta name="description" content="Practica la toma de decisiones bajo presión en escenarios controlados de trading. Herramienta del Módulo 5.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Mode Selection ─────────────────── */
+    .mode-selection {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .mode-btn {
+      flex: 1;
+      max-width: 280px;
+      background: var(--glass);
+      border: 2px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      color: var(--text);
+    }
+    .mode-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .mode-btn .mode-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+    .mode-btn .mode-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .mode-btn .mode-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .mode-btn.selected { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 30px var(--accent-glow); }
+
+    /* ── Scenario Card ──────────────────── */
+    .scenario-wrapper {
+      animation: fadeInUp 0.5s ease both;
+    }
+    .scenario-counter {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    /* Timer */
+    .timer-container {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .timer-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .timer-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--emerald);
+      transition: width 0.1s linear, background 0.3s ease;
+      width: 100%;
+    }
+    .timer-fill.warning { background: var(--amber); }
+    .timer-fill.danger { background: var(--rose); }
+    .timer-label {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+    .timer-label.danger-text { color: var(--rose); font-weight: 700; }
+
+    .scenario-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .scenario-card .scenario-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    /* Option Buttons */
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .option-btn {
+      width: 100%;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1rem 1.3rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+    }
+    .option-btn:hover:not(.disabled) { border-color: var(--accent); background: var(--accent-dim); transform: translateX(4px); box-shadow: 0 0 20px var(--accent-glow); }
+    .option-btn .option-letter {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.85rem;
+      background: var(--surface);
+      color: var(--accent);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .option-btn.correct { border-color: var(--emerald); background: rgba(52, 211, 153, 0.08); }
+    .option-btn.correct .option-letter { background: var(--emerald); color: #000; }
+    .option-btn.wrong { border-color: var(--rose); background: rgba(244, 63, 94, 0.08); }
+    .option-btn.wrong .option-letter { background: var(--rose); color: #fff; }
+    .option-btn.disabled { pointer-events: none; opacity: 0.6; }
+    .option-btn.disabled.correct { opacity: 1; }
+    .option-btn.disabled.wrong { opacity: 1; }
+
+    /* Feedback */
+    .feedback-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      animation: slideIn 0.4s ease both;
+    }
+    .feedback-card.correct-fb { border-color: rgba(52, 211, 153, 0.4); }
+    .feedback-card.wrong-fb { border-color: rgba(244, 63, 94, 0.4); }
+    .feedback-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .feedback-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .feedback-title.correct-title { color: var(--emerald); }
+    .feedback-title.wrong-title { color: var(--rose); }
+    .feedback-text { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+    .feedback-bias {
+      margin-top: 0.8rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: 0.06em;
+    }
+
+    .next-btn-area { text-align: center; }
+
+    /* ── Results ─────────────────────────── */
+    .results-panel {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 2rem;
+      animation: fadeInUp 0.6s ease;
+    }
+    .score-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      padding: 3px;
+      background: conic-gradient(var(--score-color) var(--score-pct), var(--line) 0%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+    }
+    .score-circle { --line: var(--border); }
+    .score-value {
+      font-family: var(--font-mono);
+      font-size: 2.8rem;
+      font-weight: 800;
+    }
+    .score-max {
+      font-size: 0.9rem;
+      color: var(--muted);
+      display: block;
+    }
+
+    .result-zone {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+    .result-message {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 550px;
+      margin: 0 auto 2rem;
+    }
+
+    .result-bars { margin: 2rem 0; text-align: left; }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.7rem;
+    }
+    .bar-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      width: 24px;
+      flex-shrink: 0;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+    .bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--surface);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .bar-value {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      width: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Pattern & Time analysis */
+    .result-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    .result-section-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+    .result-section p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+    .result-section .highlight { color: var(--text); font-weight: 700; }
+
+    /* Wrong answers review */
+    .wrong-review {
+      text-align: left;
+      margin: 1.5rem 0;
+    }
+    .wrong-item {
+      background: var(--surface);
+      border-left: 3px solid var(--rose);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+    .wrong-item .wrong-q { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .wrong-item .wrong-correct { font-size: 0.8rem; color: var(--emerald); font-weight: 600; }
+    .wrong-item .wrong-explain { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; line-height: 1.5; }
+
+    .result-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1.3rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      text-decoration: none;
+    }
+    .btn-download:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Pressure mode visual cues ──────── */
+    .pressure-active .scenario-card {
+      border-color: rgba(244, 63, 94, 0.2);
+      box-shadow: 0 0 40px rgba(244, 63, 94, 0.05);
+    }
+    .pressure-active .scenario-counter {
+      color: var(--rose);
+    }
+
+    /* ── Utilities & Animations ─────────── */
+    .hidden { display: none !important; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .timer-pulse { animation: pulse 0.6s ease infinite; }
+
+    @media (max-width: 480px) {
+      .mode-selection { flex-direction: column; align-items: center; }
+      .mode-btn { max-width: 100%; }
+      .scenario-card { padding: 1.5rem; }
+      .option-btn { padding: 0.8rem 1rem; font-size: 0.9rem; }
+      .results-panel { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="seBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">🎲</div>
+    <span class="module-badge" data-i18n="seModule">MÓDULO 5</span>
+    <h1 data-i18n="seTitle">Simulador de Escenarios</h1>
+    <p data-i18n="seSubtitle">La demo es tu gimnasio mental — como entrenas, operas. Practica la toma de decisiones bajo presión en escenarios controlados.</p>
+  </div>
+
+  <div class="instructions" id="instructions-panel">
+    <h3 data-i18n="seInstrTitle">🎯 ¿Cómo funciona?</h3>
+    <p data-i18n="seInstrDesc">Elige un modo, enfrenta 10 escenarios reales de trading y toma la mejor decisión. En modo Presión tendrás 30 segundos por escenario — igual que en el mercado real.</p>
+  </div>
+
+  <!-- Mode Selection -->
+  <div id="mode-panel">
+    <div class="mode-selection">
+      <button class="mode-btn" id="mode-practice">
+        <div class="mode-icon">📚</div>
+        <div class="mode-name" data-i18n="seModePractice">Práctica</div>
+        <div class="mode-desc" data-i18n="seModePracticeDesc">Sin timer. Aprende a tu ritmo.</div>
+      </button>
+      <button class="mode-btn" id="mode-pressure">
+        <div class="mode-icon">⚡</div>
+        <div class="mode-name" data-i18n="seModePressure">Presión</div>
+        <div class="mode-desc" data-i18n="seModePressureDesc">30 segundos por escenario. Simula el estrés real del trading.</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Scenario Area (hidden initially) -->
+  <div id="scenario-area" class="hidden"></div>
+
+  <!-- Results (hidden initially) -->
+  <div id="results-panel" class="hidden"></div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══ Simulador de Escenarios — Tool Logic ═══ */
+(() => {
+  /* ── i18n ────────────────────────────── */
+  const toolI18n = {
+    es: {
+      seBack: "Volver al inicio",
+      seModule: "MÓDULO 5",
+      seTitle: "Simulador de Escenarios",
+      seSubtitle: "La demo es tu gimnasio mental — como entrenas, operas. Practica la toma de decisiones bajo presión en escenarios controlados.",
+      seInstrTitle: "🎯 ¿Cómo funciona?",
+      seInstrDesc: "Elige un modo, enfrenta 10 escenarios reales de trading y toma la mejor decisión. En modo Presión tendrás 30 segundos por escenario — igual que en el mercado real.",
+      seModePractice: "Práctica",
+      seModePracticeDesc: "Sin timer. Aprende a tu ritmo.",
+      seModePressure: "Presión",
+      seModePressureDesc: "30 segundos por escenario. Simula el estrés real del trading.",
+      seScenario: "ESCENARIO",
+      seOf: "de",
+      seTimerUp: "⏰ ¡Se acabó el tiempo! En el trading real, la indecisión cuesta dinero.",
+      seCorrect: "✅ ¡Decisión correcta!",
+      seWrong: "❌ No es la mejor decisión",
+      seNext: "Siguiente escenario →",
+      seFinish: "Ver resultados →",
+      seBias: "Sesgo / Saboteador relacionado:",
+      seResTitle: "Tu puntuación",
+      seResOf: "de",
+      seRatingA: "🏆 Trader Disciplinado",
+      seRatingB: "👍 En Buen Camino",
+      seRatingC: "⚠️ Necesitas Práctica",
+      seRatingD: "📚 Vuelve al Módulo 4",
+      seMsgA: "Excelente control emocional y toma de decisiones. Estás listo para operar con consistencia.",
+      seMsgB: "Buena base, pero hay escenarios que te desafían. Revisa los que fallaste y refuerza esas áreas.",
+      seMsgC: "Tus sesgos aún influyen demasiado. Repasa los módulos 2 y 3 y vuelve a intentarlo.",
+      seMsgD: "Necesitas repasar los fundamentos. Vuelve al Módulo 4 para fortalecer tu plan de trading.",
+      sePattern: "Patrón de decisión dominante",
+      sePatImpulsive: "Impulsivo — Tiendes a actuar antes de pensar. El mercado castiga la impulsividad.",
+      sePatConservative: "Conservador — Evitas riesgos pero a veces eso te paraliza. Confía más en tu análisis.",
+      sePatDisciplined: "Disciplinado — Tomas decisiones basadas en tu plan. Sigue así.",
+      seTimeAnalysis: "Análisis de tiempo",
+      seAvgTime: "Tiempo promedio de respuesta:",
+      seSeconds: "segundos",
+      seWrongTitle: "Escenarios a reforzar",
+      seCorrectAnswer: "Respuesta correcta:",
+      seRetake: "🔄 Repetir simulación",
+      seDownload: "📥 Descargar resultados",
+      seCta: "🔥 Quiero el curso completo",
+      seS1: "Estás en profit +2R. El precio empieza a retroceder.",
+      seS1A: "Tomar profit ahora",
+      seS1B: "Mover stop a breakeven",
+      seS1C: "Mantener — confía en tu target",
+      seS1Exp: "Mover el stop a breakeven protege tus ganancias sin cerrar prematuramente una operación con potencial. Es gestión de riesgo inteligente.",
+      seS1Bias: "Aversión a la pérdida / Miedo a devolver ganancias",
+      seS2: "Acabas de cerrar 2 trades en pérdida. Ves una nueva señal.",
+      seS2A: "Tomarla — la señal es válida",
+      seS2B: "Pasar — estás en tu límite de pérdida",
+      seS2C: "Tomarla con doble tamaño para recuperar",
+      seS2Exp: "Cuando estás en tu límite de pérdida, la disciplina dice: para. Operar para recuperarse es venganza contra el mercado y siempre termina mal.",
+      seS2Bias: "Trading de venganza / Sesgo de recuperación",
+      seS3: "Tu análisis dice short pero todo el mundo en el grupo dice long.",
+      seS3A: "Seguir tu análisis",
+      seS3B: "Seguir al grupo",
+      seS3C: "No operar — estás confundido",
+      seS3Exp: "Tu análisis es tu plan. Si confías en tu método, lo sigues. El consenso del grupo es ruido, no señal.",
+      seS3Bias: "Sesgo de conformidad / Presión social",
+      seS4: "Llevas 3 horas sin operar. No hay setup claro.",
+      seS4A: "Seguir esperando — disciplina",
+      seS4B: "Bajar de timeframe para buscar algo",
+      seS4C: "Forzar un trade en la próxima vela",
+      seS4Exp: "No operar ES operar. La paciencia es una habilidad. Forzar trades destruye cuentas.",
+      seS4Bias: "FOMO / Necesidad de acción",
+      seS5: "Ganaste +5R esta semana. Es jueves y ves un setup mediocre.",
+      seS5A: "Tomarlo — tienes colchón",
+      seS5B: "Pasar — no cumple tus criterios",
+      seS5C: "Tomarlo con la mitad del tamaño",
+      seS5Exp: "Las ganancias anteriores no hacen que un mal setup sea bueno. Tu criterio de entrada no cambia por tu P&L de la semana.",
+      seS5Bias: "Exceso de confianza / 'House money effect'",
+      seS6: "Tu stop loss acaba de saltar. El precio va en tu dirección original.",
+      seS6A: "Re-entrar con el mismo setup",
+      seS6B: "Aceptarlo y seguir adelante",
+      seS6C: "Sentir rabia pero esperar el siguiente setup",
+      seS6Exp: "El stop hizo su trabajo. Re-entrar impulsivamente es peligroso. Acepta la pérdida y busca la siguiente oportunidad limpia.",
+      seS6Bias: "Sesgo de anclaje / Necesidad de tener razón",
+      seS7: "Es viernes a las 4pm. Estás en -1R del día.",
+      seS7A: "Cerrar todo — fin de semana",
+      seS7B: "Un trade más para terminar en verde",
+      seS7C: "Mantener posiciones abiertas el fin de semana",
+      seS7Exp: "Viernes tarde es el peor momento para tomar decisiones de trading. Cierra, descansa, vuelve el lunes con mente clara.",
+      seS7Bias: "Aversión a cerrar en pérdida / Sesgo de finalización",
+      seS8: "Ves una vela gigante de impulso. No estaba en tu plan.",
+      seS8A: "Entrar — ¡se está moviendo!",
+      seS8B: "Dejarlo ir — es FOMO",
+      seS8C: "Poner alerta para entrada en pullback",
+      seS8Exp: "Perseguir impulsos es la forma más rápida de comprar el techo o vender el piso. Si no estaba en tu plan, no es tu trade.",
+      seS8Bias: "FOMO / Sesgo de acción",
+      seS9: "Tu colega te muestra que ganó $500 hoy con una crypto.",
+      seS9A: "Abrir una posición en crypto",
+      seS9B: "Quedarte con tu mercado y tu plan",
+      seS9C: "Investigar crypto para mañana",
+      seS9Exp: "El éxito de otros no valida una operación. Tu plan, tu mercado, tu proceso. No dejes que la envidia sabotee tu disciplina.",
+      seS9Bias: "Envidia / Sesgo de comparación social",
+      seS10: "Llevas 5 trades ganadores seguidos. Te sientes invencible.",
+      seS10A: "Aumentar tamaño — estás en racha",
+      seS10B: "Mismo plan, mismo tamaño",
+      seS10C: "Tomar un descanso — el exceso de confianza es peligroso",
+      seS10Exp: "Las rachas ganadoras no cambian las probabilidades. Mantener el mismo tamaño y plan es la verdadera disciplina.",
+      seS10Bias: "Exceso de confianza / Ilusión de control"
+    },
+    en: {
+      seBack: "Back to home",
+      seModule: "MODULE 5",
+      seTitle: "Scenario Simulator",
+      seSubtitle: "The demo is your mental gym — how you train is how you trade. Practice decision-making under pressure in controlled scenarios.",
+      seInstrTitle: "🎯 How does it work?",
+      seInstrDesc: "Choose a mode, face 10 real trading scenarios and make the best decision. In Pressure mode you'll have 30 seconds per scenario — just like the real market.",
+      seModePractice: "Practice",
+      seModePracticeDesc: "No timer. Learn at your own pace.",
+      seModePressure: "Pressure",
+      seModePressureDesc: "30 seconds per scenario. Simulates real trading stress.",
+      seScenario: "SCENARIO",
+      seOf: "of",
+      seTimerUp: "⏰ Time's up! In real trading, hesitation costs money.",
+      seCorrect: "✅ Correct decision!",
+      seWrong: "❌ Not the best decision",
+      seNext: "Next scenario →",
+      seFinish: "See results →",
+      seBias: "Related bias / saboteur:",
+      seResTitle: "Your score",
+      seResOf: "of",
+      seRatingA: "🏆 Disciplined Trader",
+      seRatingB: "👍 On the Right Track",
+      seRatingC: "⚠️ You Need Practice",
+      seRatingD: "📚 Go Back to Module 4",
+      seMsgA: "Excellent emotional control and decision-making. You're ready to trade with consistency.",
+      seMsgB: "Good foundation, but some scenarios challenge you. Review the ones you missed and strengthen those areas.",
+      seMsgC: "Your biases still influence you too much. Review modules 2 and 3 and try again.",
+      seMsgD: "You need to review the fundamentals. Go back to Module 4 to strengthen your trading plan.",
+      sePattern: "Dominant Decision Pattern",
+      sePatImpulsive: "Impulsive — You tend to act before thinking. The market punishes impulsivity.",
+      sePatConservative: "Conservative — You avoid risk but sometimes that paralyzes you. Trust your analysis more.",
+      sePatDisciplined: "Disciplined — You make decisions based on your plan. Keep it up.",
+      seTimeAnalysis: "Time Analysis",
+      seAvgTime: "Average response time:",
+      seSeconds: "seconds",
+      seWrongTitle: "Scenarios to Reinforce",
+      seCorrectAnswer: "Correct answer:",
+      seRetake: "🔄 Retake simulation",
+      seDownload: "📥 Download results",
+      seCta: "🔥 I want the full course",
+      seS1: "You're in +2R profit. Price starts pulling back.",
+      seS1A: "Take profit now",
+      seS1B: "Move stop to breakeven",
+      seS1C: "Hold — trust your target",
+      seS1Exp: "Moving your stop to breakeven protects your gains without prematurely closing a trade with potential. Smart risk management.",
+      seS1Bias: "Loss aversion / Fear of giving back gains",
+      seS2: "You just closed 2 losing trades. You see a new signal.",
+      seS2A: "Take it — the signal is valid",
+      seS2B: "Skip — you're at your loss limit",
+      seS2C: "Take it with double size to recover",
+      seS2Exp: "When you're at your loss limit, discipline says: stop. Trading to recover is revenge trading and it always ends badly.",
+      seS2Bias: "Revenge trading / Recovery bias",
+      seS3: "Your analysis says short but everyone in the group says long.",
+      seS3A: "Follow your analysis",
+      seS3B: "Follow the group",
+      seS3C: "Don't trade — you're confused",
+      seS3Exp: "Your analysis is your plan. If you trust your method, you follow it. Group consensus is noise, not signal.",
+      seS3Bias: "Conformity bias / Social pressure",
+      seS4: "You've been 3 hours without trading. No clear setup.",
+      seS4A: "Keep waiting — discipline",
+      seS4B: "Lower timeframe to find something",
+      seS4C: "Force a trade on the next candle",
+      seS4Exp: "Not trading IS trading. Patience is a skill. Forcing trades destroys accounts.",
+      seS4Bias: "FOMO / Need for action",
+      seS5: "You won +5R this week. It's Thursday and you see a mediocre setup.",
+      seS5A: "Take it — you have buffer",
+      seS5B: "Skip — it doesn't meet your criteria",
+      seS5C: "Take half size",
+      seS5Exp: "Previous gains don't make a bad setup good. Your entry criteria don't change based on your weekly P&L.",
+      seS5Bias: "Overconfidence / 'House money effect'",
+      seS6: "Your stop just got hit. Price goes in your original direction.",
+      seS6A: "Re-enter with same setup",
+      seS6B: "Accept it and move on",
+      seS6C: "Feel angry but wait for next setup",
+      seS6Exp: "The stop did its job. Re-entering impulsively is dangerous. Accept the loss and look for the next clean opportunity.",
+      seS6Bias: "Anchoring bias / Need to be right",
+      seS7: "It's Friday 4pm. You're -1R for the day.",
+      seS7A: "Close everything — weekend",
+      seS7B: "One more trade to end green",
+      seS7C: "Hold current positions over weekend",
+      seS7Exp: "Late Friday is the worst time to make trading decisions. Close, rest, come back Monday with a clear mind.",
+      seS7Bias: "Aversion to closing at a loss / Completion bias",
+      seS8: "You see a huge impulse candle. It wasn't in your plan.",
+      seS8A: "Jump in — it's moving!",
+      seS8B: "Let it go — it's FOMO",
+      seS8C: "Set an alert for a pullback entry",
+      seS8Exp: "Chasing impulses is the fastest way to buy the top or sell the bottom. If it wasn't in your plan, it's not your trade.",
+      seS8Bias: "FOMO / Action bias",
+      seS9: "Your colleague shows you they made $500 today on a crypto.",
+      seS9A: "Open a crypto position",
+      seS9B: "Stick to your market and plan",
+      seS9C: "Research crypto for tomorrow",
+      seS9Exp: "Others' success doesn't validate a trade. Your plan, your market, your process. Don't let envy sabotage your discipline.",
+      seS9Bias: "Envy / Social comparison bias",
+      seS10: "You have 5 consecutive winners. You feel invincible.",
+      seS10A: "Increase position size — you're on fire",
+      seS10B: "Same plan, same size",
+      seS10C: "Take a break — overconfidence is dangerous",
+      seS10Exp: "Winning streaks don't change probabilities. Keeping the same size and plan is true discipline.",
+      seS10Bias: "Overconfidence / Illusion of control"
+    }
+  };
+
+  // Merge with global i18n
+  if (typeof i18n !== "undefined") {
+    Object.keys(toolI18n).forEach(lang => {
+      if (!i18n[lang]) i18n[lang] = {};
+      Object.assign(i18n[lang], toolI18n[lang]);
+    });
+  }
+
+  /* ── Language System ─────────────────── */
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("pt_lang", lang);
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const text = i18n[lang]?.[key];
+      if (text) el.innerHTML = text;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      const text = i18n[lang]?.[key];
+      if (text) el.placeholder = text;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+  }
+
+  setLang(currentLang);
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+
+  /* ── Scenario Data ───────────────────── */
+  const TIMER_SECONDS = 30;
+  const TOTAL = 10;
+
+  function getScenarios() {
+    const t = i18n[currentLang];
+    return [
+      { id: 1, text: t.seS1, options: [t.seS1A, t.seS1B, t.seS1C], best: 1, alt: -1, exp: t.seS1Exp, bias: t.seS1Bias },
+      { id: 2, text: t.seS2, options: [t.seS2A, t.seS2B, t.seS2C], best: 1, alt: -1, exp: t.seS2Exp, bias: t.seS2Bias },
+      { id: 3, text: t.seS3, options: [t.seS3A, t.seS3B, t.seS3C], best: 0, alt: -1, exp: t.seS3Exp, bias: t.seS3Bias },
+      { id: 4, text: t.seS4, options: [t.seS4A, t.seS4B, t.seS4C], best: 0, alt: -1, exp: t.seS4Exp, bias: t.seS4Bias },
+      { id: 5, text: t.seS5, options: [t.seS5A, t.seS5B, t.seS5C], best: 1, alt: -1, exp: t.seS5Exp, bias: t.seS5Bias },
+      { id: 6, text: t.seS6, options: [t.seS6A, t.seS6B, t.seS6C], best: 1, alt: 2, exp: t.seS6Exp, bias: t.seS6Bias },
+      { id: 7, text: t.seS7, options: [t.seS7A, t.seS7B, t.seS7C], best: 0, alt: -1, exp: t.seS7Exp, bias: t.seS7Bias },
+      { id: 8, text: t.seS8, options: [t.seS8A, t.seS8B, t.seS8C], best: 1, alt: 2, exp: t.seS8Exp, bias: t.seS8Bias },
+      { id: 9, text: t.seS9, options: [t.seS9A, t.seS9B, t.seS9C], best: 1, alt: -1, exp: t.seS9Exp, bias: t.seS9Bias },
+      { id: 10, text: t.seS10, options: [t.seS10A, t.seS10B, t.seS10C], best: 1, alt: 2, exp: t.seS10Exp, bias: t.seS10Bias }
+    ];
+  }
+
+  /* ── State ────────────────────────────── */
+  let mode = null;            // "practice" | "pressure"
+  let scenarios = [];
+  let currentIndex = 0;
+  let results = [];           // { scenarioId, correct, chosen, best, timedOut, timeMs }
+  let timerInterval = null;
+  let timerStart = 0;
+
+  /* ── DOM refs ─────────────────────────── */
+  const modePanel = document.getElementById("mode-panel");
+  const instrPanel = document.getElementById("instructions-panel");
+  const scenarioArea = document.getElementById("scenario-area");
+  const resultsPanel = document.getElementById("results-panel");
+
+  /* ── Shuffle ──────────────────────────── */
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /* ── Mode Selection ──────────────────── */
+  document.getElementById("mode-practice").addEventListener("click", () => startGame("practice"));
+  document.getElementById("mode-pressure").addEventListener("click", () => startGame("pressure"));
+
+  function startGame(selectedMode) {
+    mode = selectedMode;
+    scenarios = shuffle(getScenarios());
+    currentIndex = 0;
+    results = [];
+
+    modePanel.classList.add("hidden");
+    instrPanel.classList.add("hidden");
+    scenarioArea.classList.remove("hidden");
+    resultsPanel.classList.add("hidden");
+
+    if (mode === "pressure") {
+      scenarioArea.classList.add("pressure-active");
+    } else {
+      scenarioArea.classList.remove("pressure-active");
+    }
+
+    renderScenario();
+  }
+
+  /* ── Render Scenario ─────────────────── */
+  function renderScenario() {
+    const t = i18n[currentLang];
+    const sc = scenarios[currentIndex];
+    const letters = ["A", "B", "C"];
+    const num = currentIndex + 1;
+
+    let timerHtml = "";
+    if (mode === "pressure") {
+      timerHtml = `
+        <div class="timer-container">
+          <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
+          <div class="timer-label" id="timer-label">${TIMER_SECONDS}s</div>
+        </div>`;
+    }
+
+    scenarioArea.innerHTML = `
+      <div class="scenario-wrapper">
+        <div class="scenario-counter">${t.seScenario} ${num} ${t.seOf} ${TOTAL}</div>
+        ${timerHtml}
+        <div class="scenario-card">
+          <p class="scenario-text">${sc.text}</p>
+        </div>
+        <div class="options-container" id="options-container">
+          ${sc.options.map((opt, i) => `
+            <button class="option-btn" data-idx="${i}">
+              <span class="option-letter">${letters[i]}</span>
+              <span>${opt}</span>
+            </button>`).join("")}
+        </div>
+        <div id="feedback-area"></div>
+        <div class="next-btn-area hidden" id="next-area">
+          <button class="btn btn-primary btn-lg" id="next-btn">${num < TOTAL ? t.seNext : t.seFinish}</button>
+        </div>
+      </div>`;
+
+    // Option click handlers
+    document.querySelectorAll("#options-container .option-btn").forEach(btn => {
+      btn.addEventListener("click", () => handleAnswer(parseInt(btn.dataset.idx)));
+    });
+
+    // Start timer if pressure mode
+    if (mode === "pressure") {
+      startTimer();
+    }
+
+    timerStart = Date.now();
+  }
+
+  /* ── Timer ────────────────────────────── */
+  function startTimer() {
+    let remaining = TIMER_SECONDS * 1000;
+    const total = TIMER_SECONDS * 1000;
+    const fill = document.getElementById("timer-fill");
+    const label = document.getElementById("timer-label");
+    if (!fill) return;
+
+    timerInterval = setInterval(() => {
+      remaining -= 100;
+      const pct = Math.max(0, (remaining / total) * 100);
+      fill.style.width = pct + "%";
+
+      const sec = Math.ceil(remaining / 1000);
+      label.textContent = sec + "s";
+
+      // Color transitions
+      if (pct <= 20) {
+        fill.classList.add("danger");
+        fill.classList.remove("warning");
+        label.classList.add("danger-text");
+        fill.classList.add("timer-pulse");
+      } else if (pct <= 40) {
+        fill.classList.add("warning");
+        fill.classList.remove("danger");
+        label.classList.remove("danger-text");
+        fill.classList.remove("timer-pulse");
+      }
+
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        handleTimeout();
+      }
+    }, 100);
+  }
+
+  function stopTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  /* ── Handle Timeout ──────────────────── */
+  function handleTimeout() {
+    const t = i18n[currentLang];
+    const sc = scenarios[currentIndex];
+    const elapsed = Date.now() - timerStart;
+
+    // Pick the worst wrong answer (first one that isn't best or alt)
+    let wrongPick = 0;
+    for (let i = 0; i < 3; i++) {
+      if (i !== sc.best && i !== sc.alt) { wrongPick = i; break; }
+    }
+
+    results.push({
+      scenarioId: sc.id,
+      correct: false,
+      chosen: wrongPick,
+      best: sc.best,
+      timedOut: true,
+      timeMs: elapsed
+    });
+
+    // Disable buttons + show states
+    const btns = document.querySelectorAll("#options-container .option-btn");
+    btns.forEach(btn => {
+      btn.classList.add("disabled");
+      const idx = parseInt(btn.dataset.idx);
+      if (idx === sc.best) btn.classList.add("correct");
+    });
+
+    // Feedback
+    const fb = document.getElementById("feedback-area");
+    fb.innerHTML = `
+      <div class="feedback-card wrong-fb">
+        <div class="feedback-icon">⏰</div>
+        <p class="feedback-title wrong-title">${t.seTimerUp}</p>
+        <p class="feedback-text">${sc.exp}</p>
+        <p class="feedback-bias">${t.seBias} ${sc.bias}</p>
+      </div>`;
+
+    document.getElementById("next-area").classList.remove("hidden");
+    document.getElementById("next-btn").addEventListener("click", advance);
+  }
+
+  /* ── Handle Answer ───────────────────── */
+  function handleAnswer(chosenIdx) {
+    stopTimer();
+    const t = i18n[currentLang];
+    const sc = scenarios[currentIndex];
+    const elapsed = Date.now() - timerStart;
+    const isCorrect = chosenIdx === sc.best || chosenIdx === sc.alt;
+
+    results.push({
+      scenarioId: sc.id,
+      correct: isCorrect,
+      chosen: chosenIdx,
+      best: sc.best,
+      timedOut: false,
+      timeMs: elapsed
+    });
+
+    // Disable buttons + show states
+    const btns = document.querySelectorAll("#options-container .option-btn");
+    btns.forEach(btn => {
+      btn.classList.add("disabled");
+      const idx = parseInt(btn.dataset.idx);
+      if (idx === sc.best) btn.classList.add("correct");
+      if (idx === chosenIdx && !isCorrect) btn.classList.add("wrong");
+      if (idx === chosenIdx && isCorrect) btn.classList.add("correct");
+    });
+
+    // Feedback
+    const fb = document.getElementById("feedback-area");
+    fb.innerHTML = `
+      <div class="feedback-card ${isCorrect ? "correct-fb" : "wrong-fb"}">
+        <div class="feedback-icon">${isCorrect ? "✅" : "❌"}</div>
+        <p class="feedback-title ${isCorrect ? "correct-title" : "wrong-title"}">${isCorrect ? t.seCorrect : t.seWrong}</p>
+        <p class="feedback-text">${sc.exp}</p>
+        <p class="feedback-bias">${t.seBias} ${sc.bias}</p>
+      </div>`;
+
+    document.getElementById("next-area").classList.remove("hidden");
+    document.getElementById("next-btn").addEventListener("click", advance);
+  }
+
+  /* ── Advance ─────────────────────────── */
+  function advance() {
+    currentIndex++;
+    if (currentIndex >= TOTAL) {
+      showResults();
+    } else {
+      renderScenario();
+    }
+  }
+
+  /* ── Results ─────────────────────────── */
+  function showResults() {
+    stopTimer();
+    scenarioArea.classList.add("hidden");
+    resultsPanel.classList.remove("hidden");
+
+    const t = i18n[currentLang];
+    const score = results.filter(r => r.correct).length;
+    const pct = Math.round((score / TOTAL) * 100);
+
+    // Rating
+    let zone, message, color;
+    if (score >= 9) { zone = t.seRatingA; message = t.seMsgA; color = "var(--emerald)"; }
+    else if (score >= 7) { zone = t.seRatingB; message = t.seMsgB; color = "var(--accent)"; }
+    else if (score >= 5) { zone = t.seRatingC; message = t.seMsgC; color = "var(--amber)"; }
+    else { zone = t.seRatingD; message = t.seMsgD; color = "var(--rose)"; }
+
+    // Bars
+    let barsHtml = "";
+    results.forEach((r, i) => {
+      const barColor = r.correct ? "var(--emerald)" : "var(--rose)";
+      const icon = r.correct ? "✓" : "✗";
+      barsHtml += `
+        <div class="bar-row">
+          <span class="bar-label">${i + 1}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:${barColor}" data-width="100%"></div></div>
+          <span class="bar-value" style="color:${barColor}">${icon}</span>
+        </div>`;
+    });
+
+    // Time analysis (pressure mode only)
+    let timeHtml = "";
+    if (mode === "pressure") {
+      const avgTime = Math.round(results.reduce((sum, r) => sum + r.timeMs, 0) / results.length / 100) / 10;
+      timeHtml = `
+        <div class="result-section">
+          <div class="result-section-title">${t.seTimeAnalysis}</div>
+          <p>${t.seAvgTime} <span class="highlight">${avgTime} ${t.seSeconds}</span></p>
+        </div>`;
+    }
+
+    // Decision pattern analysis
+    const allScenarios = getScenarios();
+    // Classify choices: impulsive (chose action/aggressive), conservative (chose skip/wait), disciplined (chose best)
+    let impulsiveCount = 0, conservativeCount = 0, disciplinedCount = 0;
+    results.forEach(r => {
+      if (r.correct) {
+        disciplinedCount++;
+      } else {
+        // Analyze wrong answers: aggressive options are typically index 0 or 2 for action-oriented
+        const sc = allScenarios.find(s => s.id === r.scenarioId);
+        if (sc) {
+          // In most scenarios, option C or A that isn't the best tends to be impulsive/aggressive
+          // Map impulsive choices: S2C(double), S4C(force), S5A(take mediocre), S7B(one more), S8A(jump in), S9A(open crypto), S10A(increase size)
+          const impulsiveMap = { 2: 2, 4: 2, 5: 0, 7: 1, 8: 0, 9: 0, 10: 0 };
+          if (impulsiveMap[sc.id] !== undefined && r.chosen === impulsiveMap[sc.id]) {
+            impulsiveCount++;
+          } else {
+            conservativeCount++;
+          }
+        }
+      }
+    });
+
+    let patternText;
+    if (disciplinedCount >= 7) patternText = t.sePatDisciplined;
+    else if (impulsiveCount > conservativeCount) patternText = t.sePatImpulsive;
+    else patternText = t.sePatConservative;
+
+    // Wrong answers review
+    let wrongHtml = "";
+    const wrongResults = results.filter(r => !r.correct);
+    if (wrongResults.length > 0) {
+      const letters = ["A", "B", "C"];
+      wrongHtml = `<div class="wrong-review"><div class="result-section-title" style="margin-bottom:0.8rem">${t.seWrongTitle}</div>`;
+      wrongResults.forEach(r => {
+        const sc = allScenarios.find(s => s.id === r.scenarioId);
+        if (sc) {
+          wrongHtml += `
+            <div class="wrong-item">
+              <p class="wrong-q">${sc.text}</p>
+              <p class="wrong-correct">${t.seCorrectAnswer} (${letters[sc.best]}) ${sc.options[sc.best]}</p>
+              <p class="wrong-explain">${sc.exp}</p>
+            </div>`;
+        }
+      });
+      wrongHtml += `</div>`;
+    }
+
+    resultsPanel.innerHTML = `
+      <div class="results-panel">
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem">${t.seResTitle}</p>
+        <div class="score-circle" style="--score-color:${color};--score-pct:${pct}%">
+          <div>
+            <span class="score-value" style="color:${color}">${score}</span>
+            <span class="score-max">/ ${TOTAL}</span>
+          </div>
+        </div>
+        <p class="result-zone" style="color:${color}">${zone}</p>
+        <p class="result-message">${message}</p>
+        <div class="result-bars">${barsHtml}</div>
+        ${timeHtml}
+        <div class="result-section">
+          <div class="result-section-title">${t.sePattern}</div>
+          <p>${patternText}</p>
+        </div>
+        ${wrongHtml}
+        <div class="result-actions">
+          <button class="btn-download" id="retake-btn">${t.seRetake}</button>
+          <button class="btn-download" id="download-btn">${t.seDownload}</button>
+        </div>
+        <div style="margin-top:2rem">
+          <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn btn-primary">${t.seCta}</a>
+        </div>
+      </div>`;
+
+    // Animate bars
+    setTimeout(() => {
+      resultsPanel.querySelectorAll(".bar-fill").forEach(bar => {
+        bar.style.width = bar.dataset.width;
+      });
+    }, 100);
+
+    resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Event listeners
+    document.getElementById("retake-btn")?.addEventListener("click", retake);
+    document.getElementById("download-btn")?.addEventListener("click", downloadResults);
+  }
+
+  /* ── Retake ──────────────────────────── */
+  function retake() {
+    stopTimer();
+    resultsPanel.classList.add("hidden");
+    resultsPanel.innerHTML = "";
+    scenarioArea.innerHTML = "";
+    scenarioArea.classList.add("hidden");
+    scenarioArea.classList.remove("pressure-active");
+    modePanel.classList.remove("hidden");
+    instrPanel.classList.remove("hidden");
+    mode = null;
+    scenarios = [];
+    currentIndex = 0;
+    results = [];
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ── Download ────────────────────────── */
+  function downloadResults() {
+    const t = i18n[currentLang];
+    const allScenarios = getScenarios();
+    const score = results.filter(r => r.correct).length;
+    const letters = ["A", "B", "C"];
+
+    let zone;
+    if (score >= 9) zone = t.seRatingA;
+    else if (score >= 7) zone = t.seRatingB;
+    else if (score >= 5) zone = t.seRatingC;
+    else zone = t.seRatingD;
+
+    let text = `═══════════════════════════════════════\n`;
+    text += `  P'TRADERS — ${t.seTitle}\n`;
+    text += `  ${new Date().toLocaleDateString()}\n`;
+    text += `  ${currentLang === "es" ? "Modo" : "Mode"}: ${mode === "pressure" ? t.seModePressure : t.seModePractice}\n`;
+    text += `═══════════════════════════════════════\n\n`;
+
+    results.forEach((r, i) => {
+      const sc = allScenarios.find(s => s.id === r.scenarioId);
+      if (!sc) return;
+      const status = r.correct ? "✓" : (r.timedOut ? "⏰" : "✗");
+      text += `${t.seScenario} ${i + 1}: ${status}\n`;
+      text += `  ${sc.text}\n`;
+      text += `  ${currentLang === "es" ? "Tu respuesta" : "Your answer"}: (${letters[r.chosen]}) ${sc.options[r.chosen]}\n`;
+      if (!r.correct) {
+        text += `  ${t.seCorrectAnswer} (${letters[sc.best]}) ${sc.options[sc.best]}\n`;
+      }
+      if (mode === "pressure") {
+        text += `  ${currentLang === "es" ? "Tiempo" : "Time"}: ${(r.timeMs / 1000).toFixed(1)}s\n`;
+      }
+      text += `\n`;
+    });
+
+    text += `───────────────────────────────────────\n`;
+    text += `TOTAL: ${score}/${TOTAL}  →  ${zone.replace(/[🏆👍⚠️📚]\s?/g, "").trim()}\n`;
+    text += `───────────────────────────────────────\n\n`;
+
+    if (mode === "pressure") {
+      const avgTime = Math.round(results.reduce((sum, r) => sum + r.timeMs, 0) / results.length / 100) / 10;
+      text += `${t.seAvgTime} ${avgTime}s\n\n`;
+    }
+
+    text += `— P'Traders | www.paratrades.com\n`;
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `simulador-escenarios-ptraders-${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+
+</body>
+</html>

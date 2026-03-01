@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan de Contingencia — P'Traders</title>
+  <meta name="description" content="Protocolos de acción para escenarios de crisis emocional durante sesiones de trading. Herramienta del Módulo 4.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Scenario Cards ─────────────────── */
+    .scenario-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      animation: fadeInUp 0.5s ease both;
+      display: flex;
+    }
+    .scenario-card:nth-child(2) { animation-delay: 0.08s; }
+    .scenario-card:nth-child(3) { animation-delay: 0.16s; }
+    .scenario-card:nth-child(4) { animation-delay: 0.24s; }
+    .scenario-card:nth-child(5) { animation-delay: 0.32s; }
+
+    .severity-bar {
+      width: 5px;
+      flex-shrink: 0;
+    }
+    .severity-bar.critical { background: #f43f5e; }
+    .severity-bar.high { background: #f97316; }
+    .severity-bar.medium { background: #eab308; }
+
+    .scenario-content {
+      flex: 1;
+      padding: 1.5rem;
+    }
+
+    .scenario-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .scenario-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .scenario-info { flex: 1; }
+
+    .scenario-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .severity-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .severity-badge.critical { background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .severity-badge.high { background: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .severity-badge.medium { background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
+
+    /* ── Form Fields ────────────────────── */
+    .field-group {
+      margin-bottom: 1rem;
+    }
+    .field-group:last-child { margin-bottom: 0; }
+
+    .field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: var(--font-mono);
+      margin-bottom: 0.4rem;
+    }
+
+    .field-textarea {
+      width: 100%;
+      min-height: 80px;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      padding: 0.8rem 1rem;
+      resize: vertical;
+      transition: border-color var(--duration) var(--ease-out);
+      box-sizing: border-box;
+    }
+    .field-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .field-textarea.prefilled {
+      color: var(--muted);
+    }
+    .field-textarea.edited {
+      color: var(--text);
+    }
+
+    .field-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      padding: 0.65rem 1rem;
+      transition: border-color var(--duration) var(--ease-out);
+      box-sizing: border-box;
+    }
+    .field-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .field-select {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      padding: 0.65rem 1rem;
+      cursor: pointer;
+      transition: border-color var(--duration) var(--ease-out);
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+    }
+    .field-select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .field-select option {
+      background: #0d1117;
+      color: var(--text);
+    }
+
+    /* ── Generate Button ────────────────── */
+    .generate-section {
+      text-align: center;
+      margin: 2.5rem 0;
+    }
+    .btn-generate {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--accent), #2668ff);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-generate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px var(--accent-glow);
+    }
+
+    /* ── Results Section ────────────────── */
+    .results-section {
+      display: none;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .results-section.visible { display: block; }
+
+    .results-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .results-header h2 {
+      font-size: clamp(1.3rem, 3vw, 1.7rem);
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .results-timestamp {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── Protocol Cards (Results) ───────── */
+    .protocol-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .protocol-content {
+      flex: 1;
+      padding: 1.2rem 1.5rem;
+    }
+
+    .protocol-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .protocol-icon { font-size: 1.2rem; }
+
+    .protocol-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .protocol-body {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    .protocol-field-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 0.6rem;
+      margin-bottom: 0.2rem;
+    }
+    .protocol-field-label:first-child { margin-top: 0; }
+
+    .protocol-value {
+      color: var(--text);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+    .protocol-value.empty {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Emergency Quick Ref ────────────── */
+    .emergency-card {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.08), rgba(249, 115, 22, 0.06));
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .emergency-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--rose);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .emergency-item {
+      display: flex;
+      gap: 0.8rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      align-items: flex-start;
+    }
+    .emergency-item:last-child { border-bottom: none; }
+
+    .emergency-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .emergency-text {
+      flex: 1;
+    }
+
+    .emergency-scenario-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+
+    .emergency-action {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Actions Bar ────────────────────── */
+    .actions-bar {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      text-decoration: none;
+      font-family: var(--font-body);
+    }
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-action.edit:hover { border-color: var(--amber); color: var(--amber); }
+    .btn-action.cta {
+      background: linear-gradient(135deg, var(--accent), #2668ff);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-action.cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px var(--accent-glow); }
+
+    /* ── Saved Indicator ────────────────── */
+    .save-indicator {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--emerald);
+      font-weight: 600;
+      margin-top: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .save-indicator.show { opacity: 1; }
+
+    /* ── Animations ─────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+
+    /* ── Print Styles ───────────────────── */
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .bg-noise, .bg-glow, .bg-glow--1, .bg-glow--2, .topbar, .tool-back,
+      .instructions, .generate-section, .actions-bar, .btn-action, .save-indicator,
+      .scenario-card, .btn-generate { display: none !important; }
+      .results-section { display: block !important; }
+      .results-section * { color: #000 !important; border-color: #ccc !important; }
+      .tool-page { padding: 1rem !important; max-width: 100% !important; }
+      .tool-header h1 { color: #000 !important; }
+      .tool-header .module-badge { color: #333 !important; background: #eee !important; }
+      .results-timestamp { color: #666 !important; }
+      .protocol-card { background: #fff !important; border: 1px solid #ccc !important; break-inside: avoid; margin-bottom: 0.8rem !important; }
+      .severity-bar { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .protocol-name, .protocol-field-label { color: #000 !important; }
+      .protocol-value { color: #333 !important; }
+      .emergency-card { background: #f9f9f9 !important; border: 1px solid #ccc !important; break-inside: avoid; }
+      .emergency-title { color: #c00 !important; }
+      .emergency-scenario-name { color: #000 !important; }
+      .emergency-action { color: #333 !important; }
+    }
+
+    @media (max-width: 480px) {
+      .scenario-header { flex-wrap: wrap; gap: 0.5rem; }
+      .severity-badge { order: 3; }
+      .actions-bar { flex-direction: column; align-items: stretch; }
+      .btn-action { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="pcBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">🛡️</div>
+    <span class="module-badge" data-i18n="pcModule">MÓDULO 4</span>
+    <h1 data-i18n="pcTitle">Plan de Contingencia</h1>
+    <p data-i18n="pcSubtitle">Cuando las emociones toman el control, necesitas protocolos predefinidos. Define tus acciones ANTES de que la crisis ocurra.</p>
+  </div>
+
+  <div class="instructions">
+    <h3 data-i18n="pcInstrTitle">🛡️ Cómo usar esta herramienta</h3>
+    <p data-i18n="pcInstrDesc">Para cada escenario de crisis, personaliza tu protocolo de acción. Las sugerencias son un punto de partida — edítalas con tus propias palabras. Define qué dispara cada crisis en ti y cuál es tu señal de alarma física. Cuando llegue el momento, tendrás un plan claro que seguir.</p>
+  </div>
+
+  <!-- ── Scenario Cards ────────────────── -->
+  <div id="scenarios-container">
+
+    <!-- Scenario 1 -->
+    <div class="scenario-card" data-scenario="0">
+      <div class="severity-bar high"></div>
+      <div class="scenario-content">
+        <div class="scenario-header">
+          <span class="scenario-icon">🔴</span>
+          <div class="scenario-info">
+            <div class="scenario-name" data-i18n="pcS1Name">2 Pérdidas Consecutivas</div>
+          </div>
+          <span class="severity-badge high" data-i18n="pcSevHigh">ALTO</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcActionLabel">¿Qué voy a hacer?</label>
+          <textarea class="field-textarea prefilled" data-field="action" data-i18n-placeholder="pcS1Action" placeholder="Detener el trading 30 minutos. Hacer ejercicio de respiración. Revisar si se siguió el plan."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcTriggerLabel">Mi trigger</label>
+          <input class="field-input" type="text" data-field="trigger" data-i18n-placeholder="pcS1Trigger" placeholder="Ej: Frustración al ver rojo dos veces seguidas">
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcAlarmLabel">Mi señal de alarma</label>
+          <select class="field-select" data-field="alarm">
+            <option value="" data-i18n="pcAlarmSelect">-- Selecciona --</option>
+            <option value="heart" data-i18n="pcAlarm1">Corazón acelerado</option>
+            <option value="sweat" data-i18n="pcAlarm2">Sudoración</option>
+            <option value="anger" data-i18n="pcAlarm3">Ira / Frustración</option>
+            <option value="anxiety" data-i18n="pcAlarm4">Ansiedad</option>
+            <option value="shaking" data-i18n="pcAlarm5">Manos temblorosas</option>
+            <option value="chest" data-i18n="pcAlarm6">Pecho oprimido</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 2 -->
+    <div class="scenario-card" data-scenario="1">
+      <div class="severity-bar critical"></div>
+      <div class="scenario-content">
+        <div class="scenario-header">
+          <span class="scenario-icon">😤</span>
+          <div class="scenario-info">
+            <div class="scenario-name" data-i18n="pcS2Name">Impulso de Venganza</div>
+          </div>
+          <span class="severity-badge critical" data-i18n="pcSevCritical">CRÍTICO</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcActionLabel">¿Qué voy a hacer?</label>
+          <textarea class="field-textarea prefilled" data-field="action" data-i18n-placeholder="pcS2Action" placeholder="Cerrar la plataforma. Alejarme 15 minutos. Escribir en mi diario qué estoy sintiendo."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcTriggerLabel">Mi trigger</label>
+          <input class="field-input" type="text" data-field="trigger" data-i18n-placeholder="pcS2Trigger" placeholder="Ej: Querer 'recuperar' lo perdido inmediatamente">
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcAlarmLabel">Mi señal de alarma</label>
+          <select class="field-select" data-field="alarm">
+            <option value="" data-i18n="pcAlarmSelect">-- Selecciona --</option>
+            <option value="heart" data-i18n="pcAlarm1">Corazón acelerado</option>
+            <option value="sweat" data-i18n="pcAlarm2">Sudoración</option>
+            <option value="anger" data-i18n="pcAlarm3">Ira / Frustración</option>
+            <option value="anxiety" data-i18n="pcAlarm4">Ansiedad</option>
+            <option value="shaking" data-i18n="pcAlarm5">Manos temblorosas</option>
+            <option value="chest" data-i18n="pcAlarm6">Pecho oprimido</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 3 -->
+    <div class="scenario-card" data-scenario="2">
+      <div class="severity-bar medium"></div>
+      <div class="scenario-content">
+        <div class="scenario-header">
+          <span class="scenario-icon">⚡</span>
+          <div class="scenario-info">
+            <div class="scenario-name" data-i18n="pcS3Name">FOMO — Oportunidad Perdida</div>
+          </div>
+          <span class="severity-badge medium" data-i18n="pcSevMedium">MEDIO</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcActionLabel">¿Qué voy a hacer?</label>
+          <textarea class="field-textarea prefilled" data-field="action" data-i18n-placeholder="pcS3Action" placeholder="Aceptarlo. Escribir: 'Habrá otro setup.' NO perseguir el precio."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcTriggerLabel">Mi trigger</label>
+          <input class="field-input" type="text" data-field="trigger" data-i18n-placeholder="pcS3Trigger" placeholder="Ej: Ver un movimiento grande sin estar posicionado">
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcAlarmLabel">Mi señal de alarma</label>
+          <select class="field-select" data-field="alarm">
+            <option value="" data-i18n="pcAlarmSelect">-- Selecciona --</option>
+            <option value="heart" data-i18n="pcAlarm1">Corazón acelerado</option>
+            <option value="sweat" data-i18n="pcAlarm2">Sudoración</option>
+            <option value="anger" data-i18n="pcAlarm3">Ira / Frustración</option>
+            <option value="anxiety" data-i18n="pcAlarm4">Ansiedad</option>
+            <option value="shaking" data-i18n="pcAlarm5">Manos temblorosas</option>
+            <option value="chest" data-i18n="pcAlarm6">Pecho oprimido</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 4 -->
+    <div class="scenario-card" data-scenario="3">
+      <div class="severity-bar high"></div>
+      <div class="scenario-content">
+        <div class="scenario-header">
+          <span class="scenario-icon">🎉</span>
+          <div class="scenario-info">
+            <div class="scenario-name" data-i18n="pcS4Name">Euforia por Ganancias</div>
+          </div>
+          <span class="severity-badge high" data-i18n="pcSevHigh">ALTO</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcActionLabel">¿Qué voy a hacer?</label>
+          <textarea class="field-textarea prefilled" data-field="action" data-i18n-placeholder="pcS4Action" placeholder="Parar. Tomar ganancias. NO aumentar tamaño de posición. Ceñirme al plan diario."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcTriggerLabel">Mi trigger</label>
+          <input class="field-input" type="text" data-field="trigger" data-i18n-placeholder="pcS4Trigger" placeholder="Ej: Racha de 3+ operaciones ganadoras seguidas">
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcAlarmLabel">Mi señal de alarma</label>
+          <select class="field-select" data-field="alarm">
+            <option value="" data-i18n="pcAlarmSelect">-- Selecciona --</option>
+            <option value="heart" data-i18n="pcAlarm1">Corazón acelerado</option>
+            <option value="sweat" data-i18n="pcAlarm2">Sudoración</option>
+            <option value="anger" data-i18n="pcAlarm3">Ira / Frustración</option>
+            <option value="anxiety" data-i18n="pcAlarm4">Ansiedad</option>
+            <option value="shaking" data-i18n="pcAlarm5">Manos temblorosas</option>
+            <option value="chest" data-i18n="pcAlarm6">Pecho oprimido</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario 5 -->
+    <div class="scenario-card" data-scenario="4">
+      <div class="severity-bar medium"></div>
+      <div class="scenario-content">
+        <div class="scenario-header">
+          <span class="scenario-icon">😴</span>
+          <div class="scenario-info">
+            <div class="scenario-name" data-i18n="pcS5Name">Fatiga Mental</div>
+          </div>
+          <span class="severity-badge medium" data-i18n="pcSevMedium">MEDIO</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcActionLabel">¿Qué voy a hacer?</label>
+          <textarea class="field-textarea prefilled" data-field="action" data-i18n-placeholder="pcS5Action" placeholder="Cerrar todos los gráficos. Descansar. Mañana es otro día. Mi capital seguirá ahí."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcTriggerLabel">Mi trigger</label>
+          <input class="field-input" type="text" data-field="trigger" data-i18n-placeholder="pcS5Trigger" placeholder="Ej: Más de 3 horas frente a las pantallas sin descanso">
+        </div>
+        <div class="field-group">
+          <label class="field-label" data-i18n="pcAlarmLabel">Mi señal de alarma</label>
+          <select class="field-select" data-field="alarm">
+            <option value="" data-i18n="pcAlarmSelect">-- Selecciona --</option>
+            <option value="heart" data-i18n="pcAlarm1">Corazón acelerado</option>
+            <option value="sweat" data-i18n="pcAlarm2">Sudoración</option>
+            <option value="anger" data-i18n="pcAlarm3">Ira / Frustración</option>
+            <option value="anxiety" data-i18n="pcAlarm4">Ansiedad</option>
+            <option value="shaking" data-i18n="pcAlarm5">Manos temblorosas</option>
+            <option value="chest" data-i18n="pcAlarm6">Pecho oprimido</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Generate Button -->
+  <div class="generate-section">
+    <button class="btn-generate" id="btn-generate">
+      <i class="fas fa-shield-alt"></i>
+      <span data-i18n="pcGenerate">Generar Mi Plan de Contingencia</span>
+    </button>
+  </div>
+
+  <!-- ── Results ───────────────────────── -->
+  <div class="results-section" id="results-section">
+    <div class="results-header">
+      <h2 data-i18n="pcResultsTitle">Tu Plan de Contingencia Personal</h2>
+      <div class="results-timestamp" id="results-timestamp"></div>
+    </div>
+
+    <div id="protocols-container"></div>
+
+    <!-- Emergency Quick Reference -->
+    <div class="emergency-card" id="emergency-card">
+      <div class="emergency-title">
+        <span>🚨</span>
+        <span data-i18n="pcEmergencyTitle">Referencia Rápida de Emergencia</span>
+      </div>
+      <div id="emergency-list"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-bar">
+      <button class="btn-action" id="btn-save"><i class="fas fa-save"></i> <span data-i18n="pcSave">Guardar</span></button>
+      <button class="btn-action" id="btn-download"><i class="fas fa-download"></i> <span data-i18n="pcDownload">Descargar .txt</span></button>
+      <button class="btn-action" id="btn-print"><i class="fas fa-print"></i> <span data-i18n="pcPrint">Imprimir</span></button>
+      <button class="btn-action edit" id="btn-edit"><i class="fas fa-pen"></i> <span data-i18n="pcEdit">Editar</span></button>
+    </div>
+    <div class="save-indicator" id="save-indicator" data-i18n="pcSaved">✓ Guardado</div>
+
+    <!-- CTA -->
+    <div style="text-align:center; margin-top: 2.5rem;">
+      <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" class="btn-action cta">
+        <i class="fas fa-rocket"></i> <span data-i18n="pcCta">Accede al Curso Completo</span>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══════════════════════════════════════════
+   P'TRADERS — Plan de Contingencia Tool
+   ═══════════════════════════════════════════ */
+;(function() {
+  "use strict";
+
+  const STORAGE_KEY = "pt_contingency_plan";
+
+  /* ── i18n dictionary ─────────────────── */
+  const dict = {
+    es: {
+      pcBack: "Volver al inicio",
+      pcModule: "MÓDULO 4",
+      pcTitle: "Plan de Contingencia",
+      pcSubtitle: "Cuando las emociones toman el control, necesitas protocolos predefinidos. Define tus acciones ANTES de que la crisis ocurra.",
+      pcInstrTitle: "🛡️ Cómo usar esta herramienta",
+      pcInstrDesc: "Para cada escenario de crisis, personaliza tu protocolo de acción. Las sugerencias son un punto de partida — edítalas con tus propias palabras. Define qué dispara cada crisis en ti y cuál es tu señal de alarma física. Cuando llegue el momento, tendrás un plan claro que seguir.",
+      pcS1Name: "2 Pérdidas Consecutivas",
+      pcS2Name: "Impulso de Venganza",
+      pcS3Name: "FOMO — Oportunidad Perdida",
+      pcS4Name: "Euforia por Ganancias",
+      pcS5Name: "Fatiga Mental",
+      pcActionLabel: "¿Qué voy a hacer?",
+      pcTriggerLabel: "Mi trigger",
+      pcAlarmLabel: "Mi señal de alarma",
+      pcAlarmSelect: "-- Selecciona --",
+      pcAlarm1: "Corazón acelerado",
+      pcAlarm2: "Sudoración",
+      pcAlarm3: "Ira / Frustración",
+      pcAlarm4: "Ansiedad",
+      pcAlarm5: "Manos temblorosas",
+      pcAlarm6: "Pecho oprimido",
+      pcS1Action: "Detener el trading 30 minutos. Hacer ejercicio de respiración. Revisar si se siguió el plan.",
+      pcS2Action: "Cerrar la plataforma. Alejarme 15 minutos. Escribir en mi diario qué estoy sintiendo.",
+      pcS3Action: "Aceptarlo. Escribir: 'Habrá otro setup.' NO perseguir el precio.",
+      pcS4Action: "Parar. Tomar ganancias. NO aumentar tamaño de posición. Ceñirme al plan diario.",
+      pcS5Action: "Cerrar todos los gráficos. Descansar. Mañana es otro día. Mi capital seguirá ahí.",
+      pcS1Trigger: "Ej: Frustración al ver rojo dos veces seguidas",
+      pcS2Trigger: "Ej: Querer 'recuperar' lo perdido inmediatamente",
+      pcS3Trigger: "Ej: Ver un movimiento grande sin estar posicionado",
+      pcS4Trigger: "Ej: Racha de 3+ operaciones ganadoras seguidas",
+      pcS5Trigger: "Ej: Más de 3 horas frente a las pantallas sin descanso",
+      pcSevCritical: "CRÍTICO",
+      pcSevHigh: "ALTO",
+      pcSevMedium: "MEDIO",
+      pcGenerate: "Generar Mi Plan de Contingencia",
+      pcResultsTitle: "Tu Plan de Contingencia Personal",
+      pcEmergencyTitle: "Referencia Rápida de Emergencia",
+      pcSave: "Guardar",
+      pcDownload: "Descargar .txt",
+      pcPrint: "Imprimir",
+      pcEdit: "Editar",
+      pcSaved: "✓ Guardado",
+      pcCta: "Accede al Curso Completo",
+      pcTxtHeader: "PLAN DE CONTINGENCIA PERSONAL — P'TRADERS",
+      pcTxtDate: "Fecha",
+      pcTxtProtocol: "PROTOCOLO",
+      pcTxtAction: "Acción",
+      pcTxtTrigger: "Trigger",
+      pcTxtAlarm: "Señal de alarma",
+      pcTxtSeverity: "Severidad",
+      pcTxtEmergency: "REFERENCIA RÁPIDA DE EMERGENCIA",
+      pcNoAction: "(Sin protocolo definido)",
+      pcNoTrigger: "(Sin trigger definido)",
+      pcNoAlarm: "(Sin señal definida)",
+      pcTimestamp: "Creado/Editado",
+    },
+    en: {
+      pcBack: "Back to home",
+      pcModule: "MODULE 4",
+      pcTitle: "Contingency Plan",
+      pcSubtitle: "When emotions take over, you need pre-defined protocols. Define your actions BEFORE the crisis hits.",
+      pcInstrTitle: "🛡️ How to use this tool",
+      pcInstrDesc: "For each crisis scenario, customize your action protocol. The suggestions are a starting point — edit them in your own words. Define what triggers each crisis for you and what your physical alarm signal is. When the moment comes, you'll have a clear plan to follow.",
+      pcS1Name: "2 Consecutive Losses",
+      pcS2Name: "Revenge Impulse",
+      pcS3Name: "FOMO — Missed Opportunity",
+      pcS4Name: "Euphoria from Profits",
+      pcS5Name: "Mental Fatigue",
+      pcActionLabel: "What will I do?",
+      pcTriggerLabel: "My trigger",
+      pcAlarmLabel: "My alarm signal",
+      pcAlarmSelect: "-- Select --",
+      pcAlarm1: "Heart racing",
+      pcAlarm2: "Sweating",
+      pcAlarm3: "Anger / Frustration",
+      pcAlarm4: "Anxiety",
+      pcAlarm5: "Shaking hands",
+      pcAlarm6: "Tight chest",
+      pcS1Action: "Stop trading for 30 minutes. Do breathing exercise. Review if plan was followed.",
+      pcS2Action: "Close the platform. Walk away for 15 minutes. Write in your journal what you're feeling.",
+      pcS3Action: "Accept it. Write: 'There will be another setup.' Do NOT chase price.",
+      pcS4Action: "Stop. Take profit. Do NOT increase position size. Stick to daily plan.",
+      pcS5Action: "Close all charts. Rest. Tomorrow is another day. Your capital will still be there.",
+      pcS1Trigger: "E.g.: Frustration from seeing red twice in a row",
+      pcS2Trigger: "E.g.: Wanting to 'recover' losses immediately",
+      pcS3Trigger: "E.g.: Seeing a big move without being positioned",
+      pcS4Trigger: "E.g.: Streak of 3+ winning trades in a row",
+      pcS5Trigger: "E.g.: Over 3 hours at the screens without a break",
+      pcSevCritical: "CRITICAL",
+      pcSevHigh: "HIGH",
+      pcSevMedium: "MEDIUM",
+      pcGenerate: "Generate My Contingency Plan",
+      pcResultsTitle: "Your Personal Contingency Plan",
+      pcEmergencyTitle: "Emergency Quick Reference",
+      pcSave: "Save",
+      pcDownload: "Download .txt",
+      pcPrint: "Print",
+      pcEdit: "Edit",
+      pcSaved: "✓ Saved",
+      pcCta: "Access the Full Course",
+      pcTxtHeader: "PERSONAL CONTINGENCY PLAN — P'TRADERS",
+      pcTxtDate: "Date",
+      pcTxtProtocol: "PROTOCOL",
+      pcTxtAction: "Action",
+      pcTxtTrigger: "Trigger",
+      pcTxtAlarm: "Alarm signal",
+      pcTxtSeverity: "Severity",
+      pcTxtEmergency: "EMERGENCY QUICK REFERENCE",
+      pcNoAction: "(No protocol defined)",
+      pcNoTrigger: "(No trigger defined)",
+      pcNoAlarm: "(No signal defined)",
+      pcTimestamp: "Created/Edited",
+    }
+  };
+
+  /* ── Merge into global i18n ──────────── */
+  if (typeof i18n !== "undefined") {
+    Object.assign(i18n.es, dict.es);
+    Object.assign(i18n.en, dict.en);
+  }
+
+  /* ── Language helpers ────────────────── */
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function t(key) {
+    if (typeof i18n !== "undefined" && i18n[currentLang] && i18n[currentLang][key]) return i18n[currentLang][key];
+    return dict[currentLang]?.[key] || dict.es[key] || key;
+  }
+
+  function applyLang() {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const val = t(key);
+      if (val) el.textContent = val;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      const val = t(key);
+      if (val) el.placeholder = val;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+    document.documentElement.lang = currentLang;
+    // Update prefilled textareas that haven't been edited
+    cards.forEach((card, i) => {
+      const ta = card.querySelector('textarea[data-field="action"]');
+      if (ta && ta.classList.contains("prefilled") && !ta.value.trim()) {
+        ta.placeholder = t(scenarioKeys[i].action);
+      }
+    });
+  }
+
+  /* ── Scenario config ─────────────────── */
+  const scenarios = [
+    { icon: "🔴", nameKey: "pcS1Name", severity: "high", severityKey: "pcSevHigh" },
+    { icon: "😤", nameKey: "pcS2Name", severity: "critical", severityKey: "pcSevCritical" },
+    { icon: "⚡", nameKey: "pcS3Name", severity: "medium", severityKey: "pcSevMedium" },
+    { icon: "🎉", nameKey: "pcS4Name", severity: "high", severityKey: "pcSevHigh" },
+    { icon: "😴", nameKey: "pcS5Name", severity: "medium", severityKey: "pcSevMedium" },
+  ];
+
+  const scenarioKeys = [
+    { action: "pcS1Action", trigger: "pcS1Trigger" },
+    { action: "pcS2Action", trigger: "pcS2Trigger" },
+    { action: "pcS3Action", trigger: "pcS3Trigger" },
+    { action: "pcS4Action", trigger: "pcS4Trigger" },
+    { action: "pcS5Action", trigger: "pcS5Trigger" },
+  ];
+
+  const alarmMap = {
+    heart: "pcAlarm1",
+    sweat: "pcAlarm2",
+    anger: "pcAlarm3",
+    anxiety: "pcAlarm4",
+    shaking: "pcAlarm5",
+    chest: "pcAlarm6",
+  };
+
+  /* ── DOM refs ────────────────────────── */
+  const cards = document.querySelectorAll(".scenario-card");
+  const resultsSection = document.getElementById("results-section");
+  const protocolsContainer = document.getElementById("protocols-container");
+  const emergencyList = document.getElementById("emergency-list");
+  const timestampEl = document.getElementById("results-timestamp");
+  const saveIndicator = document.getElementById("save-indicator");
+
+  /* ── Track textarea edits ────────────── */
+  cards.forEach(card => {
+    const ta = card.querySelector('textarea[data-field="action"]');
+    if (ta) {
+      ta.addEventListener("input", () => {
+        if (ta.value.trim()) {
+          ta.classList.remove("prefilled");
+          ta.classList.add("edited");
+        } else {
+          ta.classList.add("prefilled");
+          ta.classList.remove("edited");
+        }
+      });
+    }
+  });
+
+  /* ── Gather data from form ───────────── */
+  function gatherData() {
+    const data = [];
+    cards.forEach((card, i) => {
+      const action = card.querySelector('textarea[data-field="action"]').value.trim() ||
+                     card.querySelector('textarea[data-field="action"]').placeholder;
+      const trigger = card.querySelector('input[data-field="trigger"]').value.trim();
+      const alarm = card.querySelector('select[data-field="alarm"]').value;
+      data.push({
+        index: i,
+        action,
+        trigger,
+        alarm,
+        hasCustomAction: !!card.querySelector('textarea[data-field="action"]').value.trim(),
+      });
+    });
+    return data;
+  }
+
+  /* ── Render results ──────────────────── */
+  function renderResults(data, timestamp) {
+    protocolsContainer.innerHTML = "";
+    emergencyList.innerHTML = "";
+
+    data.forEach((item, i) => {
+      const s = scenarios[i];
+      // Protocol card
+      const div = document.createElement("div");
+      div.className = "protocol-card";
+      div.innerHTML = `
+        <div class="severity-bar ${s.severity}"></div>
+        <div class="protocol-content">
+          <div class="protocol-header">
+            <span class="protocol-icon">${s.icon}</span>
+            <span class="protocol-name">${t(s.nameKey)}</span>
+            <span class="severity-badge ${s.severity}">${t(s.severityKey)}</span>
+          </div>
+          <div class="protocol-body">
+            <div class="protocol-field-label">${t("pcActionLabel")}</div>
+            <div class="protocol-value ${!item.hasCustomAction ? 'empty' : ''}">${escHtml(item.action)}</div>
+            <div class="protocol-field-label">${t("pcTriggerLabel")}</div>
+            <div class="protocol-value ${!item.trigger ? 'empty' : ''}">${item.trigger ? escHtml(item.trigger) : t("pcNoTrigger")}</div>
+            <div class="protocol-field-label">${t("pcAlarmLabel")}</div>
+            <div class="protocol-value ${!item.alarm ? 'empty' : ''}">${item.alarm ? t(alarmMap[item.alarm]) : t("pcNoAlarm")}</div>
+          </div>
+        </div>
+      `;
+      protocolsContainer.appendChild(div);
+
+      // Emergency item
+      const eDiv = document.createElement("div");
+      eDiv.className = "emergency-item";
+      eDiv.innerHTML = `
+        <span class="emergency-icon">${s.icon}</span>
+        <div class="emergency-text">
+          <div class="emergency-scenario-name">${t(s.nameKey)}</div>
+          <div class="emergency-action">${escHtml(item.action)}</div>
+        </div>
+      `;
+      emergencyList.appendChild(eDiv);
+    });
+
+    const ts = timestamp || new Date().toISOString();
+    const dateStr = new Date(ts).toLocaleDateString(currentLang === "es" ? "es-ES" : "en-US", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"
+    });
+    timestampEl.textContent = t("pcTimestamp") + ": " + dateStr;
+
+    resultsSection.classList.add("visible");
+    resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    return ts;
+  }
+
+  /* ── Escape HTML ─────────────────────── */
+  function escHtml(str) {
+    const d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  /* ── localStorage ────────────────────── */
+  function saveToStorage(data, timestamp) {
+    const payload = { data, timestamp, lang: currentLang };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    flashSaved();
+  }
+
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch { return null; }
+  }
+
+  function flashSaved() {
+    saveIndicator.textContent = t("pcSaved");
+    saveIndicator.classList.add("show");
+    setTimeout(() => saveIndicator.classList.remove("show"), 2000);
+  }
+
+  /* ── Restore form from saved data ───── */
+  function restoreForm(saved) {
+    if (!saved || !saved.data) return;
+    saved.data.forEach((item, i) => {
+      if (i >= cards.length) return;
+      const card = cards[i];
+      const ta = card.querySelector('textarea[data-field="action"]');
+      const inp = card.querySelector('input[data-field="trigger"]');
+      const sel = card.querySelector('select[data-field="alarm"]');
+      if (item.hasCustomAction && item.action) {
+        ta.value = item.action;
+        ta.classList.remove("prefilled");
+        ta.classList.add("edited");
+      }
+      if (item.trigger) inp.value = item.trigger;
+      if (item.alarm) sel.value = item.alarm;
+    });
+  }
+
+  /* ── Download .txt ───────────────────── */
+  function downloadTxt(data, timestamp) {
+    const dateStr = new Date(timestamp).toLocaleDateString(currentLang === "es" ? "es-ES" : "en-US", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"
+    });
+
+    const lines = [];
+    lines.push(t("pcTxtHeader"));
+    lines.push("═".repeat(50));
+    lines.push(t("pcTxtDate") + ": " + dateStr);
+    lines.push("");
+
+    data.forEach((item, i) => {
+      const s = scenarios[i];
+      lines.push("─".repeat(50));
+      lines.push(s.icon + " " + t("pcTxtProtocol") + " " + (i + 1) + ": " + t(s.nameKey));
+      lines.push(t("pcTxtSeverity") + ": " + t(s.severityKey));
+      lines.push("");
+      lines.push(t("pcTxtAction") + ":");
+      lines.push("  " + (item.action || t("pcNoAction")));
+      lines.push("");
+      lines.push(t("pcTxtTrigger") + ":");
+      lines.push("  " + (item.trigger || t("pcNoTrigger")));
+      lines.push("");
+      lines.push(t("pcTxtAlarm") + ":");
+      lines.push("  " + (item.alarm ? t(alarmMap[item.alarm]) : t("pcNoAlarm")));
+      lines.push("");
+    });
+
+    lines.push("═".repeat(50));
+    lines.push(t("pcTxtEmergency"));
+    lines.push("═".repeat(50));
+    data.forEach((item, i) => {
+      const s = scenarios[i];
+      lines.push(s.icon + " " + t(s.nameKey) + ": " + (item.action || t("pcNoAction")));
+    });
+    lines.push("");
+    lines.push("— P'Traders | https://go.hotmart.com/K101236595F?dp=1");
+
+    const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "plan-contingencia-" + new Date().toISOString().slice(0, 10) + ".txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ── Event: Generate ─────────────────── */
+  let lastTimestamp = null;
+  let lastData = null;
+
+  document.getElementById("btn-generate").addEventListener("click", () => {
+    lastData = gatherData();
+    lastTimestamp = renderResults(lastData);
+    saveToStorage(lastData, lastTimestamp);
+  });
+
+  /* ── Event: Save ─────────────────────── */
+  document.getElementById("btn-save").addEventListener("click", () => {
+    if (lastData) saveToStorage(lastData, lastTimestamp);
+  });
+
+  /* ── Event: Download ─────────────────── */
+  document.getElementById("btn-download").addEventListener("click", () => {
+    if (lastData) downloadTxt(lastData, lastTimestamp);
+  });
+
+  /* ── Event: Print ────────────────────── */
+  document.getElementById("btn-print").addEventListener("click", () => {
+    window.print();
+  });
+
+  /* ── Event: Edit ─────────────────────── */
+  document.getElementById("btn-edit").addEventListener("click", () => {
+    resultsSection.classList.remove("visible");
+    document.querySelector(".tool-header").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  /* ── Event: Lang toggle ──────────────── */
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentLang = btn.dataset.lang;
+      localStorage.setItem("pt_lang", currentLang);
+      applyLang();
+      // Re-render results if visible
+      if (resultsSection.classList.contains("visible") && lastData) {
+        renderResults(lastData, lastTimestamp);
+      }
+    });
+  });
+
+  /* ── Init ─────────────────────────────── */
+  const saved = loadFromStorage();
+  if (saved) {
+    restoreForm(saved);
+    lastData = saved.data;
+    lastTimestamp = saved.timestamp;
+    renderResults(saved.data, saved.timestamp);
+  }
+  applyLang();
+
+})();
+</script>
+</body>
+</html>

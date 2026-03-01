@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ancla Mental — P'Traders</title>
+  <meta name="description" content="Generador de Ancla Mental: crea un ancla personal basada en PNL para acceder a estados emocionales de alto rendimiento en segundos. Herramienta del Módulo 3.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Progress Bar ───────────────────── */
+    .step-progress { display: flex; align-items: center; gap: 0; margin-bottom: 2.5rem; position: relative; }
+    .step-dot { width: 36px; height: 36px; border-radius: 50%; background: var(--surface); border: 2px solid var(--glass-border); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: var(--muted); position: relative; z-index: 2; transition: all 0.4s ease; flex-shrink: 0; }
+    .step-dot.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 16px var(--accent-glow, rgba(0,255,200,0.25)); }
+    .step-dot.done { border-color: var(--emerald, #34d399); background: var(--emerald, #34d399); color: var(--bg, #0a0f1a); }
+    .step-line { flex: 1; height: 3px; background: var(--glass-border); position: relative; overflow: hidden; }
+    .step-line-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--emerald, #34d399)); transition: width 0.5s ease; }
+    .step-label { position: absolute; top: 44px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: var(--muted); white-space: nowrap; font-weight: 600; }
+    .step-dot.active .step-label { color: var(--accent); }
+    .step-dot.done .step-label { color: var(--emerald, #34d399); }
+
+    /* ── Wizard Container ───────────────── */
+    .wizard-container { position: relative; overflow: hidden; min-height: 300px; }
+    .wizard-step { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transform: translateX(60px); transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
+    .wizard-step.active { opacity: 1; transform: translateX(0); pointer-events: auto; position: relative; }
+    .wizard-step.exit-left { opacity: 0; transform: translateX(-60px); }
+
+    .step-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 2rem; animation: fadeInUp 0.4s ease both; }
+    .step-card h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; text-align: center; }
+    .step-card .step-desc { font-size: 0.88rem; color: var(--muted); text-align: center; margin-bottom: 1.5rem; line-height: 1.6; }
+
+    /* ── State Cards (Step 1) ───────────── */
+    .state-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+    .state-card { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; padding: 1.2rem 0.6rem; border-radius: var(--radius); border: 2px solid var(--glass-border); background: var(--surface); cursor: pointer; transition: all 0.3s ease; user-select: none; }
+    .state-card:hover { border-color: var(--accent); background: var(--accent-dim); }
+    .state-card.selected { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 18px var(--accent-glow, rgba(0,255,200,0.2)); }
+    .state-card .state-emoji { font-size: 2rem; }
+    .state-card .state-name { font-size: 0.8rem; font-weight: 600; color: var(--text); text-align: center; }
+    .state-card.selected .state-name { color: var(--accent); }
+    .state-limit-msg { font-size: 0.78rem; color: var(--amber); text-align: center; margin-top: -0.5rem; margin-bottom: 1rem; min-height: 1.2rem; }
+
+    /* ── Textarea (Step 2) ──────────────── */
+    .moment-textarea { width: 100%; min-height: 120px; padding: 1rem; border-radius: var(--radius); border: 1px solid var(--glass-border); background: var(--surface); color: var(--text); font-family: var(--font-body, Inter, sans-serif); font-size: 0.9rem; resize: vertical; transition: border-color 0.3s ease; line-height: 1.6; }
+    .moment-textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow, rgba(0,255,200,0.15)); }
+    .moment-textarea::placeholder { color: var(--muted); }
+    .char-counter { font-size: 0.75rem; color: var(--muted); text-align: right; margin-top: 0.4rem; font-family: var(--font-mono, 'JetBrains Mono', monospace); }
+    .char-counter.warn { color: var(--amber); }
+    .tips-box { background: var(--surface); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1rem; margin-top: 1rem; }
+    .tips-box h4 { font-size: 0.8rem; color: var(--amber); font-weight: 700; margin-bottom: 0.5rem; }
+    .tips-box ul { list-style: none; padding: 0; margin: 0; }
+    .tips-box li { font-size: 0.8rem; color: var(--muted); padding: 0.25rem 0; }
+    .tips-box li::before { content: "💡 "; }
+
+    /* ── Gesture Cards (Step 3) ─────────── */
+    .gesture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-bottom: 1.5rem; }
+    .gesture-card { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; padding: 1.2rem 0.6rem; border-radius: var(--radius); border: 2px solid var(--glass-border); background: var(--surface); cursor: pointer; transition: all 0.3s ease; user-select: none; }
+    .gesture-card:hover { border-color: var(--accent); background: var(--accent-dim); }
+    .gesture-card.selected { border-color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 18px var(--accent-glow, rgba(0,255,200,0.2)); }
+    .gesture-card .gesture-emoji { font-size: 2.2rem; }
+    .gesture-card .gesture-name { font-size: 0.78rem; font-weight: 600; color: var(--text); text-align: center; line-height: 1.3; }
+    .gesture-card.selected .gesture-name { color: var(--accent); }
+    .keyword-input-wrap { margin-top: 1rem; display: none; }
+    .keyword-input-wrap.visible { display: block; }
+    .keyword-input { width: 100%; padding: 0.8rem 1rem; border-radius: var(--radius); border: 1px solid var(--glass-border); background: var(--surface); color: var(--text); font-family: var(--font-body, Inter, sans-serif); font-size: 0.95rem; text-align: center; font-weight: 700; letter-spacing: 0.05em; transition: border-color 0.3s ease; }
+    .keyword-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow, rgba(0,255,200,0.15)); }
+    .keyword-input::placeholder { color: var(--muted); font-weight: 400; }
+
+    /* ── Activation (Step 4) ────────────── */
+    .activation-area { text-align: center; }
+    .timer-wrap { position: relative; width: 200px; height: 200px; margin: 1.5rem auto; }
+    .timer-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .timer-track { fill: none; stroke: var(--glass-border); stroke-width: 6; }
+    .timer-fill { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.4s ease; filter: drop-shadow(0 0 8px var(--accent-glow, rgba(0,255,200,0.3))); }
+    .timer-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .timer-seconds { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 3rem; font-weight: 800; color: var(--accent); }
+    .timer-phase-text { font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-top: 0.3rem; }
+    .activation-instruction { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; min-height: 2rem; line-height: 1.5; }
+    .activation-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .rep-counter { font-family: var(--font-mono, 'JetBrains Mono', monospace); font-size: 0.85rem; color: var(--muted); margin-top: 1rem; }
+
+    /* ── Navigation Buttons ─────────────── */
+    .wizard-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; gap: 1rem; }
+    .btn-wizard { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.8rem; border: 1px solid var(--glass-border); border-radius: var(--radius-full, 50px); background: var(--surface); color: var(--text); font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: var(--font-body, Inter, sans-serif); transition: all 0.3s ease; }
+    .btn-wizard:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-wizard:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .btn-wizard.primary { background: linear-gradient(135deg, var(--accent), var(--emerald, #34d399)); color: var(--bg, #0a0f1a); border: none; font-weight: 800; box-shadow: 0 0 24px var(--accent-glow, rgba(0,255,200,0.2)); }
+    .btn-wizard.primary:hover { transform: translateY(-2px); box-shadow: 0 0 36px var(--accent-glow, rgba(0,255,200,0.35)); }
+
+    /* ── Results ─────────────────────────── */
+    .results-card { background: var(--glass); border: 1px solid transparent; border-image: linear-gradient(135deg, var(--accent), var(--emerald, #34d399), var(--amber)) 1; border-radius: var(--radius); padding: 2.5rem 2rem; text-align: center; animation: fadeInUp 0.6s ease both; position: relative; overflow: hidden; }
+    .results-card::before { content: ""; position: absolute; inset: -1px; border-radius: var(--radius); padding: 2px; background: linear-gradient(135deg, var(--accent), var(--emerald, #34d399), var(--amber)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+    .results-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .results-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .results-subtitle { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
+
+    .anchor-summary { text-align: left; background: var(--surface); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .anchor-summary .summary-row { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.7rem 0; border-bottom: 1px solid var(--glass-border); }
+    .anchor-summary .summary-row:last-child { border-bottom: none; }
+    .anchor-summary .summary-label { font-size: 0.78rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; min-width: 100px; flex-shrink: 0; }
+    .anchor-summary .summary-value { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+
+    .protocol-box { background: var(--surface); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; text-align: left; }
+    .protocol-box h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.8rem; text-align: center; }
+    .protocol-box ol { padding-left: 1.2rem; margin: 0; }
+    .protocol-box li { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 0.3rem; }
+
+    .recommendation { background: var(--accent-dim); border: 1px solid var(--accent); border-radius: var(--radius); padding: 1rem; margin-bottom: 2rem; font-size: 0.85rem; color: var(--accent); font-weight: 600; line-height: 1.6; }
+
+    .results-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; }
+    .btn-action { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; border-radius: var(--radius-full, 50px); border: 1px solid var(--glass-border); background: var(--surface); color: var(--text); font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; font-family: var(--font-body, Inter, sans-serif); transition: all 0.25s ease; }
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-action.primary { background: linear-gradient(135deg, var(--accent), var(--emerald, #34d399)); color: var(--bg, #0a0f1a); border: none; font-weight: 800; box-shadow: 0 0 20px var(--accent-glow, rgba(0,255,200,0.2)); }
+    .btn-action.primary:hover { box-shadow: 0 0 30px var(--accent-glow, rgba(0,255,200,0.35)); }
+    .btn-action.cta { background: linear-gradient(135deg, var(--amber), #f59e0b); color: var(--bg, #0a0f1a); border: none; font-weight: 800; }
+
+    .hidden { display: none !important; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 16px var(--accent-glow, rgba(0,255,200,0.2)); }
+      50% { box-shadow: 0 0 32px var(--accent-glow, rgba(0,255,200,0.45)); }
+    }
+
+    @media (max-width: 600px) {
+      .state-grid { grid-template-columns: repeat(2, 1fr); }
+      .gesture-grid { grid-template-columns: repeat(2, 1fr); }
+      .wizard-nav { flex-direction: column; }
+      .btn-wizard { width: 100%; justify-content: center; }
+      .step-label { display: none; }
+      .anchor-summary .summary-row { flex-direction: column; gap: 0.2rem; }
+      .anchor-summary .summary-label { min-width: auto; }
+      .results-actions { flex-direction: column; align-items: stretch; }
+      .btn-action { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="amBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">⚓</div>
+    <span class="module-badge" data-i18n="amModule">MÓDULO 3</span>
+    <h1 data-i18n="amTitle">Generador de Ancla Mental</h1>
+    <p data-i18n="amSubtitle">Crea un ancla personal basada en PNL para acceder a estados emocionales de alto rendimiento en segundos.</p>
+  </div>
+
+  <div class="instructions" id="am-instructions">
+    <h3 data-i18n="amInstrTitle">⚓ ¿Qué es un Ancla Mental?</h3>
+    <p data-i18n="amInstrDesc">Un ancla mental es una técnica de PNL que asocia un gesto físico con un estado emocional intenso. Al repetir el proceso, creas un atajo neurológico que te permite activar ese estado de alto rendimiento en segundos — ideal antes de tomar una operación importante.</p>
+  </div>
+
+  <!-- ── Step Progress ─────────────────── -->
+  <div class="step-progress" id="step-progress">
+    <div class="step-dot active" data-step="1">1<span class="step-label" data-i18n="amStep1Label">Estado</span></div>
+    <div class="step-line"><div class="step-line-fill" id="line-1"></div></div>
+    <div class="step-dot" data-step="2">2<span class="step-label" data-i18n="amStep2Label">Momento</span></div>
+    <div class="step-line"><div class="step-line-fill" id="line-2"></div></div>
+    <div class="step-dot" data-step="3">3<span class="step-label" data-i18n="amStep3Label">Gesto</span></div>
+    <div class="step-line"><div class="step-line-fill" id="line-3"></div></div>
+    <div class="step-dot" data-step="4">4<span class="step-label" data-i18n="amStep4Label">Activar</span></div>
+  </div>
+
+  <!-- ── Wizard Container ──────────────── -->
+  <div class="wizard-container" id="wizard-container">
+
+    <!-- STEP 1: Emotional States -->
+    <div class="wizard-step active" id="step-1">
+      <div class="step-card">
+        <h2 data-i18n="amS1Title">Tu Estado Ideal</h2>
+        <p class="step-desc" data-i18n="amS1Desc">Selecciona hasta 3 estados emocionales que quieres anclar para tus sesiones de trading.</p>
+        <div class="state-grid" id="state-grid"></div>
+        <div class="state-limit-msg" id="state-limit-msg"></div>
+        <div class="wizard-nav">
+          <div></div>
+          <button class="btn-wizard primary" id="btn-next-1" disabled><span data-i18n="amNext">Siguiente</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Peak Moment -->
+    <div class="wizard-step" id="step-2">
+      <div class="step-card">
+        <h2 data-i18n="amS2Title">Tu Momento Cumbre</h2>
+        <p class="step-desc" data-i18n="amS2Desc">Describe un momento específico donde sentiste esas emociones intensamente. Puede ser en trading, deporte, trabajo o tu vida personal.</p>
+        <textarea class="moment-textarea" id="moment-textarea" maxlength="250" data-placeholder-i18n="amS2Placeholder" placeholder="Ej: Cuando cerré mi mejor operación después de semanas de análisis paciente..."></textarea>
+        <div class="char-counter" id="char-counter">0 / 250</div>
+        <div class="tips-box">
+          <h4 data-i18n="amS2TipsTitle">Consejos para recordar</h4>
+          <ul>
+            <li data-i18n="amS2Tip1">Usa todos los sentidos: ¿qué veías, oías, sentías?</li>
+            <li data-i18n="amS2Tip2">Cuanto más específico y vívido, más potente será el ancla</li>
+            <li data-i18n="amS2Tip3">Revive la emoción mientras escribes, no solo el evento</li>
+          </ul>
+        </div>
+        <div class="wizard-nav">
+          <button class="btn-wizard" id="btn-prev-2"><i class="fas fa-arrow-left"></i> <span data-i18n="amPrev">Anterior</span></button>
+          <button class="btn-wizard primary" id="btn-next-2" disabled><span data-i18n="amNext">Siguiente</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Anchor Gesture -->
+    <div class="wizard-step" id="step-3">
+      <div class="step-card">
+        <h2 data-i18n="amS3Title">Tu Gesto Ancla</h2>
+        <p class="step-desc" data-i18n="amS3Desc">Elige un gesto físico que asociarás con tu estado de alto rendimiento. Este será tu „disparador" antes de operar.</p>
+        <div class="gesture-grid" id="gesture-grid"></div>
+        <div class="keyword-input-wrap" id="keyword-wrap">
+          <input type="text" class="keyword-input" id="keyword-input" maxlength="20" data-placeholder-i18n="amKeywordPlaceholder" placeholder="Tu palabra clave (ej: ENFOQUE)">
+        </div>
+        <div class="wizard-nav">
+          <button class="btn-wizard" id="btn-prev-3"><i class="fas fa-arrow-left"></i> <span data-i18n="amPrev">Anterior</span></button>
+          <button class="btn-wizard primary" id="btn-next-3" disabled><span data-i18n="amNext">Siguiente</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: Activation -->
+    <div class="wizard-step" id="step-4">
+      <div class="step-card">
+        <h2 data-i18n="amS4Title">Activa tu Ancla</h2>
+        <p class="step-desc" data-i18n="amS4Desc">Sigue el ejercicio guiado para programar tu ancla. Se repetirá 3 veces para fortalecer la conexión neuronal.</p>
+        <div class="activation-area" id="activation-area">
+          <div class="activation-instruction" id="activ-instruction" data-i18n="amS4Ready">Presiona el botón cuando estés listo</div>
+          <div class="activation-sub" id="activ-sub"></div>
+          <div class="timer-wrap" id="timer-wrap" style="display:none;">
+            <svg class="timer-svg" viewBox="0 0 200 200">
+              <circle class="timer-track" cx="100" cy="100" r="88" />
+              <circle class="timer-fill" id="timer-fill" cx="100" cy="100" r="88" stroke="var(--accent)" stroke-dasharray="553" stroke-dashoffset="0" />
+            </svg>
+            <div class="timer-center">
+              <div class="timer-seconds" id="timer-seconds">10</div>
+              <div class="timer-phase-text" id="timer-phase"></div>
+            </div>
+          </div>
+          <div class="rep-counter" id="rep-counter"></div>
+          <div class="wizard-nav" id="step4-nav">
+            <button class="btn-wizard" id="btn-prev-4"><i class="fas fa-arrow-left"></i> <span data-i18n="amPrev">Anterior</span></button>
+            <button class="btn-wizard primary" id="btn-start-activation"><i class="fas fa-play"></i> <span data-i18n="amS4Start">Comenzar Activación</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Results Screen ────────────────── -->
+  <div id="results-screen" class="hidden"></div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══ Ancla Mental — Tool Logic ═══ */
+(() => {
+  /* ── i18n ─────────────────────────────── */
+  const toolI18n = {
+    es: {
+      amBack: "Volver al inicio",
+      amModule: "MÓDULO 3",
+      amTitle: "Generador de Ancla Mental",
+      amSubtitle: "Crea un ancla personal basada en PNL para acceder a estados emocionales de alto rendimiento en segundos.",
+      amInstrTitle: "⚓ ¿Qué es un Ancla Mental?",
+      amInstrDesc: "Un ancla mental es una técnica de PNL que asocia un gesto físico con un estado emocional intenso. Al repetir el proceso, creas un atajo neurológico que te permite activar ese estado de alto rendimiento en segundos — ideal antes de tomar una operación importante.",
+      amStep1Label: "Estado",
+      amStep2Label: "Momento",
+      amStep3Label: "Gesto",
+      amStep4Label: "Activar",
+      amNext: "Siguiente",
+      amPrev: "Anterior",
+      amS1Title: "Tu Estado Ideal",
+      amS1Desc: "Selecciona hasta 3 estados emocionales que quieres anclar para tus sesiones de trading.",
+      amS1Limit: "Máximo 3 estados seleccionados",
+      amS2Title: "Tu Momento Cumbre",
+      amS2Desc: "Describe un momento específico donde sentiste esas emociones intensamente. Puede ser en trading, deporte, trabajo o tu vida personal.",
+      amS2Placeholder: "Ej: Cuando cerré mi mejor operación después de semanas de análisis paciente...",
+      amS2TipsTitle: "Consejos para recordar",
+      amS2Tip1: "Usa todos los sentidos: ¿qué veías, oías, sentías?",
+      amS2Tip2: "Cuanto más específico y vívido, más potente será el ancla",
+      amS2Tip3: "Revive la emoción mientras escribes, no solo el evento",
+      amS3Title: "Tu Gesto Ancla",
+      amS3Desc: "Elige un gesto físico que asociarás con tu estado de alto rendimiento. Este será tu \"disparador\" antes de operar.",
+      amKeywordPlaceholder: "Tu palabra clave (ej: ENFOQUE)",
+      amS4Title: "Activa tu Ancla",
+      amS4Desc: "Sigue el ejercicio guiado para programar tu ancla. Se repetirá 3 veces para fortalecer la conexión neuronal.",
+      amS4Ready: "Presiona el botón cuando estés listo",
+      amS4Start: "Comenzar Activación",
+      amS4Phase1: "Cierra los ojos y revive tu momento cumbre intensamente",
+      amS4Phase2: "¡En el pico de la emoción, realiza tu gesto!",
+      amS4Phase3: "Suelta y respira profundamente",
+      amS4RepOf: "Repetición {c} de {t}",
+      amS4Complete: "¡Ancla programada!",
+      amResultTitle: "Tu Ancla Mental Está Lista",
+      amResultSubtitle: "Has creado un ancla poderosa. Practica diariamente para fortalecer la conexión neuronal.",
+      amResultStates: "Estados Objetivo",
+      amResultMoment: "Momento Cumbre",
+      amResultGesture: "Gesto Ancla",
+      amProtocolTitle: "🧠 Tu Protocolo de Ancla",
+      amProtocol1: "Siéntate cómodamente y cierra los ojos",
+      amProtocol2: "Revive tu momento cumbre con todos los sentidos",
+      amProtocol3: "Cuando la emoción sea intensa, realiza tu gesto ancla",
+      amProtocol4: "Mantén 5 segundos y suelta respirando profundo",
+      amProtocol5: "Repite 3 veces por sesión",
+      amRecommendation: "📅 Practica este protocolo 3 veces al día durante 7 días para fortalecer la vía neuronal. Úsalo antes de cada sesión de trading.",
+      amSave: "💾 Guardar",
+      amSaved: "✅ Guardado",
+      amDownload: "📄 Descargar .txt",
+      amNewAnchor: "⚓ Nueva Ancla",
+      amCta: "🔥 Quiero el curso completo",
+      amStatCalm: "Calma",
+      amStatConfidence: "Confianza",
+      amStatFocus: "Enfoque",
+      amStatPatience: "Paciencia",
+      amStatDiscipline: "Disciplina",
+      amStatClarity: "Claridad",
+      amGestFist: "Puño cerrado",
+      amGestPinch: "Pulgar e índice juntos",
+      amGestChest: "Tocar el pecho",
+      amGestWrist: "Presionar muñeca",
+      amGestBreath: "Respiración + palabra clave"
+    },
+    en: {
+      amBack: "Back to home",
+      amModule: "MODULE 3",
+      amTitle: "Mental Anchor Generator",
+      amSubtitle: "Create a personal NLP-based anchor to access high-performance emotional states in seconds.",
+      amInstrTitle: "⚓ What is a Mental Anchor?",
+      amInstrDesc: "A mental anchor is an NLP technique that associates a physical gesture with an intense emotional state. By repeating the process, you create a neurological shortcut that lets you activate that high-performance state in seconds — ideal before taking an important trade.",
+      amStep1Label: "State",
+      amStep2Label: "Moment",
+      amStep3Label: "Gesture",
+      amStep4Label: "Activate",
+      amNext: "Next",
+      amPrev: "Back",
+      amS1Title: "Your Ideal State",
+      amS1Desc: "Select up to 3 emotional states you want to anchor for your trading sessions.",
+      amS1Limit: "Maximum 3 states selected",
+      amS2Title: "Your Peak Moment",
+      amS2Desc: "Describe a specific moment when you felt those emotions intensely. It can be in trading, sports, work, or life.",
+      amS2Placeholder: "E.g.: When I closed my best trade after weeks of patient analysis...",
+      amS2TipsTitle: "Tips to remember",
+      amS2Tip1: "Use all your senses: what did you see, hear, feel?",
+      amS2Tip2: "The more specific and vivid, the more powerful the anchor",
+      amS2Tip3: "Relive the emotion as you write, not just the event",
+      amS3Title: "Your Anchor Gesture",
+      amS3Desc: "Choose a physical gesture to associate with your high-performance state. This will be your \"trigger\" before trading.",
+      amKeywordPlaceholder: "Your keyword (e.g.: FOCUS)",
+      amS4Title: "Activate Your Anchor",
+      amS4Desc: "Follow the guided exercise to program your anchor. It will repeat 3 times to strengthen the neural connection.",
+      amS4Ready: "Press the button when you're ready",
+      amS4Start: "Start Activation",
+      amS4Phase1: "Close your eyes and relive your peak moment intensely",
+      amS4Phase2: "At the peak of the emotion, perform your gesture!",
+      amS4Phase3: "Release and breathe deeply",
+      amS4RepOf: "Repetition {c} of {t}",
+      amS4Complete: "Anchor programmed!",
+      amResultTitle: "Your Mental Anchor Is Ready",
+      amResultSubtitle: "You've created a powerful anchor. Practice daily to strengthen the neural pathway.",
+      amResultStates: "Target States",
+      amResultMoment: "Peak Moment",
+      amResultGesture: "Anchor Gesture",
+      amProtocolTitle: "🧠 Your Anchor Protocol",
+      amProtocol1: "Sit comfortably and close your eyes",
+      amProtocol2: "Relive your peak moment with all your senses",
+      amProtocol3: "When the emotion is intense, perform your anchor gesture",
+      amProtocol4: "Hold for 5 seconds and release with a deep breath",
+      amProtocol5: "Repeat 3 times per session",
+      amRecommendation: "📅 Practice this protocol 3 times daily for 7 days to strengthen the neural pathway. Use it before every trading session.",
+      amSave: "💾 Save",
+      amSaved: "✅ Saved",
+      amDownload: "📄 Download .txt",
+      amNewAnchor: "⚓ New Anchor",
+      amCta: "🔥 I want the full course",
+      amStatCalm: "Calm",
+      amStatConfidence: "Confidence",
+      amStatFocus: "Focus",
+      amStatPatience: "Patience",
+      amStatDiscipline: "Discipline",
+      amStatClarity: "Clarity",
+      amGestFist: "Closed fist",
+      amGestPinch: "Thumb and index together",
+      amGestChest: "Touch chest",
+      amGestWrist: "Press wrist",
+      amGestBreath: "Breath + keyword"
+    }
+  };
+
+  if (typeof i18n !== "undefined") {
+    Object.keys(toolI18n).forEach(lang => {
+      if (!i18n[lang]) i18n[lang] = {};
+      Object.assign(i18n[lang], toolI18n[lang]);
+    });
+  }
+
+  /* ── Language helpers ─────────────────── */
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function t(key) {
+    if (typeof i18n !== "undefined" && i18n[currentLang] && i18n[currentLang][key]) return i18n[currentLang][key];
+    if (toolI18n[currentLang] && toolI18n[currentLang][key]) return toolI18n[currentLang][key];
+    return key;
+  }
+
+  function applyLang() {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const val = t(key);
+      if (val && val !== key) el.textContent = val;
+    });
+    document.querySelectorAll("[data-placeholder-i18n]").forEach(el => {
+      const key = el.getAttribute("data-placeholder-i18n");
+      const val = t(key);
+      if (val && val !== key) el.placeholder = val;
+    });
+    // Update lang buttons
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+  }
+
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentLang = btn.dataset.lang;
+      localStorage.setItem("pt_lang", currentLang);
+      applyLang();
+      renderStates();
+      renderGestures();
+      updateCharCounter();
+    });
+  });
+
+  /* ── Data ──────────────────────────────── */
+  const STATES = [
+    { id: "calm",       emoji: "🧘", key: "amStatCalm" },
+    { id: "confidence", emoji: "💪", key: "amStatConfidence" },
+    { id: "focus",      emoji: "🎯", key: "amStatFocus" },
+    { id: "patience",   emoji: "⏳", key: "amStatPatience" },
+    { id: "discipline", emoji: "🛡️", key: "amStatDiscipline" },
+    { id: "clarity",    emoji: "💎", key: "amStatClarity" }
+  ];
+
+  const GESTURES = [
+    { id: "fist",    emoji: "✊", key: "amGestFist",    needsKeyword: false },
+    { id: "pinch",   emoji: "👌", key: "amGestPinch",   needsKeyword: false },
+    { id: "chest",   emoji: "🫀", key: "amGestChest",   needsKeyword: false },
+    { id: "wrist",   emoji: "⌚", key: "amGestWrist",   needsKeyword: false },
+    { id: "breath",  emoji: "🗣️", key: "amGestBreath",  needsKeyword: true }
+  ];
+
+  /* ── State ─────────────────────────────── */
+  let currentStep = 1;
+  let selectedStates = [];
+  let peakMoment = "";
+  let selectedGesture = null;
+  let keyword = "";
+  let activationRunning = false;
+  let activationTimer = null;
+
+  /* ── DOM refs ──────────────────────────── */
+  const $stateGrid      = document.getElementById("state-grid");
+  const $stateLimitMsg  = document.getElementById("state-limit-msg");
+  const $momentTextarea = document.getElementById("moment-textarea");
+  const $charCounter    = document.getElementById("char-counter");
+  const $gestureGrid    = document.getElementById("gesture-grid");
+  const $keywordWrap    = document.getElementById("keyword-wrap");
+  const $keywordInput   = document.getElementById("keyword-input");
+  const $results        = document.getElementById("results-screen");
+  const $wizard         = document.getElementById("wizard-container");
+  const $instructions   = document.getElementById("am-instructions");
+  const $stepProgress   = document.getElementById("step-progress");
+  const $timerWrap      = document.getElementById("timer-wrap");
+  const $timerFill      = document.getElementById("timer-fill");
+  const $timerSeconds   = document.getElementById("timer-seconds");
+  const $timerPhase     = document.getElementById("timer-phase");
+  const $activInstr     = document.getElementById("activ-instruction");
+  const $activSub       = document.getElementById("activ-sub");
+  const $repCounter     = document.getElementById("rep-counter");
+  const $step4Nav       = document.getElementById("step4-nav");
+
+  /* ── Render State Cards ────────────────── */
+  function renderStates() {
+    $stateGrid.innerHTML = "";
+    STATES.forEach(s => {
+      const card = document.createElement("div");
+      card.className = "state-card" + (selectedStates.includes(s.id) ? " selected" : "");
+      card.dataset.stateId = s.id;
+      card.innerHTML = `<div class="state-emoji">${s.emoji}</div><div class="state-name">${t(s.key)}</div>`;
+      card.addEventListener("click", () => toggleState(s.id));
+      $stateGrid.appendChild(card);
+    });
+  }
+
+  function toggleState(id) {
+    const idx = selectedStates.indexOf(id);
+    if (idx > -1) {
+      selectedStates.splice(idx, 1);
+    } else {
+      if (selectedStates.length >= 3) {
+        $stateLimitMsg.textContent = t("amS1Limit");
+        setTimeout(() => { $stateLimitMsg.textContent = ""; }, 2000);
+        return;
+      }
+      selectedStates.push(id);
+    }
+    renderStates();
+    document.getElementById("btn-next-1").disabled = selectedStates.length === 0;
+  }
+
+  /* ── Render Gesture Cards ──────────────── */
+  function renderGestures() {
+    $gestureGrid.innerHTML = "";
+    GESTURES.forEach(g => {
+      const card = document.createElement("div");
+      card.className = "gesture-card" + (selectedGesture === g.id ? " selected" : "");
+      card.dataset.gestureId = g.id;
+      card.innerHTML = `<div class="gesture-emoji">${g.emoji}</div><div class="gesture-name">${t(g.key)}</div>`;
+      card.addEventListener("click", () => selectGesture(g.id));
+      $gestureGrid.appendChild(card);
+    });
+  }
+
+  function selectGesture(id) {
+    selectedGesture = id;
+    const g = GESTURES.find(x => x.id === id);
+    $keywordWrap.classList.toggle("visible", g && g.needsKeyword);
+    renderGestures();
+    validateStep3();
+  }
+
+  function validateStep3() {
+    const g = GESTURES.find(x => x.id === selectedGesture);
+    const needsKw = g && g.needsKeyword;
+    const kwValid = !needsKw || $keywordInput.value.trim().length > 0;
+    document.getElementById("btn-next-3").disabled = !selectedGesture || !kwValid;
+  }
+
+  /* ── Char Counter ──────────────────────── */
+  function updateCharCounter() {
+    const len = $momentTextarea.value.length;
+    $charCounter.textContent = `${len} / 250`;
+    $charCounter.classList.toggle("warn", len > 220);
+    document.getElementById("btn-next-2").disabled = len === 0;
+    peakMoment = $momentTextarea.value.trim();
+  }
+  $momentTextarea.addEventListener("input", updateCharCounter);
+  $keywordInput.addEventListener("input", () => {
+    keyword = $keywordInput.value.trim();
+    validateStep3();
+  });
+
+  /* ── Step Navigation ───────────────────── */
+  function goToStep(step) {
+    if (step < 1 || step > 4) return;
+    const oldStep = currentStep;
+    const $old = document.getElementById(`step-${oldStep}`);
+    const $new = document.getElementById(`step-${step}`);
+
+    // Animate out
+    $old.classList.remove("active");
+    $old.classList.add(step > oldStep ? "exit-left" : "");
+
+    // Update progress dots
+    document.querySelectorAll(".step-dot").forEach(dot => {
+      const s = parseInt(dot.dataset.step);
+      dot.classList.remove("active", "done");
+      if (s < step) dot.classList.add("done");
+      else if (s === step) dot.classList.add("active");
+    });
+
+    // Update progress lines
+    for (let i = 1; i <= 3; i++) {
+      const fill = document.getElementById(`line-${i}`);
+      fill.style.width = i < step ? "100%" : "0%";
+    }
+
+    currentStep = step;
+
+    // Animate in after brief delay
+    setTimeout(() => {
+      $old.classList.remove("exit-left");
+      $new.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
+  }
+
+  // Navigation buttons
+  document.getElementById("btn-next-1").addEventListener("click", () => goToStep(2));
+  document.getElementById("btn-prev-2").addEventListener("click", () => goToStep(1));
+  document.getElementById("btn-next-2").addEventListener("click", () => goToStep(3));
+  document.getElementById("btn-prev-3").addEventListener("click", () => goToStep(2));
+  document.getElementById("btn-next-3").addEventListener("click", () => {
+    keyword = $keywordInput.value.trim();
+    goToStep(4);
+  });
+  document.getElementById("btn-prev-4").addEventListener("click", () => {
+    if (!activationRunning) goToStep(3);
+  });
+
+  /* ── Activation Exercise (Step 4) ──────── */
+  const CIRCUMFERENCE = 2 * Math.PI * 88; // ~553
+  $timerFill.style.strokeDasharray = CIRCUMFERENCE;
+
+  const PHASES = [
+    { key: "amS4Phase1", duration: 10, color: "var(--accent)" },
+    { key: "amS4Phase2", duration: 5,  color: "var(--amber)" },
+    { key: "amS4Phase3", duration: 5,  color: "var(--emerald, #34d399)" }
+  ];
+  const TOTAL_REPS = 3;
+
+  document.getElementById("btn-start-activation").addEventListener("click", startActivation);
+
+  function startActivation() {
+    activationRunning = true;
+    $timerWrap.style.display = "block";
+    $step4Nav.classList.add("hidden");
+    runActivationLoop(1);
+  }
+
+  function runActivationLoop(rep) {
+    if (rep > TOTAL_REPS) {
+      finishActivation();
+      return;
+    }
+    $repCounter.textContent = t("amS4RepOf").replace("{c}", rep).replace("{t}", TOTAL_REPS);
+    runPhase(0, rep);
+  }
+
+  function runPhase(phaseIdx, rep) {
+    if (phaseIdx >= PHASES.length) {
+      // Brief pause between reps
+      if (rep < TOTAL_REPS) {
+        setTimeout(() => runActivationLoop(rep + 1), 800);
+      } else {
+        runActivationLoop(rep + 1);
+      }
+      return;
+    }
+
+    const phase = PHASES[phaseIdx];
+    let remaining = phase.duration;
+
+    $activInstr.textContent = t(phase.key);
+    $activSub.textContent = "";
+    $timerFill.style.stroke = phase.color;
+    $timerPhase.textContent = "";
+
+    // Set gesture name as sub-text on phase 2
+    if (phaseIdx === 1 && selectedGesture) {
+      const g = GESTURES.find(x => x.id === selectedGesture);
+      let gestureName = g ? (g.emoji + " " + t(g.key)) : "";
+      if (g && g.needsKeyword && keyword) gestureName += `: "${keyword}"`;
+      $activSub.textContent = gestureName;
+    }
+
+    updateTimer(remaining, phase.duration);
+
+    activationTimer = setInterval(() => {
+      remaining--;
+      updateTimer(remaining, phase.duration);
+      if (remaining <= 0) {
+        clearInterval(activationTimer);
+        setTimeout(() => runPhase(phaseIdx + 1, rep), 400);
+      }
+    }, 1000);
+  }
+
+  function updateTimer(remaining, total) {
+    $timerSeconds.textContent = remaining;
+    const offset = CIRCUMFERENCE * (1 - remaining / total);
+    $timerFill.style.strokeDashoffset = offset;
+  }
+
+  function finishActivation() {
+    activationRunning = false;
+    clearInterval(activationTimer);
+    $timerWrap.style.display = "none";
+    $activInstr.textContent = t("amS4Complete");
+    $activSub.textContent = "✅";
+    $repCounter.textContent = "";
+
+    setTimeout(() => showResults(), 1200);
+  }
+
+  /* ── Results ───────────────────────────── */
+  function showResults() {
+    $wizard.classList.add("hidden");
+    $stepProgress.classList.add("hidden");
+    $instructions.classList.add("hidden");
+    $results.classList.remove("hidden");
+
+    const stateNames = selectedStates.map(id => {
+      const s = STATES.find(x => x.id === id);
+      return s ? s.emoji + " " + t(s.key) : id;
+    }).join(", ");
+
+    const g = GESTURES.find(x => x.id === selectedGesture);
+    let gestureName = g ? g.emoji + " " + t(g.key) : "";
+    if (g && g.needsKeyword && keyword) gestureName += ` — "${keyword}"`;
+
+    $results.innerHTML = `
+      <div class="results-card">
+        <div class="results-icon">⚓</div>
+        <h2 class="results-title">${t("amResultTitle")}</h2>
+        <p class="results-subtitle">${t("amResultSubtitle")}</p>
+
+        <div class="anchor-summary">
+          <div class="summary-row">
+            <span class="summary-label">${t("amResultStates")}</span>
+            <span class="summary-value">${stateNames}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">${t("amResultMoment")}</span>
+            <span class="summary-value">${escapeHtml(peakMoment)}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">${t("amResultGesture")}</span>
+            <span class="summary-value">${gestureName}</span>
+          </div>
+        </div>
+
+        <div class="protocol-box">
+          <h3>${t("amProtocolTitle")}</h3>
+          <ol>
+            <li>${t("amProtocol1")}</li>
+            <li>${t("amProtocol2")}</li>
+            <li>${t("amProtocol3")}</li>
+            <li>${t("amProtocol4")}</li>
+            <li>${t("amProtocol5")}</li>
+          </ol>
+        </div>
+
+        <div class="recommendation">${t("amRecommendation")}</div>
+
+        <div class="results-actions">
+          <button class="btn-action primary" id="btn-save-anchor">${t("amSave")}</button>
+          <button class="btn-action" id="btn-download-anchor">${t("amDownload")}</button>
+          <button class="btn-action" id="btn-new-anchor">${t("amNewAnchor")}</button>
+          <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn-action cta">${t("amCta")}</a>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("btn-save-anchor").addEventListener("click", saveAnchor);
+    document.getElementById("btn-download-anchor").addEventListener("click", downloadAnchor);
+    document.getElementById("btn-new-anchor").addEventListener("click", resetWizard);
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /* ── Save to localStorage ──────────────── */
+  function saveAnchor() {
+    const data = {
+      states: selectedStates,
+      moment: peakMoment,
+      gesture: selectedGesture,
+      keyword: keyword,
+      date: new Date().toISOString(),
+      lang: currentLang
+    };
+    const existing = JSON.parse(localStorage.getItem("pt_anchors") || "[]");
+    existing.push(data);
+    localStorage.setItem("pt_anchors", JSON.stringify(existing));
+    const btn = document.getElementById("btn-save-anchor");
+    btn.textContent = t("amSaved");
+    btn.disabled = true;
+    btn.style.opacity = "0.6";
+  }
+
+  /* ── Download as .txt ──────────────────── */
+  function downloadAnchor() {
+    const g = GESTURES.find(x => x.id === selectedGesture);
+    let gestureLine = g ? t(g.key) : selectedGesture;
+    if (g && g.needsKeyword && keyword) gestureLine += ` — "${keyword}"`;
+
+    const stateNames = selectedStates.map(id => {
+      const s = STATES.find(x => x.id === id);
+      return s ? t(s.key) : id;
+    }).join(", ");
+
+    const lines = [
+      "═══════════════════════════════════════",
+      `  ${t("amResultTitle")}`,
+      "═══════════════════════════════════════",
+      "",
+      `${t("amResultStates")}: ${stateNames}`,
+      "",
+      `${t("amResultMoment")}:`,
+      peakMoment,
+      "",
+      `${t("amResultGesture")}: ${gestureLine}`,
+      "",
+      "───────────────────────────────────────",
+      `  ${t("amProtocolTitle")}`,
+      "───────────────────────────────────────",
+      `1. ${t("amProtocol1")}`,
+      `2. ${t("amProtocol2")}`,
+      `3. ${t("amProtocol3")}`,
+      `4. ${t("amProtocol4")}`,
+      `5. ${t("amProtocol5")}`,
+      "",
+      t("amRecommendation"),
+      "",
+      `— P'Traders | ${new Date().toLocaleDateString()}`
+    ];
+
+    const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mi-ancla-mental.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ── Reset ─────────────────────────────── */
+  function resetWizard() {
+    selectedStates = [];
+    peakMoment = "";
+    selectedGesture = null;
+    keyword = "";
+    activationRunning = false;
+    clearInterval(activationTimer);
+
+    $momentTextarea.value = "";
+    $keywordInput.value = "";
+    $keywordWrap.classList.remove("visible");
+    $charCounter.textContent = "0 / 250";
+    $charCounter.classList.remove("warn");
+
+    document.getElementById("btn-next-1").disabled = true;
+    document.getElementById("btn-next-2").disabled = true;
+    document.getElementById("btn-next-3").disabled = true;
+
+    $timerWrap.style.display = "none";
+    $step4Nav.classList.remove("hidden");
+    $activInstr.textContent = t("amS4Ready");
+    $activSub.textContent = "";
+    $repCounter.textContent = "";
+
+    // Reset steps
+    document.querySelectorAll(".wizard-step").forEach(s => s.classList.remove("active", "exit-left"));
+    document.getElementById("step-1").classList.add("active");
+    currentStep = 1;
+
+    // Reset progress
+    document.querySelectorAll(".step-dot").forEach(dot => {
+      dot.classList.remove("active", "done");
+      if (dot.dataset.step === "1") dot.classList.add("active");
+    });
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById(`line-${i}`).style.width = "0%";
+    }
+
+    $results.classList.add("hidden");
+    $results.innerHTML = "";
+    $wizard.classList.remove("hidden");
+    $stepProgress.classList.remove("hidden");
+    $instructions.classList.remove("hidden");
+
+    renderStates();
+    renderGestures();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ── Init ──────────────────────────────── */
+  renderStates();
+  renderGestures();
+  applyLang();
+
+})();
+</script>
+
+</body>
+</html>

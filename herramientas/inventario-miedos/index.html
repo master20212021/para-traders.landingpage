@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario de Miedos — P'Traders</title>
+  <meta name="description" content="Identifica los miedos específicos que sabotean tu trading. Herramienta interactiva del Módulo 1.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 800px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Fear Cards ─────────────────────── */
+    .fears-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .fear-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: all var(--duration) var(--ease-out);
+      cursor: pointer;
+      user-select: none;
+    }
+    .fear-card:hover { border-color: var(--accent-glow); }
+    .fear-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow), inset 0 0 20px rgba(0, 229, 255, 0.03);
+    }
+
+    .fear-checkbox {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 2px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--duration) var(--ease-out);
+      margin-top: 2px;
+    }
+    .fear-card.selected .fear-checkbox {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .fear-checkbox i {
+      font-size: 0.75rem;
+      color: var(--bg);
+      opacity: 0;
+      transition: opacity var(--duration) var(--ease-out);
+    }
+    .fear-card.selected .fear-checkbox i { opacity: 1; }
+
+    .fear-content { flex: 1; }
+
+    .fear-number {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+    }
+
+    .fear-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      line-height: 1.4;
+    }
+
+    .fear-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    /* ── Intensity Slider ───────────────── */
+    .fear-intensity {
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--glass-border);
+      display: none;
+    }
+    .fear-card.selected .fear-intensity { display: block; }
+
+    .intensity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .intensity-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .intensity-value {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .intensity-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--surface);
+      outline: none;
+      cursor: pointer;
+    }
+    .intensity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-glow);
+      transition: transform 0.15s ease;
+    }
+    .intensity-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .intensity-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .intensity-anchors {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.3rem;
+    }
+    .intensity-anchors span {
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    /* ── Submit Area ────────────────────── */
+    .submit-area {
+      text-align: center;
+      margin-top: 2.5rem;
+    }
+
+    /* ── Results Panel ──────────────────── */
+    .results-panel {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 2rem;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .score-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      padding: 3px;
+      background: conic-gradient(var(--score-color) var(--score-pct), var(--line) 0%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+    }
+    .score-circle { --line: var(--border); }
+    .score-value {
+      font-family: var(--font-mono);
+      font-size: 2.8rem;
+      font-weight: 800;
+    }
+    .score-max {
+      font-size: 0.9rem;
+      color: var(--muted);
+      display: block;
+    }
+
+    .result-zone {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .result-message {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ── Fear Breakdown ─────────────────── */
+    .result-bars { margin: 2rem 0; text-align: left; }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .bar-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      width: 140px;
+      flex-shrink: 0;
+      text-align: right;
+      line-height: 1.3;
+    }
+    .bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--surface);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .bar-value {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── Fear Insights ──────────────────── */
+    .fear-insights { margin-top: 2rem; text-align: left; }
+    .fear-insights h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .insight-card {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 0.8rem;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .insight-card:nth-child(2) { animation-delay: 0.08s; }
+    .insight-card:nth-child(3) { animation-delay: 0.16s; }
+    .insight-card:nth-child(4) { animation-delay: 0.24s; }
+    .insight-card:nth-child(5) { animation-delay: 0.32s; }
+    .insight-card:nth-child(6) { animation-delay: 0.40s; }
+    .insight-card:nth-child(7) { animation-delay: 0.48s; }
+    .insight-card:nth-child(8) { animation-delay: 0.56s; }
+    .insight-card:nth-child(9) { animation-delay: 0.64s; }
+
+    .insight-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+    .insight-intensity {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .insight-intensity.low { background: rgba(52,211,153,0.15); color: var(--emerald); }
+    .insight-intensity.mid { background: rgba(251,191,36,0.15); color: var(--amber); }
+    .insight-intensity.high { background: rgba(251,113,133,0.15); color: var(--rose); }
+
+    .insight-text {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Actions ────────────────────────── */
+    .result-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1.3rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      text-decoration: none;
+    }
+    .btn-download:hover { border-color: var(--accent); color: var(--accent); }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .fear-card { flex-direction: row; padding: 1.2rem; }
+      .bar-label { width: 100px; font-size: 0.7rem; }
+    }
+    @media (max-width: 480px) {
+      .bar-label { width: 80px; font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="fiBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">👻</div>
+    <span class="module-badge" data-i18n="fiModule">MÓDULO 1</span>
+    <h1 data-i18n="fiTitle">Inventario de Miedos</h1>
+    <p data-i18n="fiSubtitle">Identifica los miedos específicos que sabotean tu trading. El 65% del trading es emocional — tu peor enemigo eres tú. Selecciona los miedos que reconoces y puntúa su intensidad.</p>
+  </div>
+
+  <div class="instructions">
+    <h3 data-i18n="fiHowTitle">📋 Cómo funciona</h3>
+    <p data-i18n="fiHowDesc">Marca los miedos que experimentas en tu trading. Para cada miedo seleccionado, ajusta el deslizador de intensidad del <strong>1</strong> (leve) al <strong>5</strong> (paralizante). Sé brutalmente honesto — nadie más verá esto.</p>
+  </div>
+
+  <!-- Fear Cards -->
+  <div id="fears-container" class="fears-grid">
+
+    <!-- Fear 1 -->
+    <div class="fear-card" data-fear="1">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel1">MIEDO 1 / 8</p>
+        <p class="fear-name" data-i18n="fiF1">Miedo a perder dinero</p>
+        <p class="fear-desc" data-i18n="fiF1Desc">Cierras operaciones demasiado pronto o directamente no entras al mercado por miedo a ver tu cuenta en rojo. Cada tick en contra te genera ansiedad.</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fear 2 -->
+    <div class="fear-card" data-fear="2">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel2">MIEDO 2 / 8</p>
+        <p class="fear-name" data-i18n="fiF2">Miedo a estar equivocado</p>
+        <p class="fear-desc" data-i18n="fiF2Desc">Tu ego no soporta equivocarse. Mueves stops, promedias a la baja o te aferras a un análisis incorrecto solo para "tener razón".</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fear 3 -->
+    <div class="fear-card" data-fear="3">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel3">MIEDO 3 / 8</p>
+        <p class="fear-name" data-i18n="fiF3">Miedo a perderse una oportunidad (FOMO)</p>
+        <p class="fear-desc" data-i18n="fiF3Desc">Entras tarde a los movimientos porque ves que "todos están ganando". Operas sin plan, solo por no quedarte fuera.</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fear 4 -->
+    <div class="fear-card" data-fear="4">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel4">MIEDO 4 / 8</p>
+        <p class="fear-name" data-i18n="fiF4">Miedo a dejar correr las ganancias</p>
+        <p class="fear-desc" data-i18n="fiF4Desc">Tomas profit demasiado rápido porque temes que el mercado se dé la vuelta. Cortas ganadores en +10 pips cuando podrían ser +100.</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fear 5 -->
+    <div class="fear-card" data-fear="5">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel5">MIEDO 5 / 8</p>
+        <p class="fear-name" data-i18n="fiF5">Miedo al mercado en contra</p>
+        <p class="fear-desc" data-i18n="fiF5Desc">Sientes que el mercado va "contra ti" personalmente. Cada movimiento adverso lo interpretas como una conspiración.</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fear 6 -->
+    <div class="fear-card" data-fear="6">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel6">MIEDO 6 / 8</p>
+        <p class="fear-name" data-i18n="fiF6">Miedo a operar después de una pérdida</p>
+        <p class="fear-desc" data-i18n="fiF6Desc">Después de perder, te paralizas. Dejas pasar oportunidades perfectas porque el dolor de la pérdida anterior sigue presente.</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fear 7 -->
+    <div class="fear-card" data-fear="7">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel7">MIEDO 7 / 8</p>
+        <p class="fear-name" data-i18n="fiF7">Miedo a lo que otros piensen</p>
+        <p class="fear-desc" data-i18n="fiF7Desc">Operas influenciado por la opinión de otros. Compartes tu cuenta para validación o escondes tus pérdidas por vergüenza.</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fear 8 -->
+    <div class="fear-card" data-fear="8">
+      <div class="fear-checkbox"><i class="fas fa-check"></i></div>
+      <div class="fear-content">
+        <p class="fear-number" data-i18n="fiFearLabel8">MIEDO 8 / 8</p>
+        <p class="fear-name" data-i18n="fiF8">Miedo al éxito (auto-sabotaje)</p>
+        <p class="fear-desc" data-i18n="fiF8Desc">Cuando empiezas a ganar consistentemente, haces algo que destruye tu racha. Inconscientemente crees que no mereces ganar.</p>
+        <div class="fear-intensity">
+          <div class="intensity-header">
+            <span class="intensity-label" data-i18n="fiIntensity">INTENSIDAD</span>
+            <span class="intensity-value">3</span>
+          </div>
+          <input type="range" class="intensity-slider" min="1" max="5" value="3">
+          <div class="intensity-anchors">
+            <span data-i18n="fiMild">Leve</span>
+            <span data-i18n="fiParalyzing">Paralizante</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="submit-area">
+    <button class="btn btn-primary btn-lg" id="submit-btn" disabled data-i18n="fiSubmit">Ver mi inventario</button>
+    <p class="text-muted mt-1" id="progress-text" data-i18n="fiProgress" style="font-size:0.85rem">Selecciona al menos 1 miedo para continuar</p>
+  </div>
+
+  <!-- Results (hidden initially) -->
+  <div id="results-panel" class="hidden"></div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══ Inventario de Miedos — Tool Logic ═══ */
+(() => {
+  // ── i18n for this tool page ───────────
+  const toolI18n = {
+    es: {
+      fiBack: "Volver al inicio",
+      fiModule: "MÓDULO 1",
+      fiTitle: "Inventario de Miedos",
+      fiSubtitle: "Identifica los miedos específicos que sabotean tu trading. El 65% del trading es emocional — tu peor enemigo eres tú. Selecciona los miedos que reconoces y puntúa su intensidad.",
+      fiHowTitle: "📋 Cómo funciona",
+      fiHowDesc: 'Marca los miedos que experimentas en tu trading. Para cada miedo seleccionado, ajusta el deslizador de intensidad del <strong>1</strong> (leve) al <strong>5</strong> (paralizante). Sé brutalmente honesto — nadie más verá esto.',
+      fiFearLabel1: "MIEDO 1 / 8", fiFearLabel2: "MIEDO 2 / 8", fiFearLabel3: "MIEDO 3 / 8", fiFearLabel4: "MIEDO 4 / 8",
+      fiFearLabel5: "MIEDO 5 / 8", fiFearLabel6: "MIEDO 6 / 8", fiFearLabel7: "MIEDO 7 / 8", fiFearLabel8: "MIEDO 8 / 8",
+      fiF1: "Miedo a perder dinero",
+      fiF1Desc: "Cierras operaciones demasiado pronto o directamente no entras al mercado por miedo a ver tu cuenta en rojo. Cada tick en contra te genera ansiedad.",
+      fiF2: "Miedo a estar equivocado",
+      fiF2Desc: 'Tu ego no soporta equivocarse. Mueves stops, promedias a la baja o te aferras a un análisis incorrecto solo para "tener razón".',
+      fiF3: "Miedo a perderse una oportunidad (FOMO)",
+      fiF3Desc: 'Entras tarde a los movimientos porque ves que "todos están ganando". Operas sin plan, solo por no quedarte fuera.',
+      fiF4: "Miedo a dejar correr las ganancias",
+      fiF4Desc: "Tomas profit demasiado rápido porque temes que el mercado se dé la vuelta. Cortas ganadores en +10 pips cuando podrían ser +100.",
+      fiF5: "Miedo al mercado en contra",
+      fiF5Desc: 'Sientes que el mercado va "contra ti" personalmente. Cada movimiento adverso lo interpretas como una conspiración.',
+      fiF6: "Miedo a operar después de una pérdida",
+      fiF6Desc: "Después de perder, te paralizas. Dejas pasar oportunidades perfectas porque el dolor de la pérdida anterior sigue presente.",
+      fiF7: "Miedo a lo que otros piensen",
+      fiF7Desc: "Operas influenciado por la opinión de otros. Compartes tu cuenta para validación o escondes tus pérdidas por vergüenza.",
+      fiF8: "Miedo al éxito (auto-sabotaje)",
+      fiF8Desc: "Cuando empiezas a ganar consistentemente, haces algo que destruye tu racha. Inconscientemente crees que no mereces ganar.",
+      fiIntensity: "INTENSIDAD",
+      fiMild: "Leve",
+      fiParalyzing: "Paralizante",
+      fiSubmit: "Ver mi inventario",
+      fiProgress: "Selecciona al menos 1 miedo para continuar",
+      fiProgressReady: "¡Listo! Pulsa el botón.",
+      fiResTitle: "Tu inventario de miedos",
+      fiResCount: "miedos identificados",
+      fiZoneGreen: "🟢 Base Sólida",
+      fiZoneYellow: "🟡 Zona de Alerta",
+      fiZoneRed: "🔴 Necesitas Trabajar Esto",
+      fiMsgGreen: "Tienes pocos miedos activos — eso es una base sólida. No te confíes: incluso un solo miedo con alta intensidad puede sabotear meses de trabajo. Los módulos siguientes te ayudarán a blindar tu psicología.",
+      fiMsgYellow: "Tienes varios miedos activos que están afectando tu operativa. La buena noticia: al identificarlos ya empezaste a desactivarlos. El Módulo 2 te enseñará a neutralizar estos saboteadores internos.",
+      fiMsgRed: "Tus miedos están dominando tu trading. Esto no es una debilidad — es lo normal cuando nadie te enseña a manejar la parte emocional. El curso está diseñado exactamente para esto. Cada módulo ataca uno de estos miedos.",
+      fiInsightsTitle: "🔍 Análisis por miedo",
+      fiInsightIntLow: "Intensidad baja",
+      fiInsightIntMid: "Intensidad media",
+      fiInsightIntHigh: "Intensidad alta",
+      fiInsight1: "Este miedo te hace operar con tamaños ridículamente pequeños o no operar directamente. Pierde su poder cuando entiendes la gestión del riesgo — eso es exactamente lo que trabajamos en los Módulos 4 y 5.",
+      fiInsight2: "Tu ego está en la silla del trader. Mientras necesites \"tener razón\", nunca serás rentable. El mercado no se equivoca, tú tampoco — simplemente te adaptas. Módulo 3 trabaja esta mentalidad.",
+      fiInsight3: "El FOMO es el miedo favorito de los brokers — te hace entrar mal y salir peor. La disciplina de esperar tu setup es lo que separa a los que ganan de los que donan dinero al mercado.",
+      fiInsight4: "Cortas ganadores y dejas correr perdedores — el patrón clásico del trader emocional. Necesitas reglas mecánicas para trailing stop que eliminen la decisión emocional.",
+      fiInsight5: "El mercado no sabe que existes. Personalizar los movimientos del precio es una trampa mental que genera resentimiento y revenge trading. Módulo 2 desmonta esta ilusión.",
+      fiInsight6: "La parálisis post-pérdida es como un boxeador que deja de tirar golpes después de recibir uno. Cada setup es independiente. Módulo 3 te enseña a resetear tu estado mental.",
+      fiInsight7: "Si tradeas para impresionar o para evitar el juicio, tu tamaño de posición reflejará tu ego, no tu análisis. El trading es un trabajo solitario — y eso es una ventaja.",
+      fiInsight8: "Este es el miedo más profundo y destructivo. Si inconscientemente crees que no mereces ganar, encontrarás la forma de devolver todo. El Módulo 1 empieza exactamente aquí.",
+      fiRetake: "🔄 Repetir inventario",
+      fiDownload: "📥 Descargar resultado",
+      fiCta: "🔥 Quiero el curso completo",
+      fiAvgIntensity: "Intensidad promedio",
+      fiDlTitle: "INVENTARIO DE MIEDOS"
+    },
+    en: {
+      fiBack: "Back to home",
+      fiModule: "MODULE 1",
+      fiTitle: "Fear Inventory",
+      fiSubtitle: "Identify the specific fears that sabotage your trading. 65% of trading is emotional — your worst enemy is you. Select the fears you recognize and rate their intensity.",
+      fiHowTitle: "📋 How it works",
+      fiHowDesc: 'Check the fears you experience in your trading. For each selected fear, adjust the intensity slider from <strong>1</strong> (mild) to <strong>5</strong> (paralyzing). Be brutally honest — no one else will see this.',
+      fiFearLabel1: "FEAR 1 / 8", fiFearLabel2: "FEAR 2 / 8", fiFearLabel3: "FEAR 3 / 8", fiFearLabel4: "FEAR 4 / 8",
+      fiFearLabel5: "FEAR 5 / 8", fiFearLabel6: "FEAR 6 / 8", fiFearLabel7: "FEAR 7 / 8", fiFearLabel8: "FEAR 8 / 8",
+      fiF1: "Fear of losing money",
+      fiF1Desc: "You close trades too early or don't enter the market at all out of fear of seeing your account in the red. Every tick against you triggers anxiety.",
+      fiF2: "Fear of being wrong",
+      fiF2Desc: 'Your ego can\'t handle being wrong. You move stops, average down, or cling to an incorrect analysis just to "be right."',
+      fiF3: "Fear of missing out (FOMO)",
+      fiF3Desc: 'You enter moves late because you see "everyone is winning." You trade without a plan, just to not miss out.',
+      fiF4: "Fear of letting profits run",
+      fiF4Desc: "You take profit too quickly because you fear the market will reverse. You cut winners at +10 pips when they could be +100.",
+      fiF5: "Fear of market going against you",
+      fiF5Desc: 'You feel the market is moving "against you" personally. Every adverse move feels like a conspiracy against you.',
+      fiF6: "Fear of trading after a loss",
+      fiF6Desc: "After losing, you freeze. You let perfect setups pass because the pain from the previous loss is still present.",
+      fiF7: "Fear of what others think",
+      fiF7Desc: "You trade influenced by others' opinions. You share your account for validation or hide losses out of shame.",
+      fiF8: "Fear of success (self-sabotage)",
+      fiF8Desc: "When you start winning consistently, you do something that destroys your streak. You subconsciously believe you don't deserve to win.",
+      fiIntensity: "INTENSITY",
+      fiMild: "Mild",
+      fiParalyzing: "Paralyzing",
+      fiSubmit: "See my inventory",
+      fiProgress: "Select at least 1 fear to continue",
+      fiProgressReady: "Ready! Press the button.",
+      fiResTitle: "Your fear inventory",
+      fiResCount: "fears identified",
+      fiZoneGreen: "🟢 Solid Base",
+      fiZoneYellow: "🟡 Alert Zone",
+      fiZoneRed: "🔴 Needs Work",
+      fiMsgGreen: "You have few active fears — that's a solid base. Don't get overconfident: even a single high-intensity fear can sabotage months of work. The following modules will help you armor your psychology.",
+      fiMsgYellow: "You have several active fears affecting your trading. The good news: by identifying them you've already started deactivating them. Module 2 will teach you to neutralize these internal saboteurs.",
+      fiMsgRed: "Your fears are dominating your trading. This isn't a weakness — it's normal when nobody teaches you to handle the emotional side. The course is designed exactly for this. Each module attacks one of these fears.",
+      fiInsightsTitle: "🔍 Analysis per fear",
+      fiInsightIntLow: "Low intensity",
+      fiInsightIntMid: "Medium intensity",
+      fiInsightIntHigh: "High intensity",
+      fiInsight1: "This fear makes you trade ridiculously small sizes or not trade at all. It loses its power when you understand risk management — that's exactly what we cover in Modules 4 and 5.",
+      fiInsight2: "Your ego is in the trader's seat. As long as you need to \"be right,\" you'll never be profitable. The market isn't wrong, and neither are you — you simply adapt. Module 3 works on this mindset.",
+      fiInsight3: "FOMO is the brokers' favorite fear — it makes you enter badly and exit worse. The discipline of waiting for your setup is what separates winners from those who donate money to the market.",
+      fiInsight4: "You cut winners and let losers run — the classic emotional trader pattern. You need mechanical trailing stop rules that eliminate the emotional decision.",
+      fiInsight5: "The market doesn't know you exist. Personalizing price movements is a mental trap that generates resentment and revenge trading. Module 2 dismantles this illusion.",
+      fiInsight6: "Post-loss paralysis is like a boxer who stops throwing punches after taking one. Each setup is independent. Module 3 teaches you to reset your mental state.",
+      fiInsight7: "If you trade to impress or avoid judgment, your position size will reflect your ego, not your analysis. Trading is a solitary job — and that's an advantage.",
+      fiInsight8: "This is the deepest and most destructive fear. If you subconsciously believe you don't deserve to win, you'll find a way to give it all back. Module 1 starts exactly here.",
+      fiRetake: "🔄 Retake inventory",
+      fiDownload: "📥 Download result",
+      fiCta: "🔥 I want the full course",
+      fiAvgIntensity: "Average intensity",
+      fiDlTitle: "FEAR INVENTORY"
+    }
+  };
+
+  // Merge with global i18n
+  if (typeof i18n !== 'undefined') {
+    Object.keys(toolI18n).forEach(lang => {
+      if (!i18n[lang]) i18n[lang] = {};
+      Object.assign(i18n[lang], toolI18n[lang]);
+    });
+  }
+
+  // ── Language System ─────────────────────
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("pt_lang", lang);
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const text = (i18n[lang] && i18n[lang][key]) || (toolI18n[lang] && toolI18n[lang][key]);
+      if (text) el.innerHTML = text;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      const text = (i18n[lang] && i18n[lang][key]) || (toolI18n[lang] && toolI18n[lang][key]);
+      if (text) el.placeholder = text;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+  }
+
+  setLang(currentLang);
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+
+  // ── State ───────────────────────────────
+  const selectedFears = {};  // { fearId: intensity }
+  const TOTAL_FEARS = 8;
+  const submitBtn = document.getElementById("submit-btn");
+  const progressText = document.getElementById("progress-text");
+  const resultsPanel = document.getElementById("results-panel");
+
+  // ── Fear Card Interaction ───────────────
+  document.querySelectorAll(".fear-card").forEach(card => {
+    const fearId = card.dataset.fear;
+    const slider = card.querySelector(".intensity-slider");
+    const valueDisplay = card.querySelector(".intensity-value");
+
+    // Toggle fear selection
+    card.addEventListener("click", (e) => {
+      // Don't toggle if clicking the slider
+      if (e.target.classList.contains("intensity-slider")) return;
+
+      if (card.classList.contains("selected")) {
+        card.classList.remove("selected");
+        delete selectedFears[fearId];
+      } else {
+        card.classList.add("selected");
+        selectedFears[fearId] = parseInt(slider.value);
+      }
+      updateProgress();
+    });
+
+    // Intensity slider change
+    slider.addEventListener("input", (e) => {
+      e.stopPropagation();
+      const val = parseInt(slider.value);
+      valueDisplay.textContent = val;
+      if (card.classList.contains("selected")) {
+        selectedFears[fearId] = val;
+      }
+    });
+
+    // Prevent slider click from toggling card
+    slider.addEventListener("click", (e) => e.stopPropagation());
+  });
+
+  function updateProgress() {
+    const count = Object.keys(selectedFears).length;
+    const t = toolI18n[currentLang];
+    if (count >= 1) {
+      submitBtn.disabled = false;
+      progressText.textContent = t.fiProgressReady;
+    } else {
+      submitBtn.disabled = true;
+      progressText.textContent = t.fiProgress;
+    }
+  }
+
+  // ── Submit ──────────────────────────────
+  submitBtn.addEventListener("click", () => {
+    if (Object.keys(selectedFears).length < 1) return;
+    showResults();
+  });
+
+  function showResults() {
+    const t = toolI18n[currentLang];
+    const fearIds = Object.keys(selectedFears).map(Number).sort((a, b) => a - b);
+    const count = fearIds.length;
+    const intensities = fearIds.map(id => selectedFears[id]);
+    const totalIntensity = intensities.reduce((a, b) => a + b, 0);
+    const avgIntensity = (totalIntensity / count).toFixed(1);
+    const pct = Math.round((count / TOTAL_FEARS) * 100);
+
+    // Zone determination
+    let zone, message, color;
+    if (count <= 2) {
+      zone = t.fiZoneGreen;
+      message = t.fiMsgGreen;
+      color = "var(--emerald)";
+    } else if (count <= 5) {
+      zone = t.fiZoneYellow;
+      message = t.fiMsgYellow;
+      color = "var(--amber)";
+    } else {
+      zone = t.fiZoneRed;
+      message = t.fiMsgRed;
+      color = "var(--rose)";
+    }
+
+    // Fear names for bars
+    const fearNames = [
+      t.fiF1, t.fiF2, t.fiF3, t.fiF4, t.fiF5, t.fiF6, t.fiF7, t.fiF8
+    ];
+    const barColors = ["#00e5ff", "#2668ff", "#a855f7", "#ff8a3a", "#ff4d6a", "#34d399", "#fbbf24", "#f472b6"];
+    const insightKeys = [
+      t.fiInsight1, t.fiInsight2, t.fiInsight3, t.fiInsight4,
+      t.fiInsight5, t.fiInsight6, t.fiInsight7, t.fiInsight8
+    ];
+
+    // Build intensity bars for selected fears
+    let barsHtml = '';
+    fearIds.forEach(id => {
+      const val = selectedFears[id];
+      const w = (val / 5) * 100;
+      const shortName = fearNames[id - 1].replace(/ \(.*\)/, ''); // shorten FOMO etc
+      barsHtml += `
+        <div class="bar-row">
+          <span class="bar-label">${shortName}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:${barColors[id - 1]}" data-width="${w}%"></div></div>
+          <span class="bar-value" style="color:${barColors[id - 1]}">${val}</span>
+        </div>`;
+    });
+
+    // Build insight cards
+    let insightsHtml = '';
+    fearIds.forEach(id => {
+      const val = selectedFears[id];
+      let intLabel, intClass;
+      if (val <= 2) { intLabel = t.fiInsightIntLow; intClass = 'low'; }
+      else if (val <= 3) { intLabel = t.fiInsightIntMid; intClass = 'mid'; }
+      else { intLabel = t.fiInsightIntHigh; intClass = 'high'; }
+
+      insightsHtml += `
+        <div class="insight-card">
+          <p class="insight-name">${fearNames[id - 1]}</p>
+          <span class="insight-intensity ${intClass}">${intLabel} (${val}/5)</span>
+          <p class="insight-text">${insightKeys[id - 1]}</p>
+        </div>`;
+    });
+
+    resultsPanel.innerHTML = `
+      <div class="results-panel">
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem">${t.fiResTitle}</p>
+        <div class="score-circle" style="--score-color:${color};--score-pct:${pct}%">
+          <div>
+            <span class="score-value" style="color:${color}">${count}</span>
+            <span class="score-max">/ ${TOTAL_FEARS} ${t.fiResCount}</span>
+          </div>
+        </div>
+        <p class="result-zone" style="color:${color}">${zone}</p>
+        <p style="font-family:var(--font-mono);font-size:0.85rem;color:var(--muted);margin-bottom:1.5rem">${t.fiAvgIntensity}: <strong style="color:${color}">${avgIntensity}</strong> / 5</p>
+        <p class="result-message">${message}</p>
+        <div class="result-bars">${barsHtml}</div>
+        <div class="fear-insights">
+          <h3>${t.fiInsightsTitle}</h3>
+          ${insightsHtml}
+        </div>
+        <div class="result-actions">
+          <button class="btn-download" id="retake-btn">${t.fiRetake}</button>
+          <button class="btn-download" id="download-btn">${t.fiDownload}</button>
+        </div>
+        <div style="margin-top:2rem">
+          <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn btn-primary">${t.fiCta}</a>
+        </div>
+      </div>`;
+
+    resultsPanel.classList.remove("hidden");
+
+    // Animate bars
+    setTimeout(() => {
+      resultsPanel.querySelectorAll(".bar-fill").forEach(bar => {
+        bar.style.width = bar.dataset.width;
+      });
+    }, 100);
+
+    // Scroll to results
+    resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Hide questions
+    document.getElementById("fears-container").style.display = "none";
+    document.querySelector(".submit-area").style.display = "none";
+    document.querySelector(".instructions").style.display = "none";
+
+    // Retake
+    document.getElementById("retake-btn")?.addEventListener("click", retake);
+    // Download
+    document.getElementById("download-btn")?.addEventListener("click", downloadResult);
+  }
+
+  function retake() {
+    Object.keys(selectedFears).forEach(k => delete selectedFears[k]);
+    document.querySelectorAll(".fear-card").forEach(c => {
+      c.classList.remove("selected");
+      const slider = c.querySelector(".intensity-slider");
+      const display = c.querySelector(".intensity-value");
+      slider.value = 3;
+      display.textContent = "3";
+    });
+    resultsPanel.classList.add("hidden");
+    resultsPanel.innerHTML = "";
+    document.getElementById("fears-container").style.display = "";
+    document.querySelector(".submit-area").style.display = "";
+    document.querySelector(".instructions").style.display = "";
+    submitBtn.disabled = true;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function downloadResult() {
+    const t = toolI18n[currentLang];
+    const fearIds = Object.keys(selectedFears).map(Number).sort((a, b) => a - b);
+    const count = fearIds.length;
+    const totalIntensity = fearIds.map(id => selectedFears[id]).reduce((a, b) => a + b, 0);
+    const avgIntensity = (totalIntensity / count).toFixed(1);
+
+    const fearNames = [t.fiF1, t.fiF2, t.fiF3, t.fiF4, t.fiF5, t.fiF6, t.fiF7, t.fiF8];
+    const fearDescs = [t.fiF1Desc, t.fiF2Desc, t.fiF3Desc, t.fiF4Desc, t.fiF5Desc, t.fiF6Desc, t.fiF7Desc, t.fiF8Desc];
+    const insightKeys = [
+      t.fiInsight1, t.fiInsight2, t.fiInsight3, t.fiInsight4,
+      t.fiInsight5, t.fiInsight6, t.fiInsight7, t.fiInsight8
+    ];
+
+    let zone;
+    if (count <= 2) zone = t.fiZoneGreen;
+    else if (count <= 5) zone = t.fiZoneYellow;
+    else zone = t.fiZoneRed;
+
+    let text = `═══════════════════════════════════════\n`;
+    text += `  P'TRADERS — ${t.fiDlTitle}\n`;
+    text += `  ${new Date().toLocaleDateString()}\n`;
+    text += `═══════════════════════════════════════\n\n`;
+    text += `${t.fiResCount.toUpperCase()}: ${count} / ${TOTAL_FEARS}\n`;
+    text += `${t.fiAvgIntensity}: ${avgIntensity} / 5\n`;
+    text += `${zone.replace(/[🟢🟡🔴]\s?/, '')}\n\n`;
+    text += `───────────────────────────────────────\n`;
+
+    fearIds.forEach(id => {
+      const val = selectedFears[id];
+      let intLabel;
+      if (val <= 2) intLabel = t.fiInsightIntLow;
+      else if (val <= 3) intLabel = t.fiInsightIntMid;
+      else intLabel = t.fiInsightIntHigh;
+
+      text += `\n▸ ${fearNames[id - 1]} — ${val}/5 (${intLabel})\n`;
+      text += `  ${fearDescs[id - 1]}\n`;
+      text += `  → ${insightKeys[id - 1]}\n`;
+    });
+
+    text += `\n───────────────────────────────────────\n\n`;
+
+    if (count <= 2) text += t.fiMsgGreen;
+    else if (count <= 5) text += t.fiMsgYellow;
+    else text += t.fiMsgRed;
+
+    text += `\n\n— P'Traders | www.paratrades.com\n`;
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `inventario-miedos-ptraders-${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+
+</body>
+</html>

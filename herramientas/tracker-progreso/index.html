@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracker de Progreso — P'Traders</title>
+  <meta name="description" content="Visualiza tu evolución con métricas de disciplina, control emocional y consistencia. Herramienta del Módulo 5.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 800px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: all var(--duration) var(--ease-out); }
+    .tool-back:hover { color: var(--accent); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--accent-dim); color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--amber); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Entry Form ─────────────────────── */
+    .entry-form {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .entry-form.collapsed .form-body { display: none; }
+    .entry-form.collapsed .form-toggle-icon { transform: rotate(0deg); }
+
+    .form-header {
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none;
+    }
+    .form-header h2 { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+    .form-toggle-icon { transition: transform 0.3s; transform: rotate(180deg); color: var(--muted); }
+    .form-body { margin-top: 1.5rem; }
+
+    /* ── Metric Sliders ─────────────────── */
+    .metric-slider-group {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s;
+    }
+    .metric-slider-group:hover { border-color: rgba(var(--accent-rgb), 0.3); }
+
+    .metric-slider-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+    .metric-slider-label {
+      font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .metric-slider-value {
+      font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700;
+      color: var(--accent); min-width: 2ch; text-align: right;
+    }
+    .metric-slider-desc {
+      font-size: 0.78rem; color: var(--muted); margin-bottom: 0.8rem; line-height: 1.5;
+    }
+
+    /* ── Custom Range Input ─────────────── */
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px; border-radius: 3px;
+      background: var(--surface-2); outline: none; cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--accent); border: 3px solid var(--bg);
+      box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
+      cursor: pointer; transition: box-shadow 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.8);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--accent); border: 3px solid var(--bg);
+      box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
+      cursor: pointer;
+    }
+
+    /* ── Additional Fields ──────────────── */
+    .extra-fields {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .extra-field {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.2rem;
+    }
+    .extra-field label {
+      display: block; font-size: 0.8rem; font-weight: 700;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em;
+      font-family: var(--font-mono); margin-bottom: 0.4rem;
+    }
+    .extra-field input[type="number"],
+    .extra-field input[type="text"] {
+      width: 100%; background: var(--bg-elevated); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xs); color: var(--text); font-family: var(--font-body);
+      font-size: 0.9rem; padding: 0.6rem 0.8rem; transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+    .extra-field input:focus { outline: none; border-color: var(--accent); }
+    .extra-field.full-width { grid-column: 1 / -1; }
+
+    .btn-submit-entry {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      width: 100%; margin-top: 1.5rem;
+      background: linear-gradient(135deg, var(--accent), #2668ff);
+      color: #fff; border: none; border-radius: var(--radius-sm);
+      padding: 1rem 2rem; font-size: 1rem; font-weight: 700;
+      font-family: var(--font-body); cursor: pointer;
+      transition: all var(--duration) var(--ease-out);
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-submit-entry:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+
+    /* ── Dashboard ──────────────────────── */
+    .dashboard { display: none; animation: fadeInUp 0.5s ease both; }
+    .dashboard.visible { display: block; }
+
+    /* ── Overall Score Circle ───────────── */
+    .overall-score-section { text-align: center; margin-bottom: 2.5rem; }
+    .score-circle {
+      position: relative; display: inline-flex; align-items: center; justify-content: center;
+      width: 140px; height: 140px; border-radius: 50%;
+      background: var(--glass); border: 3px solid var(--glass-border);
+      box-shadow: 0 0 40px rgba(var(--accent-rgb), 0.15);
+    }
+    .score-circle-value {
+      font-family: var(--font-mono); font-size: 2.8rem; font-weight: 800;
+      background: var(--grad-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .score-circle-label {
+      font-size: 0.8rem; color: var(--muted); margin-top: 0.6rem; font-weight: 600;
+    }
+    .score-subtitle {
+      font-size: 0.85rem; color: var(--muted); margin-top: 0.8rem; line-height: 1.6;
+    }
+    .streak-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(var(--accent-rgb), 0.1); border: 1px solid rgba(var(--accent-rgb), 0.2);
+      border-radius: var(--radius-full); padding: 0.3rem 1rem;
+      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); margin-top: 0.8rem;
+    }
+
+    /* ── Charts ─────────────────────────── */
+    .charts-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .chart-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 1.5rem; overflow: hidden;
+    }
+    .chart-card h3 {
+      font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .chart-card canvas { width: 100%; display: block; }
+
+    /* ── Metric Cards ───────────────────── */
+    .metric-cards {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm); padding: 1.2rem;
+      border-top: 3px solid var(--accent);
+      text-align: center; transition: transform 0.3s, border-color 0.3s;
+    }
+    .metric-card:hover { transform: translateY(-2px); }
+    .metric-card.best { border-top-color: var(--emerald); }
+    .metric-card.worst { border-top-color: var(--rose); }
+    .metric-card-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .metric-card-name { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); margin-bottom: 0.3rem; }
+    .metric-card-value {
+      font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800;
+    }
+    .metric-card-value.green { color: var(--emerald); }
+    .metric-card-value.yellow { color: var(--amber); }
+    .metric-card-value.red { color: var(--rose); }
+    .metric-card-delta {
+      font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700;
+      margin-top: 0.3rem;
+    }
+    .metric-card-delta.up { color: var(--emerald); }
+    .metric-card-delta.down { color: var(--rose); }
+    .metric-card-delta.same { color: var(--muted); }
+
+    /* ── Weekly Summary Card ────────────── */
+    .week-summary {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .week-summary h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .week-summary-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;
+    }
+    .ws-item { text-align: center; }
+    .ws-item-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+    .ws-item-value { font-family: var(--font-mono); font-size: 1.3rem; font-weight: 800; color: var(--text); }
+    .ws-reflection {
+      margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);
+      font-size: 0.88rem; color: var(--text-secondary); font-style: italic; line-height: 1.6;
+    }
+
+    /* ── History List ────────────────────── */
+    .history-section {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); margin-bottom: 2rem; overflow: hidden;
+    }
+    .history-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 1.5rem; cursor: pointer; user-select: none;
+    }
+    .history-header h3 { font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+    .history-toggle { color: var(--muted); transition: transform 0.3s; }
+    .history-section.collapsed .history-toggle { transform: rotate(-90deg); }
+    .history-section.collapsed .history-body { display: none; }
+    .history-body { border-top: 1px solid var(--glass-border); }
+    .history-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.03);
+      transition: background 0.2s;
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-item:hover { background: rgba(var(--accent-rgb), 0.03); }
+    .history-item-week {
+      font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; color: var(--accent);
+    }
+    .history-item-date { font-size: 0.78rem; color: var(--muted); }
+    .history-item-score {
+      font-family: var(--font-mono); font-size: 1rem; font-weight: 800;
+    }
+    .history-item-delete {
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      font-size: 0.8rem; padding: 0.3rem; transition: color 0.2s; margin-left: 0.8rem;
+    }
+    .history-item-delete:hover { color: var(--rose); }
+
+    /* ── Actions Bar ────────────────────── */
+    .actions-bar {
+      display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 2rem; margin-bottom: 1rem;
+    }
+    .btn-action {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
+      padding: 0.7rem 1.2rem; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all var(--duration) var(--ease-out);
+      text-decoration: none; font-family: var(--font-body);
+    }
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-action.danger:hover { border-color: var(--rose); color: var(--rose); }
+    .btn-action.cta {
+      background: linear-gradient(135deg, var(--accent), #2668ff);
+      color: #fff; border: none; font-weight: 700;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-action.cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px var(--accent-glow); }
+
+    /* ── Confirm Modal ──────────────────── */
+    .confirm-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+    }
+    .confirm-overlay.visible { display: flex; }
+    .confirm-box {
+      background: var(--bg-elevated); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 2rem; max-width: 400px; width: 90%;
+      text-align: center;
+    }
+    .confirm-box h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.8rem; color: var(--rose); }
+    .confirm-box p { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+    .confirm-actions { display: flex; gap: 0.8rem; justify-content: center; }
+    .confirm-actions button {
+      padding: 0.6rem 1.5rem; border-radius: var(--radius-sm); font-size: 0.88rem;
+      font-weight: 700; font-family: var(--font-body); cursor: pointer; transition: all 0.3s;
+    }
+    .btn-confirm-cancel { background: var(--surface); color: var(--text); border: 1px solid var(--glass-border); }
+    .btn-confirm-cancel:hover { border-color: var(--accent); }
+    .btn-confirm-delete { background: var(--rose); color: #fff; border: none; }
+    .btn-confirm-delete:hover { opacity: 0.85; }
+
+    /* ── Animations ─────────────────────── */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .hidden { display: none !important; }
+
+    /* ── Responsive ─────────────────────── */
+    @media (max-width: 640px) {
+      .charts-grid { grid-template-columns: 1fr; }
+      .extra-fields { grid-template-columns: 1fr; }
+      .metric-cards { grid-template-columns: 1fr 1fr; }
+      .actions-bar { flex-direction: column; align-items: stretch; }
+      .btn-action { justify-content: center; }
+    }
+    @media (max-width: 380px) {
+      .metric-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-noise"></div>
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="../../logo.svg" alt="P'Traders" class="brand-logo" />
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="tpBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">📊</div>
+    <span class="module-badge" data-i18n="tpModule">MÓDULO 5</span>
+    <h1 data-i18n="tpTitle">Tracker de Progreso</h1>
+    <p data-i18n="tpSubtitle">Visualiza tu evolución semana a semana. Mide disciplina, control emocional y consistencia en tu camino del demo al trading real.</p>
+  </div>
+
+  <div class="instructions">
+    <h3 data-i18n="tpInstrTitle">📊 Cómo usar esta herramienta</h3>
+    <p data-i18n="tpInstrDesc">Cada semana, evalúa honestamente tus 5 métricas clave del 1 al 10. Con el tiempo, verás tu evolución en gráficos y podrás identificar patrones. La consistencia en el seguimiento es tan importante como la mejora misma.</p>
+  </div>
+
+  <!-- ── Entry Form ────────────────────── -->
+  <div class="entry-form" id="entry-form">
+    <div class="form-header" id="form-toggle">
+      <h2><span data-i18n="tpFormTitle">📝 Nueva Entrada Semanal</span></h2>
+      <i class="fas fa-chevron-up form-toggle-icon" id="form-toggle-icon"></i>
+    </div>
+    <div class="form-body" id="form-body">
+
+      <!-- Metric 1: Discipline -->
+      <div class="metric-slider-group">
+        <div class="metric-slider-header">
+          <span class="metric-slider-label">🛡️ <span data-i18n="tpM1Name">Disciplina</span></span>
+          <span class="metric-slider-value" id="val-discipline">5</span>
+        </div>
+        <div class="metric-slider-desc" data-i18n="tpM1Desc">¿Seguí mi plan de trading consistentemente?</div>
+        <input type="range" min="1" max="10" value="5" id="slider-discipline">
+      </div>
+
+      <!-- Metric 2: Emotional Control -->
+      <div class="metric-slider-group">
+        <div class="metric-slider-header">
+          <span class="metric-slider-label">🧘 <span data-i18n="tpM2Name">Control Emocional</span></span>
+          <span class="metric-slider-value" id="val-emotional">5</span>
+        </div>
+        <div class="metric-slider-desc" data-i18n="tpM2Desc">¿Manejé mis emociones durante las sesiones?</div>
+        <input type="range" min="1" max="10" value="5" id="slider-emotional">
+      </div>
+
+      <!-- Metric 3: Patience -->
+      <div class="metric-slider-group">
+        <div class="metric-slider-header">
+          <span class="metric-slider-label">⏳ <span data-i18n="tpM3Name">Paciencia</span></span>
+          <span class="metric-slider-value" id="val-patience">5</span>
+        </div>
+        <div class="metric-slider-desc" data-i18n="tpM3Desc">¿Esperé por mis setups o forcé operaciones?</div>
+        <input type="range" min="1" max="10" value="5" id="slider-patience">
+      </div>
+
+      <!-- Metric 4: Risk Management -->
+      <div class="metric-slider-group">
+        <div class="metric-slider-header">
+          <span class="metric-slider-label">📐 <span data-i18n="tpM4Name">Gestión de Riesgo</span></span>
+          <span class="metric-slider-value" id="val-risk">5</span>
+        </div>
+        <div class="metric-slider-desc" data-i18n="tpM4Desc">¿Respeté mi stop loss y tamaño de posición?</div>
+        <input type="range" min="1" max="10" value="5" id="slider-risk">
+      </div>
+
+      <!-- Metric 5: Consistency -->
+      <div class="metric-slider-group">
+        <div class="metric-slider-header">
+          <span class="metric-slider-label">🎯 <span data-i18n="tpM5Name">Consistencia</span></span>
+          <span class="metric-slider-value" id="val-consistency">5</span>
+        </div>
+        <div class="metric-slider-desc" data-i18n="tpM5Desc">¿Fueron mis acciones consistentes día a día?</div>
+        <input type="range" min="1" max="10" value="5" id="slider-consistency">
+      </div>
+
+      <!-- Extra fields -->
+      <div class="extra-fields">
+        <div class="extra-field">
+          <label data-i18n="tpTrades">Trades esta semana</label>
+          <input type="number" id="input-trades" min="0" max="999" value="0">
+        </div>
+        <div class="extra-field">
+          <label data-i18n="tpWinRate">Win Rate %</label>
+          <input type="number" id="input-winrate" min="0" max="100" value="50">
+        </div>
+        <div class="extra-field">
+          <label data-i18n="tpRulesBroken">Reglas Rotas</label>
+          <input type="number" id="input-rules" min="0" max="99" value="0">
+        </div>
+        <div class="extra-field">
+          <label data-i18n="tpReflection">Reflexión Semanal</label>
+          <input type="text" id="input-reflection" maxlength="100" data-i18n-placeholder="tpReflectionPH" placeholder="Una frase sobre tu semana...">
+        </div>
+      </div>
+
+      <button class="btn-submit-entry" id="btn-submit">
+        <i class="fas fa-plus-circle"></i> <span data-i18n="tpSubmit">Guardar Semana</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ─────────────────────── -->
+  <div class="dashboard" id="dashboard">
+
+    <!-- Overall Score -->
+    <div class="overall-score-section">
+      <div class="score-circle">
+        <span class="score-circle-value" id="overall-score">0</span>
+      </div>
+      <div class="score-circle-label" data-i18n="tpOverallLabel">Puntaje General</div>
+      <div class="score-subtitle" id="best-worst-label"></div>
+      <div class="streak-badge" id="streak-badge">🔥 <span id="streak-value">0</span> <span data-i18n="tpStreakWeeks">semanas consecutivas</span></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>🕸️ <span data-i18n="tpRadarTitle">Radar de Métricas</span></h3>
+        <canvas id="radar-chart" width="320" height="320"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>📈 <span data-i18n="tpTrendTitle">Tendencia Semanal</span></h3>
+        <canvas id="trend-chart" width="320" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Metric Cards -->
+    <div class="metric-cards" id="metric-cards"></div>
+
+    <!-- Week Summary -->
+    <div class="week-summary" id="week-summary">
+      <h3>📋 <span data-i18n="tpWeekSummary">Resumen de la Semana</span></h3>
+      <div class="week-summary-grid" id="week-summary-grid"></div>
+      <div class="ws-reflection" id="ws-reflection"></div>
+    </div>
+
+    <!-- History -->
+    <div class="history-section" id="history-section">
+      <div class="history-header" id="history-toggle">
+        <h3>🗂️ <span data-i18n="tpHistory">Historial</span> (<span id="history-count">0</span>)</h3>
+        <i class="fas fa-chevron-down history-toggle"></i>
+      </div>
+      <div class="history-body" id="history-body"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-bar">
+      <button class="btn-action" id="btn-add-week"><i class="fas fa-plus"></i> <span data-i18n="tpAddWeek">Agregar Semana</span></button>
+      <button class="btn-action" id="btn-export"><i class="fas fa-download"></i> <span data-i18n="tpExport">Exportar .txt</span></button>
+      <button class="btn-action danger" id="btn-clear"><i class="fas fa-trash"></i> <span data-i18n="tpClear">Borrar Todo</span></button>
+      <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" class="btn-action cta">
+        <i class="fas fa-rocket"></i> <span data-i18n="tpCta">Accede al Curso Completo</span>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- Confirm Modal -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3 data-i18n="tpConfirmTitle">⚠️ ¿Borrar todos los datos?</h3>
+    <p data-i18n="tpConfirmDesc">Esta acción eliminará todo tu historial de progreso. No se puede deshacer.</p>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" id="btn-cancel-clear" data-i18n="tpConfirmCancel">Cancelar</button>
+      <button class="btn-confirm-delete" id="btn-confirm-clear" data-i18n="tpConfirmDelete">Sí, borrar todo</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══════════════════════════════════════════
+   P'TRADERS — Tracker de Progreso Tool
+   ═══════════════════════════════════════════ */
+;(function() {
+  "use strict";
+
+  const STORAGE_KEY = "pt_progress_tracker";
+  const MAX_WEEKS = 12;
+
+  /* ── i18n dictionary ─────────────────── */
+  const dict = {
+    es: {
+      tpBack: "Volver al inicio",
+      tpModule: "MÓDULO 5",
+      tpTitle: "Tracker de Progreso",
+      tpSubtitle: "Visualiza tu evolución semana a semana. Mide disciplina, control emocional y consistencia en tu camino del demo al trading real.",
+      tpInstrTitle: "📊 Cómo usar esta herramienta",
+      tpInstrDesc: "Cada semana, evalúa honestamente tus 5 métricas clave del 1 al 10. Con el tiempo, verás tu evolución en gráficos y podrás identificar patrones. La consistencia en el seguimiento es tan importante como la mejora misma.",
+      tpFormTitle: "📝 Nueva Entrada Semanal",
+      tpM1Name: "Disciplina",
+      tpM1Desc: "¿Seguí mi plan de trading consistentemente?",
+      tpM2Name: "Control Emocional",
+      tpM2Desc: "¿Manejé mis emociones durante las sesiones?",
+      tpM3Name: "Paciencia",
+      tpM3Desc: "¿Esperé por mis setups o forcé operaciones?",
+      tpM4Name: "Gestión de Riesgo",
+      tpM4Desc: "¿Respeté mi stop loss y tamaño de posición?",
+      tpM5Name: "Consistencia",
+      tpM5Desc: "¿Fueron mis acciones consistentes día a día?",
+      tpTrades: "Trades esta semana",
+      tpWinRate: "Win Rate %",
+      tpRulesBroken: "Reglas Rotas",
+      tpReflection: "Reflexión Semanal",
+      tpReflectionPH: "Una frase sobre tu semana...",
+      tpSubmit: "Guardar Semana",
+      tpOverallLabel: "Puntaje General",
+      tpStreakWeeks: "semanas consecutivas",
+      tpRadarTitle: "Radar de Métricas",
+      tpTrendTitle: "Tendencia Semanal",
+      tpWeekSummary: "Resumen de la Semana",
+      tpHistory: "Historial",
+      tpAddWeek: "Agregar Semana",
+      tpExport: "Exportar .txt",
+      tpClear: "Borrar Todo",
+      tpCta: "Accede al Curso Completo",
+      tpConfirmTitle: "⚠️ ¿Borrar todos los datos?",
+      tpConfirmDesc: "Esta acción eliminará todo tu historial de progreso. No se puede deshacer.",
+      tpConfirmCancel: "Cancelar",
+      tpConfirmDelete: "Sí, borrar todo",
+      tpBest: "Mejor",
+      tpWorst: "A mejorar",
+      tpWeekLabel: "Semana",
+      tpNoChange: "=",
+      tpCurrent: "Actual",
+      tpPrevious: "Anterior",
+      tpTradesLabel: "Trades",
+      tpWinRateLabel: "Win Rate",
+      tpRulesLabel: "Reglas Rotas",
+      tpExportHeader: "TRACKER DE PROGRESO — P'TRADERS",
+      tpExportWeek: "SEMANA",
+      tpExportDate: "Fecha",
+      tpExportScore: "Puntaje General",
+      tpExportReflection: "Reflexión",
+      tpDeleteEntry: "¿Eliminar esta entrada?",
+    },
+    en: {
+      tpBack: "Back to home",
+      tpModule: "MODULE 5",
+      tpTitle: "Progress Tracker",
+      tpSubtitle: "Visualize your weekly evolution. Measure discipline, emotional control, and consistency on your path from demo to live trading.",
+      tpInstrTitle: "📊 How to use this tool",
+      tpInstrDesc: "Every week, honestly assess your 5 key metrics from 1 to 10. Over time, you'll see your evolution in charts and identify patterns. Consistency in tracking is as important as the improvement itself.",
+      tpFormTitle: "📝 New Weekly Entry",
+      tpM1Name: "Discipline",
+      tpM1Desc: "Did I follow my trading plan consistently?",
+      tpM2Name: "Emotional Control",
+      tpM2Desc: "Did I manage my emotions during sessions?",
+      tpM3Name: "Patience",
+      tpM3Desc: "Did I wait for my setups or force trades?",
+      tpM4Name: "Risk Management",
+      tpM4Desc: "Did I respect my stop loss and position sizing?",
+      tpM5Name: "Consistency",
+      tpM5Desc: "Were my actions consistent day to day?",
+      tpTrades: "Trades this week",
+      tpWinRate: "Win Rate %",
+      tpRulesBroken: "Rules Broken",
+      tpReflection: "Weekly Reflection",
+      tpReflectionPH: "One line about your week...",
+      tpSubmit: "Save Week",
+      tpOverallLabel: "Overall Score",
+      tpStreakWeeks: "consecutive weeks",
+      tpRadarTitle: "Metrics Radar",
+      tpTrendTitle: "Weekly Trend",
+      tpWeekSummary: "Week Summary",
+      tpHistory: "History",
+      tpAddWeek: "Add This Week",
+      tpExport: "Export .txt",
+      tpClear: "Clear All",
+      tpCta: "Access the Full Course",
+      tpConfirmTitle: "⚠️ Delete all data?",
+      tpConfirmDesc: "This will permanently delete all your progress history. It cannot be undone.",
+      tpConfirmCancel: "Cancel",
+      tpConfirmDelete: "Yes, delete all",
+      tpBest: "Best",
+      tpWorst: "Needs work",
+      tpWeekLabel: "Week",
+      tpNoChange: "=",
+      tpCurrent: "Current",
+      tpPrevious: "Previous",
+      tpTradesLabel: "Trades",
+      tpWinRateLabel: "Win Rate",
+      tpRulesLabel: "Rules Broken",
+      tpExportHeader: "PROGRESS TRACKER — P'TRADERS",
+      tpExportWeek: "WEEK",
+      tpExportDate: "Date",
+      tpExportScore: "Overall Score",
+      tpExportReflection: "Reflection",
+      tpDeleteEntry: "Delete this entry?",
+    }
+  };
+
+  /* ── Merge into global i18n ──────────── */
+  if (typeof i18n !== "undefined") {
+    Object.assign(i18n.es, dict.es);
+    Object.assign(i18n.en, dict.en);
+  }
+
+  /* ── Language helpers ────────────────── */
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function t(key) {
+    if (typeof i18n !== "undefined" && i18n[currentLang] && i18n[currentLang][key]) return i18n[currentLang][key];
+    return dict[currentLang]?.[key] || dict.es[key] || key;
+  }
+
+  function applyLang() {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const val = t(key);
+      if (val) el.textContent = val;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      const val = t(key);
+      if (val) el.placeholder = val;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+    document.documentElement.lang = currentLang;
+  }
+
+  /* ── Metric definitions ──────────────── */
+  const METRICS = [
+    { key: "discipline",  icon: "🛡️", nameKey: "tpM1Name", sliderId: "slider-discipline",  valId: "val-discipline" },
+    { key: "emotional",   icon: "🧘", nameKey: "tpM2Name", sliderId: "slider-emotional",   valId: "val-emotional" },
+    { key: "patience",    icon: "⏳", nameKey: "tpM3Name", sliderId: "slider-patience",    valId: "val-patience" },
+    { key: "risk",        icon: "📐", nameKey: "tpM4Name", sliderId: "slider-risk",        valId: "val-risk" },
+    { key: "consistency", icon: "🎯", nameKey: "tpM5Name", sliderId: "slider-consistency", valId: "val-consistency" },
+  ];
+
+  /* ── DOM refs ────────────────────────── */
+  const entryForm = document.getElementById("entry-form");
+  const formToggle = document.getElementById("form-toggle");
+  const formBody = document.getElementById("form-body");
+  const formToggleIcon = document.getElementById("form-toggle-icon");
+  const btnSubmit = document.getElementById("btn-submit");
+  const dashboard = document.getElementById("dashboard");
+  const overallScoreEl = document.getElementById("overall-score");
+  const bestWorstLabel = document.getElementById("best-worst-label");
+  const streakValue = document.getElementById("streak-value");
+  const metricCardsContainer = document.getElementById("metric-cards");
+  const weekSummaryGrid = document.getElementById("week-summary-grid");
+  const wsReflection = document.getElementById("ws-reflection");
+  const historyBody = document.getElementById("history-body");
+  const historyCount = document.getElementById("history-count");
+  const historySection = document.getElementById("history-section");
+  const historyToggleEl = document.getElementById("history-toggle");
+  const btnAddWeek = document.getElementById("btn-add-week");
+  const btnExport = document.getElementById("btn-export");
+  const btnClear = document.getElementById("btn-clear");
+  const confirmOverlay = document.getElementById("confirm-overlay");
+  const btnCancelClear = document.getElementById("btn-cancel-clear");
+  const btnConfirmClear = document.getElementById("btn-confirm-clear");
+
+  /* ── Slider wiring ──────────────────── */
+  METRICS.forEach(m => {
+    const slider = document.getElementById(m.sliderId);
+    const valEl = document.getElementById(m.valId);
+    slider.addEventListener("input", () => { valEl.textContent = slider.value; });
+  });
+
+  /* ── Data management ─────────────────── */
+  function loadEntries() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveEntries(entries) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries.slice(-MAX_WEEKS)));
+  }
+
+  /* ── Submit entry ────────────────────── */
+  btnSubmit.addEventListener("click", () => {
+    const entry = {
+      date: new Date().toISOString(),
+      metrics: {},
+      trades: parseInt(document.getElementById("input-trades").value) || 0,
+      winrate: parseInt(document.getElementById("input-winrate").value) || 0,
+      rulesBroken: parseInt(document.getElementById("input-rules").value) || 0,
+      reflection: document.getElementById("input-reflection").value.trim().slice(0, 100),
+    };
+    METRICS.forEach(m => {
+      entry.metrics[m.key] = parseInt(document.getElementById(m.sliderId).value);
+    });
+    const entries = loadEntries();
+    entries.push(entry);
+    saveEntries(entries);
+    resetForm();
+    renderDashboard();
+  });
+
+  function resetForm() {
+    METRICS.forEach(m => {
+      const slider = document.getElementById(m.sliderId);
+      slider.value = 5;
+      document.getElementById(m.valId).textContent = "5";
+    });
+    document.getElementById("input-trades").value = 0;
+    document.getElementById("input-winrate").value = 50;
+    document.getElementById("input-rules").value = 0;
+    document.getElementById("input-reflection").value = "";
+  }
+
+  /* ── Toggle form ─────────────────────── */
+  formToggle.addEventListener("click", () => {
+    entryForm.classList.toggle("collapsed");
+  });
+
+  /* ── History toggle ──────────────────── */
+  historyToggleEl.addEventListener("click", () => {
+    historySection.classList.toggle("collapsed");
+  });
+
+  /* ── Add Week button ─────────────────── */
+  btnAddWeek.addEventListener("click", () => {
+    entryForm.classList.remove("collapsed");
+    entryForm.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  /* ── Clear data ──────────────────────── */
+  btnClear.addEventListener("click", () => { confirmOverlay.classList.add("visible"); });
+  btnCancelClear.addEventListener("click", () => { confirmOverlay.classList.remove("visible"); });
+  btnConfirmClear.addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    confirmOverlay.classList.remove("visible");
+    renderDashboard();
+  });
+
+  /* ── Export ───────────────────────────── */
+  btnExport.addEventListener("click", () => {
+    const entries = loadEntries();
+    if (!entries.length) return;
+    let txt = t("tpExportHeader") + "\n" + "=".repeat(50) + "\n\n";
+    entries.forEach((e, i) => {
+      const d = new Date(e.date);
+      const dateStr = d.toLocaleDateString(currentLang === "es" ? "es-ES" : "en-US");
+      txt += `── ${t("tpExportWeek")} ${i + 1} ──────────────────\n`;
+      txt += `${t("tpExportDate")}: ${dateStr}\n`;
+      METRICS.forEach(m => {
+        txt += `${t(m.nameKey)}: ${e.metrics[m.key]}/10\n`;
+      });
+      const avg = calcAvg(e);
+      txt += `${t("tpExportScore")}: ${avg.toFixed(1)}/10\n`;
+      txt += `${t("tpTradesLabel")}: ${e.trades} | ${t("tpWinRateLabel")}: ${e.winrate}% | ${t("tpRulesLabel")}: ${e.rulesBroken}\n`;
+      if (e.reflection) txt += `${t("tpExportReflection")}: "${e.reflection}"\n`;
+      txt += "\n";
+    });
+    const blob = new Blob([txt], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `progress-tracker-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  /* ── Helpers ─────────────────────────── */
+  function calcAvg(entry) {
+    const vals = METRICS.map(m => entry.metrics[m.key]);
+    return vals.reduce((s, v) => s + v, 0) / vals.length;
+  }
+
+  function colorClass(val) {
+    if (val >= 8) return "green";
+    if (val >= 5) return "yellow";
+    return "red";
+  }
+
+  /* ── Render Dashboard ────────────────── */
+  function renderDashboard() {
+    const entries = loadEntries();
+    const hasData = entries.length > 0;
+
+    dashboard.classList.toggle("visible", hasData);
+
+    if (!hasData) {
+      entryForm.classList.remove("collapsed");
+      return;
+    }
+
+    // Collapse form if data exists
+    entryForm.classList.add("collapsed");
+
+    const current = entries[entries.length - 1];
+    const prev = entries.length > 1 ? entries[entries.length - 2] : null;
+    const currentAvg = calcAvg(current);
+
+    // Overall score
+    animateValue(overallScoreEl, 0, currentAvg, 800);
+
+    // Streak
+    streakValue.textContent = entries.length;
+
+    // Best / Worst metric
+    let bestIdx = 0, worstIdx = 0;
+    METRICS.forEach((m, i) => {
+      if (current.metrics[m.key] > current.metrics[METRICS[bestIdx].key]) bestIdx = i;
+      if (current.metrics[m.key] < current.metrics[METRICS[worstIdx].key]) worstIdx = i;
+    });
+    bestWorstLabel.innerHTML = `✅ ${t("tpBest")}: <strong>${t(METRICS[bestIdx].nameKey)}</strong> &nbsp;|&nbsp; 🔻 ${t("tpWorst")}: <strong>${t(METRICS[worstIdx].nameKey)}</strong>`;
+
+    // Metric cards
+    metricCardsContainer.innerHTML = "";
+    METRICS.forEach((m, i) => {
+      const val = current.metrics[m.key];
+      const prevVal = prev ? prev.metrics[m.key] : null;
+      const delta = prevVal !== null ? val - prevVal : 0;
+      const isBest = i === bestIdx;
+      const isWorst = i === worstIdx;
+      const card = document.createElement("div");
+      card.className = `metric-card${isBest ? " best" : ""}${isWorst ? " worst" : ""}`;
+      card.style.animationDelay = `${i * 0.08}s`;
+      card.innerHTML = `
+        <div class="metric-card-icon">${m.icon}</div>
+        <div class="metric-card-name">${t(m.nameKey)}</div>
+        <div class="metric-card-value ${colorClass(val)}">${val}</div>
+        <div class="metric-card-delta ${delta > 0 ? "up" : delta < 0 ? "down" : "same"}">
+          ${delta > 0 ? "↑+" + delta : delta < 0 ? "↓" + delta : t("tpNoChange")}
+        </div>
+      `;
+      metricCardsContainer.appendChild(card);
+    });
+
+    // Week summary
+    const dateStr = new Date(current.date).toLocaleDateString(currentLang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "short", day: "numeric" });
+    weekSummaryGrid.innerHTML = `
+      <div class="ws-item"><div class="ws-item-label">${t("tpTradesLabel")}</div><div class="ws-item-value">${current.trades}</div></div>
+      <div class="ws-item"><div class="ws-item-label">${t("tpWinRateLabel")}</div><div class="ws-item-value">${current.winrate}%</div></div>
+      <div class="ws-item"><div class="ws-item-label">${t("tpRulesLabel")}</div><div class="ws-item-value">${current.rulesBroken}</div></div>
+      <div class="ws-item"><div class="ws-item-label">${t("tpExportDate")}</div><div class="ws-item-value" style="font-size:0.9rem">${dateStr}</div></div>
+    `;
+    wsReflection.textContent = current.reflection ? `"${current.reflection}"` : "";
+
+    // History
+    historyCount.textContent = entries.length;
+    historyBody.innerHTML = "";
+    for (let i = entries.length - 1; i >= 0; i--) {
+      const e = entries[i];
+      const avg = calcAvg(e);
+      const d = new Date(e.date).toLocaleDateString(currentLang === "es" ? "es-ES" : "en-US", { month: "short", day: "numeric" });
+      const item = document.createElement("div");
+      item.className = "history-item";
+      item.innerHTML = `
+        <div>
+          <div class="history-item-week">${t("tpWeekLabel")} ${i + 1}</div>
+          <div class="history-item-date">${d}</div>
+        </div>
+        <div style="display:flex;align-items:center;">
+          <span class="history-item-score ${colorClass(avg)}" style="color:var(--${colorClass(avg) === 'green' ? 'emerald' : colorClass(avg) === 'yellow' ? 'amber' : 'rose'})">${avg.toFixed(1)}</span>
+          <button class="history-item-delete" data-idx="${i}" title="Delete"><i class="fas fa-times"></i></button>
+        </div>
+      `;
+      historyBody.appendChild(item);
+    }
+
+    // Delete individual entry
+    historyBody.querySelectorAll(".history-item-delete").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm(t("tpDeleteEntry"))) {
+          const idx = parseInt(btn.dataset.idx);
+          const entries = loadEntries();
+          entries.splice(idx, 1);
+          saveEntries(entries);
+          renderDashboard();
+        }
+      });
+    });
+
+    // Draw charts
+    setTimeout(() => {
+      drawRadarChart(entries);
+      drawTrendChart(entries);
+    }, 100);
+  }
+
+  /* ── Animate number ──────────────────── */
+  function animateValue(el, start, end, duration) {
+    const startTime = performance.now();
+    function update(now) {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = start + (end - start) * eased;
+      el.textContent = val.toFixed(1);
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  /* ═══════════════════════════════════════
+     RADAR CHART — Vanilla Canvas
+     ═══════════════════════════════════════ */
+  function drawRadarChart(entries) {
+    const canvas = document.getElementById("radar-chart");
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.width * dpr; // square
+    ctx.scale(dpr, dpr);
+    const W = rect.width;
+    const H = W;
+    const cx = W / 2;
+    const cy = H / 2;
+    const maxR = Math.min(cx, cy) * 0.72;
+    const sides = 5;
+    const angleStep = (Math.PI * 2) / sides;
+    const startAngle = -Math.PI / 2;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Grid rings
+    for (let ring = 1; ring <= 5; ring++) {
+      const r = (maxR / 5) * ring;
+      ctx.beginPath();
+      for (let i = 0; i <= sides; i++) {
+        const a = startAngle + i * angleStep;
+        const x = cx + r * Math.cos(a);
+        const y = cy + r * Math.sin(a);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = "rgba(148, 163, 200, 0.1)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Axis lines
+    for (let i = 0; i < sides; i++) {
+      const a = startAngle + i * angleStep;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + maxR * Math.cos(a), cy + maxR * Math.sin(a));
+      ctx.strokeStyle = "rgba(148, 163, 200, 0.08)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Axis labels
+    const labels = METRICS.map(m => ({ icon: m.icon, name: t(m.nameKey) }));
+    ctx.font = `600 ${Math.max(10, W * 0.033)}px Inter, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    labels.forEach((l, i) => {
+      const a = startAngle + i * angleStep;
+      const labelR = maxR + Math.max(18, W * 0.08);
+      const x = cx + labelR * Math.cos(a);
+      const y = cy + labelR * Math.sin(a);
+      ctx.fillStyle = "rgba(148, 163, 200, 0.7)";
+      ctx.fillText(`${l.icon} ${l.name}`, x, y);
+    });
+
+    // Scale numbers
+    ctx.font = `500 ${Math.max(8, W * 0.025)}px JetBrains Mono, monospace`;
+    ctx.fillStyle = "rgba(148, 163, 200, 0.35)";
+    for (let ring = 1; ring <= 5; ring++) {
+      const r = (maxR / 5) * ring;
+      const val = ring * 2;
+      ctx.fillText(val.toString(), cx + 8, cy - r + 2);
+    }
+
+    const current = entries[entries.length - 1];
+    const prev = entries.length > 1 ? entries[entries.length - 2] : null;
+
+    // Animate fill
+    let animProgress = 0;
+    const animDuration = 800;
+    const animStart = performance.now();
+
+    function drawFrame(now) {
+      animProgress = Math.min((now - animStart) / animDuration, 1);
+      const eased = 1 - Math.pow(1 - animProgress, 3);
+
+      // Clear data area only
+      ctx.save();
+      ctx.beginPath();
+      for (let ring = 5; ring >= 0; ring--) {
+        const r = (maxR / 5) * ring + 2;
+        for (let i = 0; i <= sides; i++) {
+          const a = startAngle + i * angleStep;
+          const x = cx + (maxR + 2) * Math.cos(a);
+          const y = cy + (maxR + 2) * Math.sin(a);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+      }
+      // We don't clip, just redraw the data layers
+
+      // Previous week (dimmed)
+      if (prev) {
+        drawDataShape(ctx, prev, cx, cy, maxR, startAngle, angleStep, eased,
+          "rgba(100, 116, 139, 0.15)", "rgba(100, 116, 139, 0.4)", 1.5);
+      }
+
+      // Current week (accent)
+      drawDataShape(ctx, current, cx, cy, maxR, startAngle, angleStep, eased,
+        "rgba(0, 212, 255, 0.12)", "rgba(0, 212, 255, 0.9)", 2.5);
+
+      // Data points (current)
+      METRICS.forEach((m, i) => {
+        const val = current.metrics[m.key] * eased;
+        const r = (maxR / 10) * val;
+        const a = startAngle + i * angleStep;
+        const x = cx + r * Math.cos(a);
+        const y = cy + r * Math.sin(a);
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#00d4ff";
+        ctx.fill();
+        // Glow
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, 8);
+        glow.addColorStop(0, "rgba(0, 212, 255, 0.5)");
+        glow.addColorStop(1, "rgba(0, 212, 255, 0)");
+        ctx.fillStyle = glow;
+        ctx.fill();
+      });
+
+      ctx.restore();
+
+      if (animProgress < 1) requestAnimationFrame(drawFrame);
+    }
+
+    // Initial full redraw then animate data
+    requestAnimationFrame(drawFrame);
+
+    // Legend
+    if (prev) {
+      const legendY = H - 15;
+      ctx.font = `600 ${Math.max(9, W * 0.028)}px Inter, sans-serif`;
+      ctx.fillStyle = "rgba(0, 212, 255, 0.9)";
+      ctx.fillRect(cx - 70, legendY - 4, 8, 8);
+      ctx.fillText(t("tpCurrent"), cx - 50, legendY);
+      ctx.fillStyle = "rgba(100, 116, 139, 0.6)";
+      ctx.fillRect(cx + 20, legendY - 4, 8, 8);
+      ctx.fillText(t("tpPrevious"), cx + 40, legendY);
+    }
+  }
+
+  function drawDataShape(ctx, entry, cx, cy, maxR, startAngle, angleStep, eased, fillColor, strokeColor, lineWidth) {
+    const sides = METRICS.length;
+    ctx.beginPath();
+    METRICS.forEach((m, i) => {
+      const val = entry.metrics[m.key] * eased;
+      const r = (maxR / 10) * val;
+      const a = startAngle + i * angleStep;
+      const x = cx + r * Math.cos(a);
+      const y = cy + r * Math.sin(a);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = lineWidth;
+    ctx.stroke();
+  }
+
+  /* ═══════════════════════════════════════
+     TREND LINE CHART — Vanilla Canvas
+     ═══════════════════════════════════════ */
+  function drawTrendChart(entries) {
+    const canvas = document.getElementById("trend-chart");
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = (rect.width * 0.65) * dpr;
+    ctx.scale(dpr, dpr);
+    const W = rect.width;
+    const H = rect.width * 0.65;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const padL = 35, padR = 15, padT = 15, padB = 30;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+
+    // Y axis gridlines (0-10)
+    ctx.font = `500 ${Math.max(9, W * 0.03)}px JetBrains Mono, monospace`;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    for (let v = 0; v <= 10; v += 2) {
+      const y = padT + chartH - (v / 10) * chartH;
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(padL + chartW, y);
+      ctx.strokeStyle = "rgba(148, 163, 200, 0.08)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.fillStyle = "rgba(148, 163, 200, 0.4)";
+      ctx.fillText(v.toString(), padL - 6, y);
+    }
+
+    if (entries.length < 1) return;
+
+    const avgs = entries.map(e => calcAvg(e));
+    const n = avgs.length;
+    const stepX = n > 1 ? chartW / (n - 1) : chartW / 2;
+
+    function getPoint(i) {
+      const x = padL + (n > 1 ? i * stepX : chartW / 2);
+      const y = padT + chartH - (avgs[i] / 10) * chartH;
+      return { x, y };
+    }
+
+    // Smooth curve helper
+    function drawSmoothLine(points) {
+      if (points.length < 2) {
+        ctx.moveTo(points[0].x, points[0].y);
+        return;
+      }
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 0; i < points.length - 1; i++) {
+        const cp1x = (points[i].x + points[i + 1].x) / 2;
+        const cp1y = points[i].y;
+        const cp2x = cp1x;
+        const cp2y = points[i + 1].y;
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, points[i + 1].x, points[i + 1].y);
+      }
+    }
+
+    // Animate
+    let animProgress = 0;
+    const animDuration = 900;
+    const animStartTime = performance.now();
+
+    function drawFrame(now) {
+      animProgress = Math.min((now - animStartTime) / animDuration, 1);
+      const eased = 1 - Math.pow(1 - animProgress, 3);
+      const drawCount = Math.max(1, Math.ceil(n * eased));
+
+      // Clear chart area
+      ctx.clearRect(padL - 1, padT - 1, chartW + 2, chartH + 2);
+
+      // Redraw grid
+      for (let v = 0; v <= 10; v += 2) {
+        const y = padT + chartH - (v / 10) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(padL + chartW, y);
+        ctx.strokeStyle = "rgba(148, 163, 200, 0.08)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      const points = [];
+      for (let i = 0; i < drawCount; i++) {
+        const pt = getPoint(i);
+        // Animate Y
+        const animY = padT + chartH + (pt.y - padT - chartH) * eased;
+        points.push({ x: pt.x, y: animY });
+      }
+
+      // Gradient fill under line
+      if (points.length > 1) {
+        ctx.beginPath();
+        drawSmoothLine(points);
+        ctx.lineTo(points[points.length - 1].x, padT + chartH);
+        ctx.lineTo(points[0].x, padT + chartH);
+        ctx.closePath();
+        const grad = ctx.createLinearGradient(0, padT, 0, padT + chartH);
+        grad.addColorStop(0, "rgba(0, 212, 255, 0.2)");
+        grad.addColorStop(1, "rgba(0, 212, 255, 0.0)");
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      // Line
+      ctx.beginPath();
+      drawSmoothLine(points);
+      ctx.strokeStyle = "#00d4ff";
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.stroke();
+
+      // Glow line
+      ctx.beginPath();
+      drawSmoothLine(points);
+      ctx.strokeStyle = "rgba(0, 212, 255, 0.3)";
+      ctx.lineWidth = 8;
+      ctx.stroke();
+
+      // Points
+      points.forEach((p, i) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#00d4ff";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+      });
+
+      // X labels
+      ctx.font = `500 ${Math.max(8, W * 0.025)}px JetBrains Mono, monospace`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "rgba(148, 163, 200, 0.5)";
+      for (let i = 0; i < drawCount; i++) {
+        const pt = points[i];
+        ctx.fillText(`S${i + 1}`, pt.x, padT + chartH + 8);
+      }
+
+      if (animProgress < 1) requestAnimationFrame(drawFrame);
+    }
+
+    requestAnimationFrame(drawFrame);
+  }
+
+  /* ── Language switcher ───────────────── */
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentLang = btn.dataset.lang;
+      localStorage.setItem("pt_lang", currentLang);
+      applyLang();
+      // Re-render dashboard with new language
+      const entries = loadEntries();
+      if (entries.length) renderDashboard();
+    });
+  });
+
+  /* ── Window resize → redraw charts ──── */
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const entries = loadEntries();
+      if (entries.length) {
+        drawRadarChart(entries);
+        drawTrendChart(entries);
+      }
+    }, 250);
+  });
+
+  /* ── Init ─────────────────────────────── */
+  applyLang();
+  renderDashboard();
+
+})();
+</script>
+</body>
+</html>

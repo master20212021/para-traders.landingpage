@@ -229,6 +229,16 @@
     if (!toolSlug) return;
     const toolRoutes = {
       "test-mental": "herramientas/test-mental/index.html",
+      "inventario-miedos": "herramientas/inventario-miedos/index.html",
+      "detector-saboteadores": "herramientas/detector-saboteadores/index.html",
+      "diario-emocional": "herramientas/diario-emocional/index.html",
+      "respiracion-box": "herramientas/respiracion-box/index.html",
+      "ancla-mental": "herramientas/ancla-mental/index.html",
+      "checklist-premercado": "herramientas/checklist-premercado/index.html",
+      "plan-contingencia": "herramientas/plan-contingencia/index.html",
+      "simulador-escenarios": "herramientas/simulador-escenarios/index.html",
+      "tracker-progreso": "herramientas/tracker-progreso/index.html",
+      "contrato-compromiso": "herramientas/contrato-compromiso/index.html",
     };
     const route = toolRoutes[toolSlug];
     if (route) {
