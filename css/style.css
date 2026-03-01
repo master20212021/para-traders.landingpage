@@ -458,7 +458,7 @@ button { font-family: inherit; cursor: pointer; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .stat-item:nth-child(2)::after { display: none; }
   .outcomes-grid { grid-template-columns: 1fr; }
-  .about-body { flex-direction: column; padding: 1.8rem 1.5rem 1.2rem; gap: 1rem; align-items: center; text-align: center; }
+  .about-body { flex-direction: column; padding: 1.8rem 1.5rem 1.2rem; gap: 1rem; align-items: center; }
   .about-quote-bar { padding: 1rem 1.5rem; }
   .about-footer { padding: 1.2rem 1.5rem; }
   .roadmap-timeline::before { left: 20px; }
