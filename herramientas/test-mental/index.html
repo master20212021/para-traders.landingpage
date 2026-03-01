@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Mental de Arranque — P'Traders</title>
+  <meta name="description" content="Evalúa tu estado emocional como trader con 5 afirmaciones honestas.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    /* ── Tool-specific styles ──────────── */
+    .tool-page { max-width: 750px; margin: 0 auto; padding: 6rem 1.5rem 4rem; position: relative; z-index: 1; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; margin-bottom: 2rem; transition: var(--transition); }
+    .tool-back:hover { color: var(--cyan); }
+
+    .tool-header { text-align: center; margin-bottom: 3rem; }
+    .tool-header .tool-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .tool-header h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .tool-header .module-badge { display: inline-block; background: var(--cyan-dim); color: var(--cyan); font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; letter-spacing: 0.08em; }
+    .tool-header p { color: var(--muted); margin-top: 1rem; line-height: 1.7; }
+
+    .instructions { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+    .instructions p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    .question-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      margin-bottom: 1.2rem;
+      transition: var(--transition);
+    }
+    .question-card:hover { border-color: var(--cyan-glow); }
+    .question-card.answered { border-color: rgba(0, 229, 255, 0.25); }
+
+    .question-number {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .question-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .scale-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .scale-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: 60px;
+      text-align: center;
+    }
+    .scale-label:last-child { text-align: center; }
+    .scale-buttons {
+      display: flex;
+      gap: 0.4rem;
+      flex: 1;
+      justify-content: center;
+    }
+    .scale-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: var(--panel);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .scale-btn:hover {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+      transform: scale(1.08);
+    }
+    .scale-btn.selected {
+      background: var(--cyan);
+      color: var(--bg);
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px var(--cyan-glow);
+    }
+
+    .submit-area {
+      text-align: center;
+      margin-top: 2.5rem;
+    }
+
+    /* ── Results ─────────────────────── */
+    .results-panel {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 2rem;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      padding: 3px;
+      background: conic-gradient(var(--score-color) var(--score-pct), var(--line) 0%);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+    }
+    .score-value {
+      font-family: var(--font-mono);
+      font-size: 2.5rem;
+      font-weight: 800;
+    }
+    .score-max {
+      font-size: 0.9rem;
+      color: var(--muted);
+      display: block;
+    }
+
+    .result-zone {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .result-message {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 550px;
+      margin: 0 auto 2rem;
+    }
+
+    .result-bars { margin: 2rem 0; text-align: left; }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .bar-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      width: 30px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--panel);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .bar-value {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 20px;
+      flex-shrink: 0;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1.3rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-download:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .scale-btn { width: 38px; height: 38px; font-size: 0.9rem; }
+      .scale-label { font-size: 0.65rem; width: 45px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+</div>
+
+<!-- Topbar -->
+<nav class="topbar">
+  <a href="/" class="brand">
+    <img src="https://i.postimg.cc/nVW2PvKM/logo-png-oficial-fondo-trasparente.png" alt="P'Traders" class="brand-logo">
+    <span class="brand-text">P'TRADERS</span>
+  </a>
+  <div class="topbar-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<main class="tool-page">
+  <a href="/" class="tool-back"><i class="fas fa-arrow-left"></i> <span data-i18n="tmBack">Volver al inicio</span></a>
+
+  <div class="tool-header">
+    <div class="tool-icon">🧠</div>
+    <span class="module-badge" data-i18n="tmModule">MÓDULO 1</span>
+    <h1 data-i18n="tmTitle">Test Mental de Arranque</h1>
+    <p data-i18n="tmSubtitle">Evalúa honestamente cada afirmación del 1 al 5. Nadie más va a ver tus resultados. Si te mientes aquí, el único que pierde eres tú.</p>
+  </div>
+
+  <div class="instructions">
+    <h3 data-i18n="tmScaleTitle">📏 Escala de puntuación</h3>
+    <p data-i18n="tmScaleDesc"><strong>1</strong> = Nunca me pasa &nbsp; · &nbsp; <strong>5</strong> = Me pasa todo el tiempo</p>
+  </div>
+
+  <!-- Questions container -->
+  <div id="questions-container">
+    <!-- Q1 -->
+    <div class="question-card" data-q="1">
+      <p class="question-number" data-i18n="tmQ">PREGUNTA 1 / 5</p>
+      <p class="question-text" data-i18n="tmQ1">"Me frustro rápido cuando el trade no sale bien."</p>
+      <p class="question-hint" data-i18n="tmQ1Hint">Piensa en tu última semana de trading. ¿Cuántas veces sentiste esa frustración inmediata?</p>
+      <div class="scale-row">
+        <span class="scale-label" data-i18n="tmNever">Nunca</span>
+        <div class="scale-buttons">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+        </div>
+        <span class="scale-label" data-i18n="tmAlways">Siempre</span>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-card" data-q="2">
+      <p class="question-number" data-i18n="tmQ2Label">PREGUNTA 2 / 5</p>
+      <p class="question-text" data-i18n="tmQ2">"He operado sin plan solo por impulso."</p>
+      <p class="question-hint" data-i18n="tmQ2Hint">¿Abriste una operación solo porque viste una vela bonita o porque alguien en un grupo dijo "compren"?</p>
+      <div class="scale-row">
+        <span class="scale-label" data-i18n="tmNever">Nunca</span>
+        <div class="scale-buttons">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+        </div>
+        <span class="scale-label" data-i18n="tmAlways">Siempre</span>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-card" data-q="3">
+      <p class="question-number" data-i18n="tmQ3Label">PREGUNTA 3 / 5</p>
+      <p class="question-text" data-i18n="tmQ3">"Me cuesta aceptar una pérdida."</p>
+      <p class="question-hint" data-i18n="tmQ3Hint">¿Moviste el stop? ¿Te quedaste mirando la pantalla esperando que vuelva? ¿Dijiste "ya va a subir"?</p>
+      <div class="scale-row">
+        <span class="scale-label" data-i18n="tmNever">Nunca</span>
+        <div class="scale-buttons">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+        </div>
+        <span class="scale-label" data-i18n="tmAlways">Siempre</span>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-card" data-q="4">
+      <p class="question-number" data-i18n="tmQ4Label">PREGUNTA 4 / 5</p>
+      <p class="question-text" data-i18n="tmQ4">"Me afecta ver operaciones rojas."</p>
+      <p class="question-hint" data-i18n="tmQ4Hint">¿Sientes un nudo en el estómago cuando ves el número en rojo?</p>
+      <div class="scale-row">
+        <span class="scale-label" data-i18n="tmNever">Nunca</span>
+        <div class="scale-buttons">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+        </div>
+        <span class="scale-label" data-i18n="tmAlways">Siempre</span>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-card" data-q="5">
+      <p class="question-number" data-i18n="tmQ5Label">PREGUNTA 5 / 5</p>
+      <p class="question-text" data-i18n="tmQ5">"Me saboteo cuando las cosas no salen como quiero."</p>
+      <p class="question-hint" data-i18n="tmQ5Hint">Después de una pérdida, ¿tomas decisiones que sabes que están mal… pero las haces igual?</p>
+      <div class="scale-row">
+        <span class="scale-label" data-i18n="tmNever">Nunca</span>
+        <div class="scale-buttons">
+          <button class="scale-btn" data-value="1">1</button>
+          <button class="scale-btn" data-value="2">2</button>
+          <button class="scale-btn" data-value="3">3</button>
+          <button class="scale-btn" data-value="4">4</button>
+          <button class="scale-btn" data-value="5">5</button>
+        </div>
+        <span class="scale-label" data-i18n="tmAlways">Siempre</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="btn btn-primary btn-lg" id="submit-test" disabled data-i18n="tmSubmit">Ver mi resultado</button>
+    <p class="text-muted mt-1" id="progress-text" data-i18n="tmProgress" style="font-size:0.85rem">Responde las 5 preguntas para continuar</p>
+  </div>
+
+  <!-- Results (hidden initially) -->
+  <div id="results-panel" class="hidden"></div>
+
+</main>
+
+<script src="../../js/i18n.js"></script>
+<script src="../../js/auth.js"></script>
+<script>
+/* ═══ Test Mental — Tool Logic ═══ */
+(() => {
+  // ── i18n for this tool page ───────────
+  const toolI18n = {
+    es: {
+      tmBack: "Volver al inicio",
+      tmModule: "MÓDULO 1",
+      tmTitle: "Test Mental de Arranque",
+      tmSubtitle: "Evalúa honestamente cada afirmación del 1 al 5. Nadie más va a ver tus resultados. Si te mientes aquí, el único que pierde eres tú.",
+      tmScaleTitle: "📏 Escala de puntuación",
+      tmScaleDesc: '<strong>1</strong> = Nunca me pasa &nbsp; · &nbsp; <strong>5</strong> = Me pasa todo el tiempo',
+      tmQ: "PREGUNTA 1 / 5",
+      tmQ1: '"Me frustro rápido cuando el trade no sale bien."',
+      tmQ1Hint: "Piensa en tu última semana de trading. ¿Cuántas veces sentiste esa frustración inmediata?",
+      tmQ2Label: "PREGUNTA 2 / 5",
+      tmQ2: '"He operado sin plan solo por impulso."',
+      tmQ2Hint: '¿Abriste una operación solo porque viste una vela bonita o porque alguien en un grupo dijo "compren"?',
+      tmQ3Label: "PREGUNTA 3 / 5",
+      tmQ3: '"Me cuesta aceptar una pérdida."',
+      tmQ3Hint: '¿Moviste el stop? ¿Te quedaste mirando la pantalla esperando que vuelva? ¿Dijiste "ya va a subir"?',
+      tmQ4Label: "PREGUNTA 4 / 5",
+      tmQ4: '"Me afecta ver operaciones rojas."',
+      tmQ4Hint: "¿Sientes un nudo en el estómago cuando ves el número en rojo?",
+      tmQ5Label: "PREGUNTA 5 / 5",
+      tmQ5: '"Me saboteo cuando las cosas no salen como quiero."',
+      tmQ5Hint: "Después de una pérdida, ¿tomas decisiones que sabes que están mal… pero las haces igual?",
+      tmNever: "Nunca",
+      tmAlways: "Siempre",
+      tmSubmit: "Ver mi resultado",
+      tmProgress: "Responde las 5 preguntas para continuar",
+      tmProgressDone: "¡Listo! Pulsa el botón.",
+      tmZoneGreen: "🟢 Base Sólida",
+      tmZoneYellow: "🟡 Zona de Alerta",
+      tmZoneRed: "🔴 Señal Clara",
+      tmMsgGreen: "Vas bien. Tienes una base emocional sólida, pero siempre hay espacio para mejorar. Los siguientes módulos te darán herramientas para afinar ese control.",
+      tmMsgYellow: "Tus emociones están influyendo más de lo que crees en tus operaciones. No estás solo en esto — la mayoría de los traders pasan por aquí. Los módulos 2 y 3 van a cambiar tu juego.",
+      tmMsgRed: "No te asustes. Esto es una señal clara de que necesitas trabajar tu psicología de trading. Y eso es exactamente lo que vamos a hacer en los siguientes módulos. El primer paso ya lo diste.",
+      tmResTitle: "Tu puntaje total",
+      tmResDe: "de",
+      tmResQ1Short: "Frustración",
+      tmResQ2Short: "Impulso",
+      tmResQ3Short: "Aceptar pérdida",
+      tmResQ4Short: "Ops. rojas",
+      tmResQ5Short: "Autosabotaje",
+      tmRetake: "🔄 Repetir test",
+      tmDownload: "📥 Descargar resultado",
+      tmContinue: "Continuar al Módulo 2 →",
+      tmCta: "🔥 Quiero el curso completo"
+    },
+    en: {
+      tmBack: "Back to home",
+      tmModule: "MODULE 1",
+      tmTitle: "Startup Mental Test",
+      tmSubtitle: "Honestly rate each statement from 1 to 5. No one else will see your results. If you lie to yourself here, the only one who loses is you.",
+      tmScaleTitle: "📏 Scoring scale",
+      tmScaleDesc: '<strong>1</strong> = Never happens &nbsp; · &nbsp; <strong>5</strong> = Happens all the time',
+      tmQ: "QUESTION 1 / 5",
+      tmQ1: '"I get frustrated quickly when a trade doesn\'t go well."',
+      tmQ1Hint: "Think about your last week of trading. How many times did you feel that immediate frustration?",
+      tmQ2Label: "QUESTION 2 / 5",
+      tmQ2: '"I\'ve traded without a plan just on impulse."',
+      tmQ2Hint: 'Did you open a trade just because you saw a nice candle or someone in a group said "buy"?',
+      tmQ3Label: "QUESTION 3 / 5",
+      tmQ3: '"I find it hard to accept a loss."',
+      tmQ3Hint: 'Did you move your stop? Did you stare at the screen waiting for it to come back? Did you say "it\'ll go up"?',
+      tmQ4Label: "QUESTION 4 / 5",
+      tmQ4: '"Seeing red trades affects me emotionally."',
+      tmQ4Hint: "Do you feel a knot in your stomach when you see the number in red?",
+      tmQ5Label: "QUESTION 5 / 5",
+      tmQ5: '"I self-sabotage when things don\'t go my way."',
+      tmQ5Hint: "After a loss, do you make decisions you know are wrong… but do them anyway?",
+      tmNever: "Never",
+      tmAlways: "Always",
+      tmSubmit: "See my result",
+      tmProgress: "Answer all 5 questions to continue",
+      tmProgressDone: "Ready! Press the button.",
+      tmZoneGreen: "🟢 Solid Base",
+      tmZoneYellow: "🟡 Alert Zone",
+      tmZoneRed: "🔴 Clear Signal",
+      tmMsgGreen: "You're doing well. You have a solid emotional base, but there's always room to improve. The next modules will give you tools to fine-tune that control.",
+      tmMsgYellow: "Your emotions are influencing your trades more than you think. You're not alone — most traders go through this. Modules 2 and 3 will change your game.",
+      tmMsgRed: "Don't panic. This is a clear signal that you need to work on your trading psychology. And that's exactly what we're going to do in the next modules. You already took the first step.",
+      tmResTitle: "Your total score",
+      tmResDe: "of",
+      tmResQ1Short: "Frustration",
+      tmResQ2Short: "Impulse",
+      tmResQ3Short: "Accept loss",
+      tmResQ4Short: "Red trades",
+      tmResQ5Short: "Self-sabotage",
+      tmRetake: "🔄 Retake test",
+      tmDownload: "📥 Download result",
+      tmContinue: "Continue to Module 2 →",
+      tmCta: "🔥 I want the full course"
+    }
+  };
+
+  // Merge with global i18n
+  if (typeof i18n !== 'undefined') {
+    Object.keys(toolI18n).forEach(lang => {
+      if (!i18n[lang]) i18n[lang] = {};
+      Object.assign(i18n[lang], toolI18n[lang]);
+    });
+  }
+
+  // ── Language System ─────────────────────
+  let currentLang = localStorage.getItem("pt_lang") || "es";
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("pt_lang", lang);
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const text = i18n[lang]?.[key];
+      if (text) el.innerHTML = text;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      const text = i18n[lang]?.[key];
+      if (text) el.placeholder = text;
+    });
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+  }
+
+  setLang(currentLang);
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+
+  // ── Test Logic ──────────────────────────
+  const answers = {};
+  const TOTAL_Q = 5;
+  const submitBtn = document.getElementById("submit-test");
+  const progressText = document.getElementById("progress-text");
+  const resultsPanel = document.getElementById("results-panel");
+
+  // Handle scale button clicks
+  document.querySelectorAll(".question-card").forEach(card => {
+    const q = card.dataset.q;
+    card.querySelectorAll(".scale-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        // Deselect siblings
+        card.querySelectorAll(".scale-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        card.classList.add("answered");
+        answers[q] = parseInt(btn.dataset.value);
+        updateProgress();
+      });
+    });
+  });
+
+  function updateProgress() {
+    const count = Object.keys(answers).length;
+    const t = i18n[currentLang];
+    if (count >= TOTAL_Q) {
+      submitBtn.disabled = false;
+      progressText.textContent = t.tmProgressDone;
+    } else {
+      submitBtn.disabled = true;
+      progressText.textContent = t.tmProgress;
+    }
+  }
+
+  // Submit
+  submitBtn.addEventListener("click", () => {
+    if (Object.keys(answers).length < TOTAL_Q) return;
+    showResults();
+  });
+
+  function showResults() {
+    const t = i18n[currentLang];
+    const total = Object.values(answers).reduce((a, b) => a + b, 0);
+    const pct = Math.round((total / 25) * 100);
+
+    let zone, message, color;
+    if (total < 10) {
+      zone = t.tmZoneGreen;
+      message = t.tmMsgGreen;
+      color = "var(--mint)";
+    } else if (total <= 20) {
+      zone = t.tmZoneYellow;
+      message = t.tmMsgYellow;
+      color = "var(--gold)";
+    } else {
+      zone = t.tmZoneRed;
+      message = t.tmMsgRed;
+      color = "var(--red)";
+    }
+
+    const shortLabels = [t.tmResQ1Short, t.tmResQ2Short, t.tmResQ3Short, t.tmResQ4Short, t.tmResQ5Short];
+    const barColors = ["#00e5ff", "#2668ff", "#a855f7", "#ff8a3a", "#ff4d6a"];
+
+    let barsHtml = '';
+    for (let i = 1; i <= TOTAL_Q; i++) {
+      const val = answers[i];
+      const w = (val / 5) * 100;
+      barsHtml += `
+        <div class="bar-row">
+          <span class="bar-label">${shortLabels[i - 1]}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:0%;background:${barColors[i - 1]}" data-width="${w}%"></div></div>
+          <span class="bar-value" style="color:${barColors[i - 1]}">${val}</span>
+        </div>`;
+    }
+
+    resultsPanel.innerHTML = `
+      <div class="results-panel">
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem">${t.tmResTitle}</p>
+        <div class="score-circle" style="--score-color:${color};--score-pct:${pct}%">
+          <div>
+            <span class="score-value" style="color:${color}">${total}</span>
+            <span class="score-max">/ 25</span>
+          </div>
+        </div>
+        <p class="result-zone" style="color:${color}">${zone}</p>
+        <p class="result-message">${message}</p>
+        <div class="result-bars">${barsHtml}</div>
+        <div class="result-actions">
+          <button class="btn-download" id="retake-btn">${t.tmRetake}</button>
+          <button class="btn-download" id="download-btn">${t.tmDownload}</button>
+        </div>
+        <div style="margin-top:2rem">
+          <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" rel="noopener" class="btn btn-primary">${t.tmCta}</a>
+        </div>
+      </div>`;
+
+    resultsPanel.classList.remove("hidden");
+
+    // Animate bars
+    setTimeout(() => {
+      resultsPanel.querySelectorAll(".bar-fill").forEach(bar => {
+        bar.style.width = bar.dataset.width;
+      });
+    }, 100);
+
+    // Scroll to results
+    resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Hide questions
+    document.getElementById("questions-container").style.display = "none";
+    document.querySelector(".submit-area").style.display = "none";
+    document.querySelector(".instructions").style.display = "none";
+
+    // Retake
+    document.getElementById("retake-btn")?.addEventListener("click", retake);
+    // Download
+    document.getElementById("download-btn")?.addEventListener("click", downloadResult);
+  }
+
+  function retake() {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    document.querySelectorAll(".scale-btn").forEach(b => b.classList.remove("selected"));
+    document.querySelectorAll(".question-card").forEach(c => c.classList.remove("answered"));
+    resultsPanel.classList.add("hidden");
+    resultsPanel.innerHTML = "";
+    document.getElementById("questions-container").style.display = "";
+    document.querySelector(".submit-area").style.display = "";
+    document.querySelector(".instructions").style.display = "";
+    submitBtn.disabled = true;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function downloadResult() {
+    const t = i18n[currentLang];
+    const total = Object.values(answers).reduce((a, b) => a + b, 0);
+    const labels = [t.tmResQ1Short, t.tmResQ2Short, t.tmResQ3Short, t.tmResQ4Short, t.tmResQ5Short];
+    const questions = [
+      i18n[currentLang].tmQ1,
+      i18n[currentLang].tmQ2,
+      i18n[currentLang].tmQ3,
+      i18n[currentLang].tmQ4,
+      i18n[currentLang].tmQ5
+    ];
+
+    let zone;
+    if (total < 10) zone = t.tmZoneGreen;
+    else if (total <= 20) zone = t.tmZoneYellow;
+    else zone = t.tmZoneRed;
+
+    let text = `═══════════════════════════════════════\n`;
+    text += `  P'TRADERS — ${t.tmTitle}\n`;
+    text += `  ${new Date().toLocaleDateString()}\n`;
+    text += `═══════════════════════════════════════\n\n`;
+
+    for (let i = 1; i <= TOTAL_Q; i++) {
+      text += `${labels[i - 1]}: ${answers[i]}/5\n`;
+      text += `  ${questions[i - 1].replace(/"/g, '')}\n\n`;
+    }
+
+    text += `───────────────────────────────────────\n`;
+    text += `TOTAL: ${total}/25  →  ${zone.replace(/[🟢🟡🔴]\s?/, '')}\n`;
+    text += `───────────────────────────────────────\n\n`;
+
+    if (total < 10) text += t.tmMsgGreen;
+    else if (total <= 20) text += t.tmMsgYellow;
+    else text += t.tmMsgRed;
+
+    text += `\n\n— P'Traders | www.paratrades.com\n`;
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `test-mental-ptraders-${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+})();
+</script>
+
+</body>
+</html>
