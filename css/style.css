@@ -229,7 +229,7 @@ button { font-family: inherit; cursor: pointer; }
 .tool-card {
   background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius);
   padding: 1.6rem; position: relative; overflow: hidden; transition: all var(--duration) var(--ease-out);
-  display: flex; gap: 1rem; align-items: flex-start;
+  display: flex; gap: 1rem; align-items: flex-start; cursor: pointer;
 }
 .tool-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--grad-accent); opacity: 0; transition: opacity var(--duration); }
 .tool-card:hover::before { opacity: 1; }

@@ -107,7 +107,7 @@
 
     /* ── Results ─────────────────────────── */
     .results-card { background: var(--glass); border: 1px solid transparent; border-image: linear-gradient(135deg, var(--accent), var(--emerald, #34d399), var(--amber)) 1; border-radius: var(--radius); padding: 2.5rem 2rem; text-align: center; animation: fadeInUp 0.6s ease both; position: relative; overflow: hidden; }
-    .results-card::before { content: ""; position: absolute; inset: -1px; border-radius: var(--radius); padding: 2px; background: linear-gradient(135deg, var(--accent), var(--emerald, #34d399), var(--amber)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+    .results-card::before { content: ""; position: absolute; inset: -1px; border-radius: var(--radius); padding: 2px; background: linear-gradient(135deg, var(--accent), var(--emerald, #34d399), var(--amber)); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; -webkit-mask-composite: xor; pointer-events: none; }
     .results-icon { font-size: 3.5rem; margin-bottom: 1rem; }
     .results-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
     .results-subtitle { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
