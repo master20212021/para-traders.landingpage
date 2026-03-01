@@ -386,15 +386,12 @@
     const closeBtn = document.getElementById("app-toast-close");
     if (!toast || !closeBtn) return;
 
-    // Don't show if user already dismissed this session
-    if (sessionStorage.getItem("appToastDismissed")) return;
-
     const FIRST_DELAY = 12000;   // 12s after page load
     const VISIBLE_TIME = 10000;  // stay visible 10s
-    const INTERVAL = 50000;      // re-appear every 50s
+    const INTERVAL = 45000;      // re-appear every 45s
+    const AFTER_CLOSE = 60000;   // re-appear 60s after user closes it
 
     let timer = null;
-    let dismissed = false;
 
     function isAppSectionVisible() {
       const appSection = document.getElementById("app");
@@ -404,7 +401,6 @@
     }
 
     function showToast() {
-      if (dismissed) return;
       // Skip if user is already viewing the app section
       if (isAppSectionVisible()) {
         timer = setTimeout(showToast, 8000);
@@ -420,32 +416,30 @@
       toast.classList.add("hiding");
       toast.classList.remove("visible");
       // Schedule next appearance
-      if (!dismissed) {
-        timer = setTimeout(showToast, INTERVAL);
-      }
+      timer = setTimeout(showToast, INTERVAL);
     }
 
     closeBtn.addEventListener("click", () => {
-      dismissed = true;
       clearTimeout(timer);
       toast.classList.add("hiding");
       toast.classList.remove("visible");
-      sessionStorage.setItem("appToastDismissed", "1");
+      // Come back after a longer delay when manually closed
+      timer = setTimeout(showToast, AFTER_CLOSE);
     });
 
     // Scroll to app section on store button click
     toast.querySelectorAll(".app-toast-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        dismissed = true;
         clearTimeout(timer);
         toast.classList.add("hiding");
         toast.classList.remove("visible");
-        sessionStorage.setItem("appToastDismissed", "1");
         const appSection = document.getElementById("app");
         if (appSection) {
           appSection.scrollIntoView({ behavior: "smooth", block: "start" });
         }
+        // Still come back later
+        timer = setTimeout(showToast, AFTER_CLOSE);
       });
     });
 
