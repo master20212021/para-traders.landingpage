@@ -193,7 +193,7 @@ button { font-family: inherit; cursor: pointer; }
 .outcome-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
 
 /* ── About ─────────────────────────────────────────────── */
-.about-grid { display: grid; grid-template-columns: 1fr 280px; gap: 3.5rem; align-items: center; }
+.about-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 .about-photo-wrapper { position: relative; }
 .about-photo { width: 220px; height: 220px; border-radius: 20px; object-fit: cover; border: 2px solid rgba(var(--accent-rgb), 0.2); box-shadow: 0 20px 60px rgba(0,0,0,0.4); position: relative; z-index: 1; }
 .about-photo-glow { position: absolute; inset: -20px; background: radial-gradient(circle, rgba(var(--accent-rgb), 0.15), transparent 70%); border-radius: 30px; z-index: 0; }
