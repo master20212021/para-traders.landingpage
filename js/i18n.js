@@ -111,7 +111,7 @@ const i18n = {
     app_feat_3: "11 Herramientas Integradas",
     app_feat_4: "Notificaciones Inteligentes",
     app_available: "Próximamente en",
-    app_soon: "Lanzamiento muy pronto — Disponible por suscripción",
+    app_soon: "Lanzamiento muy pronto",
 
     // FAQ
     faq_tag: "FAQ",
@@ -282,7 +282,7 @@ const i18n = {
     app_feat_3: "11 Integrated Tools",
     app_feat_4: "Smart Notifications",
     app_available: "Coming soon to",
-    app_soon: "Launching very soon — Available by subscription",
+    app_soon: "Launching very soon",
 
     // FAQ
     faq_tag: "FAQ",
