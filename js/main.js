@@ -22,6 +22,7 @@
     initDemoButton();
     initMobileMenu();
     handleReturnScroll();
+    initAppToast();
   });
 
   // ═══ PARTICLE CANVAS ═══════════════════════
@@ -377,5 +378,78 @@
         }, 100);
       }
     }
+  }
+
+  // ═══ FLOATING APP TOAST ════════════════════
+  function initAppToast() {
+    const toast = document.getElementById("app-toast");
+    const closeBtn = document.getElementById("app-toast-close");
+    if (!toast || !closeBtn) return;
+
+    // Don't show if user already dismissed this session
+    if (sessionStorage.getItem("appToastDismissed")) return;
+
+    const FIRST_DELAY = 12000;   // 12s after page load
+    const VISIBLE_TIME = 10000;  // stay visible 10s
+    const INTERVAL = 50000;      // re-appear every 50s
+
+    let timer = null;
+    let dismissed = false;
+
+    function isAppSectionVisible() {
+      const appSection = document.getElementById("app");
+      if (!appSection) return false;
+      const rect = appSection.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    }
+
+    function showToast() {
+      if (dismissed) return;
+      // Skip if user is already viewing the app section
+      if (isAppSectionVisible()) {
+        timer = setTimeout(showToast, 8000);
+        return;
+      }
+      toast.classList.remove("hiding");
+      toast.classList.add("visible");
+      // Auto-hide after visible time
+      timer = setTimeout(hideToast, VISIBLE_TIME);
+    }
+
+    function hideToast() {
+      toast.classList.add("hiding");
+      toast.classList.remove("visible");
+      // Schedule next appearance
+      if (!dismissed) {
+        timer = setTimeout(showToast, INTERVAL);
+      }
+    }
+
+    closeBtn.addEventListener("click", () => {
+      dismissed = true;
+      clearTimeout(timer);
+      toast.classList.add("hiding");
+      toast.classList.remove("visible");
+      sessionStorage.setItem("appToastDismissed", "1");
+    });
+
+    // Scroll to app section on store button click
+    toast.querySelectorAll(".app-toast-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        dismissed = true;
+        clearTimeout(timer);
+        toast.classList.add("hiding");
+        toast.classList.remove("visible");
+        sessionStorage.setItem("appToastDismissed", "1");
+        const appSection = document.getElementById("app");
+        if (appSection) {
+          appSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    // First show
+    timer = setTimeout(showToast, FIRST_DELAY);
   }
 })();

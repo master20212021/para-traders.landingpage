@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=2.7" />
+  <link rel="stylesheet" href="css/style.css?v=2.8" />
 </head>
 <body>
 
@@ -672,9 +672,30 @@
     </div>
   </div>
 
+  <!-- ═══ FLOATING APP TOAST ═══ -->
+  <div class="app-toast" id="app-toast">
+    <button class="app-toast-close" id="app-toast-close" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+    <div class="app-toast-icon">
+      <i class="fa-solid fa-mobile-screen-button"></i>
+    </div>
+    <div class="app-toast-body">
+      <span class="app-toast-badge" data-i18n="toast_badge">PRÓXIMAMENTE</span>
+      <p class="app-toast-title" data-i18n="toast_title">Descarga nuestra App</p>
+      <p class="app-toast-sub" data-i18n="toast_sub">Todas las herramientas en un solo lugar</p>
+      <div class="app-toast-buttons">
+        <a href="#" class="app-toast-btn" id="toast-appstore">
+          <i class="fa-brands fa-apple"></i> App Store
+        </a>
+        <a href="#" class="app-toast-btn" id="toast-playstore">
+          <i class="fa-brands fa-google-play"></i> Google Play
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
-  <script src="js/auth.js?v=2.7"></script>
-  <script src="js/i18n.js?v=2.7"></script>
-  <script src="js/main.js?v=2.7"></script>
+  <script src="js/auth.js?v=2.8"></script>
+  <script src="js/i18n.js?v=2.8"></script>
+  <script src="js/main.js?v=2.8"></script>
 </body>
 </html>

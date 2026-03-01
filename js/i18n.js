@@ -113,6 +113,11 @@ const i18n = {
     app_available: "Próximamente en",
     app_soon: "Lanzamiento muy pronto",
 
+    // App Toast
+    toast_badge: "PRÓXIMAMENTE",
+    toast_title: "Descarga nuestra App",
+    toast_sub: "Todas las herramientas en un solo lugar",
+
     // FAQ
     faq_tag: "FAQ",
     faq_title: "Preguntas Frecuentes",
@@ -283,6 +288,11 @@ const i18n = {
     app_feat_4: "Smart Notifications",
     app_available: "Coming soon to",
     app_soon: "Launching very soon",
+
+    // App Toast
+    toast_badge: "COMING SOON",
+    toast_title: "Download our App",
+    toast_sub: "All your tools in one place",
 
     // FAQ
     faq_tag: "FAQ",
