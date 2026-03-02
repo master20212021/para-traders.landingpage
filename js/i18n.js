@@ -40,7 +40,7 @@ const i18n = {
 
     // About
     about_tag: "TU INSTRUCTOR",
-    about_title: "Creado por un trader activo, para traders reales",
+    about_title: "De trader a trader",
     about_p1: 'Este curso nació de <strong>años de experiencia</strong> operando mercados reales — cometiendo errores, descubriendo patrones emocionales y desarrollando sistemas para manejarlos.',
     about_p2: 'Cada herramienta, cada módulo, cada ejercicio viene de la <strong>trinchera real del trading</strong>. No es teoría de libro: es el sistema que uso cada día antes de abrir una operación.',
     about_quote: '"El 80% del trading es psicología. Este curso es el 80% que nadie te enseña."',
@@ -216,7 +216,7 @@ const i18n = {
 
     // About
     about_tag: "YOUR INSTRUCTOR",
-    about_title: "Created by an active trader, for real traders",
+    about_title: "From trader to trader",
     about_p1: 'This course was born from <strong>years of experience</strong> trading real markets — making mistakes, discovering emotional patterns, and developing systems to manage them.',
     about_p2: 'Every tool, every module, every exercise comes from the <strong>real trading trenches</strong>. It\'s not textbook theory: it\'s the system I use every day before opening a trade.',
     about_quote: '"80% of trading is psychology. This course is the 80% nobody teaches you."',
