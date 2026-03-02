@@ -274,10 +274,19 @@
 
     if (!overlay) return;
 
-    submit.addEventListener("click", () => {
+    submit.addEventListener("click", async () => {
       const code = input.value.trim();
       if (!code) return;
-      if (Auth.unlock(code)) {
+
+      // Show validating state
+      submit.disabled = true;
+      error.textContent = i18n[currentLang]?.modal_validating || "Validando...";
+      error.style.color = "var(--muted)";
+
+      const result = await Auth.unlock(code);
+      submit.disabled = false;
+
+      if (result) {
         input.classList.remove("error");
         input.classList.add("success");
         error.textContent = i18n[currentLang]?.modal_success || "¡Acceso concedido!";

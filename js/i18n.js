@@ -176,6 +176,7 @@ const i18n = {
     modal_submit: "Desbloquear",
     modal_cancel: "Cancelar",
     modal_error: "Código incorrecto. Inténtalo de nuevo.",
+    modal_validating: "Validando código...",
     modal_success: "¡Acceso concedido!",
   },
 
@@ -352,6 +353,7 @@ const i18n = {
     modal_submit: "Unlock",
     modal_cancel: "Cancel",
     modal_error: "Incorrect code. Try again.",
+    modal_validating: "Validating code...",
     modal_success: "Access granted!",
   }
 };
