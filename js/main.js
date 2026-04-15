@@ -337,8 +337,9 @@
   function initDemoButton() {
     const btn = document.getElementById("btn-demo");
     if (!btn) return;
-    btn.addEventListener("click", () => {
-      document.getElementById("roadmap")?.scrollIntoView({ behavior: "smooth" });
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
     });
   }
 
@@ -455,17 +456,12 @@
       timer = setTimeout(showToast, AFTER_CLOSE);
     });
 
-    // Scroll to app section on store button click
+    // Open app on store button click
     toast.querySelectorAll(".app-toast-btn").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
+      btn.addEventListener("click", () => {
         clearTimeout(timer);
         toast.classList.add("hiding");
         toast.classList.remove("visible");
-        const appSection = document.getElementById("app");
-        if (appSection) {
-          appSection.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
         // Still come back later
         timer = setTimeout(showToast, AFTER_CLOSE);
       });

@@ -5,31 +5,77 @@
 const i18n = {
   es: {
     // Nav
-    nav_outcomes: "Qué Lograrás",
-    nav_roadmap: "Programa",
-    nav_tools: "Herramientas",
+    nav_products: "Productos",
+    nav_app: "La App",
+    nav_roadmap: "El Curso",
     nav_testimonials: "Testimonios",
     nav_faq: "FAQ",
-    nav_cta: "Inscribirme",
+    nav_cta: "Abrir App",
 
     // Hero
-    hero_badge: "Inscripciones Abiertas — Acceso Inmediato",
-    hero_title_1: "Domina tu ",
-    hero_title_hl: "Mentalidad",
-    hero_title_2: "y Opera con Confianza",
-    hero_subtitle: "El curso de psicología del trading que transforma traders emocionales en operadores disciplinados. 6 módulos, 11 herramientas interactivas y una comunidad que te acompaña.",
-    hero_cta_primary: "Quiero Transformar mi Trading",
-    hero_cta_secondary: "Ver Programa",
+    hero_badge: "App Disponible + Curso con Acceso Inmediato",
+    hero_title_1: "Tu Ecosistema de ",
+    hero_title_hl: "Psicología",
+    hero_title_2: "del Trading",
+    hero_subtitle: "App con inteligencia artificial para analizar emociones y gráficos en tiempo real + Curso completo de 6 módulos con 11 herramientas interactivas. Todo lo que necesitas para operar con disciplina.",
+    hero_cta_primary: "Explorar la App",
+    hero_cta_secondary: "Ver Productos",
 
     // Stats
-    stat_1: "en la Comunidad",
-    stat_2: "Módulos Estructurados",
-    stat_3: "Herramientas Interactivas",
+    stat_1: "Traders en la Comunidad",
+    stat_2: "Módulos del Curso",
+    stat_3: "Herramientas IA",
     stat_4: "Acceso 24/7",
 
+    // Products
+    products_tag: "DOS PRODUCTOS, UN ECOSISTEMA",
+    products_title: "Elige tu camino o combina ambos",
+    products_desc: "La app te da herramientas de IA en tiempo real. El curso te da el conocimiento profundo. Juntos, son imbatibles.",
+    product_app_badge: "PLATAFORMA IA",
+    product_app_name: "La App",
+    product_app_tagline: "Inteligencia artificial al servicio de tu operativa",
+    product_app_f1: "Analizador de emociones con IA",
+    product_app_f2: "Analizador de gráficos con IA",
+    product_app_f3: "Predicciones de mercado",
+    product_app_f4: "Diario de trading inteligente",
+    product_app_f5: "Checklist pre-mercado",
+    product_app_f6: "Planes desde gratis",
+    product_app_cta: "Abrir la App Gratis",
+    product_course_badge: "CURSO COMPLETO",
+    product_course_name: "El Curso",
+    product_course_tagline: "Conocimiento profundo para transformar tu mentalidad",
+    product_course_f1: "6 módulos en video",
+    product_course_f2: "11 herramientas interactivas",
+    product_course_f3: "Comunidad de traders",
+    product_course_f4: "Material descargable",
+    product_course_f5: "Actualizaciones de por vida",
+    product_course_f6: "Acceso a las 11 herramientas web",
+    product_course_cta: "Inscribirme al Curso",
+
+    // App Features
+    appfeat_tag: "LA APP — INTELIGENCIA ARTIFICIAL",
+    appfeat_title: "Tu copiloto de trading con IA",
+    appfeat_desc: "Accede desde cualquier dispositivo. Analiza tus emociones, gráficos y predicciones de mercado en tiempo real.",
+    appfeat_1_title: "Analizador de Emociones IA",
+    appfeat_1_desc: "Describe cómo te sientes y la IA te da un diagnóstico emocional completo con recomendaciones para operar.",
+    appfeat_2_title: "Analizador de Gráficos IA",
+    appfeat_2_desc: "Sube una captura de tu gráfico y recibe análisis técnico con soportes, resistencias y posibles entradas.",
+    appfeat_3_title: "Predicciones de Mercado",
+    appfeat_3_desc: "Predicciones actualizadas para los principales pares y activos, generadas por IA.",
+    appfeat_4_title: "Checklist & Diario de Trading",
+    appfeat_4_desc: "Rutina pre-mercado inteligente y diario emocional integrado para seguir tu evolución.",
+    appfeat_5_title: "Gamificación & Logros",
+    appfeat_5_desc: "Gana XP, desbloquea logros y mantén la motivación mientras desarrollas disciplina real.",
+    appfeat_6_title: "Coaching & Respiración",
+    appfeat_6_desc: "Coaching personalizado con IA y técnicas de respiración guiada para resetear antes de operar.",
+    appfeat_cta: "Probar la App Gratis",
+
+    // Divider
+    divider_course: '<i class="fa-solid fa-graduation-cap"></i> EL CURSO',
+
     // Outcomes
-    outcomes_tag: "RESULTADOS",
-    outcomes_title: "¿Qué vas a lograr con este curso?",
+    outcomes_tag: "RESULTADOS DEL CURSO",
+    outcomes_title: "¿Qué vas a lograr con el curso?",
     outcomes_desc: "No es solo teoría. Es un sistema probado con herramientas prácticas que vas a usar cada día de operativa.",
     outcome_1_title: "Domina tus Emociones",
     outcome_1_desc: "Identifica miedo, codicia y frustración antes de que saboteen tu operativa. Herramientas de autodiagnóstico en tiempo real.",
@@ -69,7 +115,7 @@ const i18n = {
     mod6_desc: "Consolida todo lo aprendido. Firma tu contrato personal y únete a la comunidad de traders transformados.",
 
     // Tools
-    tools_tag: "HERRAMIENTAS",
+    tools_tag: "HERRAMIENTAS DEL CURSO",
     tools_title: "11 herramientas interactivas incluidas",
     tools_desc: "No son PDFs aburridos. Son herramientas web interactivas que usarás antes, durante y después de cada sesión de trading.",
     tool_mod1: "MÓDULO 1",
@@ -102,35 +148,36 @@ const i18n = {
     tool_11_desc: "Formaliza tu compromiso contigo mismo. Tu manifiesto personal de trader disciplinado.",
     tool_locked: "Requiere acceso",
 
-    // App
-    app_tag: "NUEVA APP",
+    // App Section
+    app_tag: "DESCARGA LA APP",
     app_title: "Todas tus herramientas en el bolsillo",
-    app_desc: "Analizador de emociones con IA, analizador de gráficos, checklist pre-mercado, diario emocional y las 11 herramientas del curso — todo comprimido en una sola app. Aumenta tu productividad y acierto operando desde cualquier lugar.",
+    app_desc: "Analizador de emociones con IA, analizador de gráficos, checklist pre-mercado, diario emocional y mucho más — todo en una sola plataforma. Regístrate gratis y empieza a operar con disciplina.",
     app_feat_1: "Analizador de Emociones IA",
     app_feat_2: "Analizador de Gráficos IA",
-    app_feat_3: "11 Herramientas Integradas",
-    app_feat_4: "Notificaciones Inteligentes",
+    app_feat_3: "Herramientas Integradas",
+    app_feat_4: "Predicciones de Mercado",
+    app_open: "Abrir la App",
     app_available: "Próximamente en",
-    app_soon: "Lanzamiento muy pronto",
 
     // App Toast
-    toast_badge: "PRÓXIMAMENTE",
-    toast_title: "Descarga nuestra App",
-    toast_sub: "Todas las herramientas en un solo lugar",
+    toast_badge: "DISPONIBLE AHORA",
+    toast_title: "Prueba la App con IA",
+    toast_sub: "Analizador de emociones y gráficos gratis",
+    toast_open: "Abrir App",
 
     // FAQ
     faq_tag: "FAQ",
     faq_title: "Preguntas Frecuentes",
-    faq_q1: "¿Necesito experiencia previa en trading?",
-    faq_a1: "No. El curso está diseñado tanto para principiantes como para traders con experiencia. Si operas o planeas operar, este curso te dará las bases psicológicas que necesitas desde el primer día.",
-    faq_q2: "¿Qué incluye exactamente el curso?",
-    faq_a2: "6 módulos en video, 11 herramientas interactivas web exclusivas, acceso a la comunidad de traders, material descargable y actualizaciones futuras incluidas.",
-    faq_q3: "¿Las herramientas son descargables o están online?",
-    faq_a3: "Son aplicaciones web interactivas que funcionan desde tu navegador en cualquier dispositivo. Accedes con tu código personal y puedes usarlas en tu computadora, tablet o celular. Algunas permiten descargar resultados en formato texto.",
-    faq_q4: "¿Cuánto tiempo tengo acceso al curso?",
-    faq_a4: "Acceso de por vida. Una vez inscrito, puedes revisar el material y usar las herramientas cuando quieras, sin límite de tiempo. Además, recibirás todas las actualizaciones futuras sin costo adicional.",
-    faq_q5: "¿El curso enseña estrategias de trading técnico?",
-    faq_a5: "No directamente. Este curso se enfoca 100% en la psicología del trading — el aspecto que representa el 80% de tu éxito. Es el complemento perfecto para cualquier estrategia técnica que ya uses o estés aprendiendo.",
+    faq_q1: "¿Cuál es la diferencia entre la App y el Curso?",
+    faq_a1: "La App es una plataforma web con inteligencia artificial para analizar tus emociones y gráficos en tiempo real. El Curso es un programa de 6 módulos en video con 11 herramientas interactivas para aprender psicología del trading de forma profunda. Son complementarios: la app es tu herramienta diaria, el curso es tu formación completa.",
+    faq_q2: "¿La App es gratis?",
+    faq_a2: "Sí. La App tiene un plan gratuito (Beginner) con análisis limitados por día. Si necesitas más análisis y funciones avanzadas, puedes suscribirte a los planes Professional o Elite desde la app.",
+    faq_q3: "¿Necesito experiencia previa en trading?",
+    faq_a3: "No. Tanto la app como el curso están diseñados para todos los niveles. Si operas o planeas operar, te darán las bases psicológicas que necesitas desde el primer día.",
+    faq_q4: "¿Qué incluye exactamente el curso?",
+    faq_a4: "6 módulos en video, 11 herramientas interactivas web exclusivas, acceso a la comunidad de traders, material descargable y actualizaciones futuras incluidas. Acceso de por vida.",
+    faq_q5: "¿La app funciona en cualquier dispositivo?",
+    faq_a5: "Sí. Es una aplicación web (PWA) que funciona en tu navegador desde cualquier dispositivo: computadora, tablet o celular. Próximamente también en App Store y Google Play.",
 
     // Testimonials
     test_tag: "TESTIMONIOS",
@@ -144,7 +191,7 @@ const i18n = {
     test_3_quote: '"Llevo 4 años en esto y nunca había visto un curso enfocado solo en la mente. El simulador de escenarios y el diario emocional son oro puro para cualquier trader serio."',
     test_3_name: "Luis P.",
     test_3_role: "Day Trader — 4 años de experiencia",
-    test_4_quote: '"La técnica de box breathing me salvó de cerrar una operación ganadora por miedo. Solo eso ya pagó el curso. Lo recomiendo a cualquier trader, novato o experimentado."',
+    test_4_quote: '"La app con IA me ayudó a identificar que siempre opero peor los lunes por ansiedad. Ahora uso el checklist antes de cada sesión. Cambió todo."',
     test_4_name: "María V.",
     test_4_role: "Swing Trader — Criptomonedas",
 
@@ -163,11 +210,14 @@ const i18n = {
 
     // CTA
     cta_title: '¿Listo para <span class="highlight">transformar</span> tu trading?',
-    cta_desc: "Únete a más de 500 traders que ya están operando con disciplina, control emocional y confianza.",
-    cta_btn: "Comenzar Ahora",
+    cta_desc: "Más de 500 traders ya están operando con disciplina, control emocional y confianza.",
+    cta_btn_app: "Abrir la App Gratis",
+    cta_btn_course: "Inscribirme al Curso",
 
     // Footer
-    footer_legal: "© 2025 P'Traders. Todos los derechos reservados. Este sitio no es asesoría financiera. Trading implica riesgo de pérdida. Opera de forma responsable.",
+    footer_app: "Abrir la App",
+    footer_course: "El Curso",
+    footer_legal: "© 2026 P'Traders. Todos los derechos reservados. Este sitio no es asesoría financiera. Trading implica riesgo de pérdida. Opera de forma responsable.",
 
     // Modal
     modal_title: "Acceso Exclusivo",
@@ -182,31 +232,77 @@ const i18n = {
 
   en: {
     // Nav
-    nav_outcomes: "What You'll Achieve",
-    nav_roadmap: "Program",
-    nav_tools: "Tools",
+    nav_products: "Products",
+    nav_app: "The App",
+    nav_roadmap: "The Course",
     nav_testimonials: "Testimonials",
     nav_faq: "FAQ",
-    nav_cta: "Enroll Now",
+    nav_cta: "Open App",
 
     // Hero
-    hero_badge: "Enrollments Open — Instant Access",
-    hero_title_1: "Master your ",
-    hero_title_hl: "Mindset",
-    hero_title_2: "and Trade with Confidence",
-    hero_subtitle: "The trading psychology course that transforms emotional traders into disciplined operators. 6 modules, 11 interactive tools, and a community that supports you.",
-    hero_cta_primary: "Transform My Trading Now",
-    hero_cta_secondary: "See Program",
+    hero_badge: "App Available + Course with Instant Access",
+    hero_title_1: "Your ",
+    hero_title_hl: "Trading Psychology",
+    hero_title_2: "Ecosystem",
+    hero_subtitle: "AI-powered app to analyze emotions and charts in real time + Complete 6-module course with 11 interactive tools. Everything you need to trade with discipline.",
+    hero_cta_primary: "Explore the App",
+    hero_cta_secondary: "See Products",
 
     // Stats
-    stat_1: "in the Community",
-    stat_2: "Structured Modules",
-    stat_3: "Interactive Tools",
+    stat_1: "Traders in the Community",
+    stat_2: "Course Modules",
+    stat_3: "AI Tools",
     stat_4: "24/7 Access",
 
+    // Products
+    products_tag: "TWO PRODUCTS, ONE ECOSYSTEM",
+    products_title: "Choose your path or combine both",
+    products_desc: "The app gives you real-time AI tools. The course gives you deep knowledge. Together, they're unbeatable.",
+    product_app_badge: "AI PLATFORM",
+    product_app_name: "The App",
+    product_app_tagline: "Artificial intelligence at the service of your trading",
+    product_app_f1: "AI emotion analyzer",
+    product_app_f2: "AI chart analyzer",
+    product_app_f3: "Market predictions",
+    product_app_f4: "Smart trading journal",
+    product_app_f5: "Pre-market checklist",
+    product_app_f6: "Plans starting from free",
+    product_app_cta: "Open the App Free",
+    product_course_badge: "FULL COURSE",
+    product_course_name: "The Course",
+    product_course_tagline: "Deep knowledge to transform your mindset",
+    product_course_f1: "6 video modules",
+    product_course_f2: "11 interactive tools",
+    product_course_f3: "Trader community",
+    product_course_f4: "Downloadable materials",
+    product_course_f5: "Lifetime updates",
+    product_course_f6: "Access to all 11 web tools",
+    product_course_cta: "Enroll in the Course",
+
+    // App Features
+    appfeat_tag: "THE APP — ARTIFICIAL INTELLIGENCE",
+    appfeat_title: "Your AI-powered trading copilot",
+    appfeat_desc: "Access from any device. Analyze your emotions, charts, and market predictions in real time.",
+    appfeat_1_title: "AI Emotion Analyzer",
+    appfeat_1_desc: "Describe how you feel and the AI gives you a complete emotional diagnosis with trading recommendations.",
+    appfeat_2_title: "AI Chart Analyzer",
+    appfeat_2_desc: "Upload a screenshot of your chart and receive technical analysis with supports, resistances, and potential entries.",
+    appfeat_3_title: "Market Predictions",
+    appfeat_3_desc: "Updated predictions for major pairs and assets, generated by AI.",
+    appfeat_4_title: "Checklist & Trading Journal",
+    appfeat_4_desc: "Smart pre-market routine and integrated emotional journal to track your evolution.",
+    appfeat_5_title: "Gamification & Achievements",
+    appfeat_5_desc: "Earn XP, unlock achievements, and stay motivated while developing real discipline.",
+    appfeat_6_title: "Coaching & Breathing",
+    appfeat_6_desc: "Personalized AI coaching and guided breathing techniques to reset before trading.",
+    appfeat_cta: "Try the App Free",
+
+    // Divider
+    divider_course: '<i class="fa-solid fa-graduation-cap"></i> THE COURSE',
+
     // Outcomes
-    outcomes_tag: "OUTCOMES",
-    outcomes_title: "What will you achieve with this course?",
+    outcomes_tag: "COURSE OUTCOMES",
+    outcomes_title: "What will you achieve with the course?",
     outcomes_desc: "It's not just theory. It's a proven system with practical tools you'll use every trading day.",
     outcome_1_title: "Master Your Emotions",
     outcome_1_desc: "Identify fear, greed, and frustration before they sabotage your trades. Real-time self-diagnosis tools.",
@@ -246,7 +342,7 @@ const i18n = {
     mod6_desc: "Consolidate everything learned. Sign your personal contract and join the community of transformed traders.",
 
     // Tools
-    tools_tag: "TOOLS",
+    tools_tag: "COURSE TOOLS",
     tools_title: "11 interactive tools included",
     tools_desc: "Not boring PDFs. Interactive web tools you'll use before, during, and after every trading session.",
     tool_mod1: "MODULE 1",
@@ -279,35 +375,36 @@ const i18n = {
     tool_11_desc: "Formalize your commitment to yourself. Your personal manifesto as a disciplined trader.",
     tool_locked: "Access required",
 
-    // App
-    app_tag: "NEW APP",
+    // App Section
+    app_tag: "DOWNLOAD THE APP",
     app_title: "All your tools in your pocket",
-    app_desc: "AI emotion analyzer, chart analyzer, pre-market checklist, emotional journal, and all 11 course tools — compressed into a single app. Boost your productivity and accuracy by trading from anywhere.",
+    app_desc: "AI emotion analyzer, chart analyzer, pre-market checklist, emotional journal, and much more — all in one platform. Sign up free and start trading with discipline.",
     app_feat_1: "AI Emotion Analyzer",
     app_feat_2: "AI Chart Analyzer",
-    app_feat_3: "11 Integrated Tools",
-    app_feat_4: "Smart Notifications",
+    app_feat_3: "Integrated Tools",
+    app_feat_4: "Market Predictions",
+    app_open: "Open the App",
     app_available: "Coming soon to",
-    app_soon: "Launching very soon",
 
     // App Toast
-    toast_badge: "COMING SOON",
-    toast_title: "Download our App",
-    toast_sub: "All your tools in one place",
+    toast_badge: "AVAILABLE NOW",
+    toast_title: "Try the AI App",
+    toast_sub: "Free emotion and chart analyzer",
+    toast_open: "Open App",
 
     // FAQ
     faq_tag: "FAQ",
     faq_title: "Frequently Asked Questions",
-    faq_q1: "Do I need previous trading experience?",
-    faq_a1: "No. The course is designed for both beginners and experienced traders. If you trade or plan to trade, this course will give you the psychological foundations you need from day one.",
-    faq_q2: "What exactly does the course include?",
-    faq_a2: "6 video modules, 11 exclusive interactive web tools, access to the trader community, downloadable materials, and future updates included.",
-    faq_q3: "Are the tools downloadable or online?",
-    faq_a3: "They are interactive web applications that work from your browser on any device. You access them with your personal code and can use them on your computer, tablet, or phone. Some allow downloading results in text format.",
-    faq_q4: "How long do I have access to the course?",
-    faq_a4: "Lifetime access. Once enrolled, you can review the material and use the tools whenever you want, with no time limit. Plus, you'll receive all future updates at no additional cost.",
-    faq_q5: "Does the course teach technical trading strategies?",
-    faq_a5: "Not directly. This course focuses 100% on trading psychology — the aspect that represents 80% of your success. It's the perfect complement to any technical strategy you already use or are learning.",
+    faq_q1: "What's the difference between the App and the Course?",
+    faq_a1: "The App is a web platform with AI to analyze your emotions and charts in real time. The Course is a 6-module video program with 11 interactive tools for deep trading psychology learning. They're complementary: the app is your daily tool, the course is your complete training.",
+    faq_q2: "Is the App free?",
+    faq_a2: "Yes. The App has a free plan (Beginner) with limited daily analyses. If you need more analyses and advanced features, you can subscribe to Professional or Elite plans from within the app.",
+    faq_q3: "Do I need previous trading experience?",
+    faq_a3: "No. Both the app and course are designed for all levels. If you trade or plan to trade, they'll give you the psychological foundations you need from day one.",
+    faq_q4: "What exactly does the course include?",
+    faq_a4: "6 video modules, 11 exclusive interactive web tools, access to the trader community, downloadable materials, and future updates included. Lifetime access.",
+    faq_q5: "Does the app work on any device?",
+    faq_a5: "Yes. It's a web application (PWA) that works in your browser from any device: computer, tablet, or phone. Coming soon to App Store and Google Play.",
 
     // Testimonials
     test_tag: "TESTIMONIALS",
@@ -321,7 +418,7 @@ const i18n = {
     test_3_quote: '"I\'ve been trading for 4 years and never seen a course focused solely on the mind. The scenario simulator and emotional journal are pure gold for any serious trader."',
     test_3_name: "Luis P.",
     test_3_role: "Day Trader — 4 years experience",
-    test_4_quote: '"The box breathing technique saved me from closing a winning trade out of fear. That alone paid for the course. I recommend it to any trader, novice or experienced."',
+    test_4_quote: '"The AI app helped me identify that I always trade worse on Mondays due to anxiety. Now I use the checklist before every session. Changed everything."',
     test_4_name: "Maria V.",
     test_4_role: "Swing Trader — Crypto",
 
@@ -340,11 +437,14 @@ const i18n = {
 
     // CTA
     cta_title: 'Ready to <span class="highlight">transform</span> your trading?',
-    cta_desc: "Join over 500 traders already operating with discipline, emotional control, and confidence.",
-    cta_btn: "Start Now",
+    cta_desc: "Over 500 traders are already operating with discipline, emotional control, and confidence.",
+    cta_btn_app: "Open the App Free",
+    cta_btn_course: "Enroll in the Course",
 
     // Footer
-    footer_legal: "© 2025 P'Traders. All rights reserved. This site is not financial advice. Trading involves risk of loss. Trade responsibly.",
+    footer_app: "Open the App",
+    footer_course: "The Course",
+    footer_legal: "© 2026 P'Traders. All rights reserved. This site is not financial advice. Trading involves risk of loss. Trade responsibly.",
 
     // Modal
     modal_title: "Exclusive Access",
