@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   P'TRADERS — Main Application v4.0
+   P'TRADERS — Main Application v5.0
    Premium animations, bottom nav, particles
    ═══════════════════════════════════════════ */
 
@@ -13,8 +13,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     initParticles();
     initLanguage();
-    initTopbarScroll();
-    initScrollProgress();
+    initUnifiedScroll();
     initScrollReveal();
     initStatCounters();
     initFAQ();
@@ -137,13 +136,39 @@
     document.documentElement.lang = currentLang;
   }
 
-  // ═══ TOPBAR SCROLL ═════════════════════════
-  function initTopbarScroll() {
+  // ═══ TOPBAR SCROLL (now part of unified handler) ══
+  // Consolidated into initUnifiedScroll()
+
+  // ═══ UNIFIED SCROLL HANDLER ═════════════
+  function initUnifiedScroll() {
     const topbar = document.getElementById("topbar");
-    if (!topbar) return;
-    const check = () => topbar.classList.toggle("scrolled", window.scrollY > 60);
-    window.addEventListener("scroll", check, { passive: true });
-    check();
+    const bottomNav = document.getElementById("bottom-nav");
+    let bottomNavShown = false;
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      // Topbar scrolled state
+      if (topbar) topbar.classList.toggle("scrolled", scrollY > 60);
+      // Scroll progress bar
+      if (topbar) {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+        topbar.style.setProperty("--scroll-progress", progress + "%");
+      }
+      // Bottom nav visibility
+      if (bottomNav) {
+        const shouldShow = scrollY > window.innerHeight * 0.5;
+        if (shouldShow && !bottomNavShown) {
+          bottomNav.classList.add("visible");
+          bottomNavShown = true;
+        } else if (!shouldShow && bottomNavShown) {
+          bottomNav.classList.remove("visible");
+          bottomNavShown = false;
+        }
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   }
 
   // ═══ SCROLL REVEAL ═════════════════════════
@@ -207,8 +232,14 @@
         const item = btn.closest(".faq-item");
         const isOpen = item.classList.contains("open");
         // Close all
-        document.querySelectorAll(".faq-item.open").forEach((i) => i.classList.remove("open"));
-        if (!isOpen) item.classList.add("open");
+        document.querySelectorAll(".faq-item.open").forEach((i) => {
+          i.classList.remove("open");
+          i.querySelector(".faq-question")?.setAttribute("aria-expanded", "false");
+        });
+        if (!isOpen) {
+          item.classList.add("open");
+          btn.setAttribute("aria-expanded", "true");
+        }
       });
     });
   }
@@ -316,6 +347,12 @@
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) closeModal();
     });
+    // Escape key to close modal
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("active")) {
+        closeModal();
+      }
+    });
   }
 
   function openModal() {
@@ -421,11 +458,11 @@
     const closeBtn = document.getElementById("app-toast-close");
     if (!toast || !closeBtn) return;
 
-    const FIRST_DELAY = 12000;   // 12s after page load
-    const VISIBLE_TIME = 10000;  // stay visible 10s
-    const INTERVAL = 45000;      // re-appear every 45s
-    const AFTER_CLOSE = 60000;   // re-appear 60s after user closes it
+    // Respect previous dismissal this session
+    if (sessionStorage.getItem("pt_toast_dismissed")) return;
 
+    const FIRST_DELAY = 12000;
+    const VISIBLE_TIME = 10000;
     let timer = null;
 
     function isAppSectionVisible() {
@@ -436,59 +473,35 @@
     }
 
     function showToast() {
-      // Skip if user is already viewing the app section
       if (isAppSectionVisible()) {
         timer = setTimeout(showToast, 8000);
         return;
       }
       toast.classList.remove("hiding");
       toast.classList.add("visible");
-      // Auto-hide after visible time
       timer = setTimeout(hideToast, VISIBLE_TIME);
     }
 
     function hideToast() {
       toast.classList.add("hiding");
       toast.classList.remove("visible");
-      // Schedule next appearance
-      timer = setTimeout(showToast, INTERVAL);
     }
 
     closeBtn.addEventListener("click", () => {
       clearTimeout(timer);
-      toast.classList.add("hiding");
-      toast.classList.remove("visible");
-      // Come back after a longer delay when manually closed
-      timer = setTimeout(showToast, AFTER_CLOSE);
+      hideToast();
+      sessionStorage.setItem("pt_toast_dismissed", "1");
     });
 
-    // Open app on store button click
     toast.querySelectorAll(".app-toast-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         clearTimeout(timer);
-        toast.classList.add("hiding");
-        toast.classList.remove("visible");
-        // Still come back later
-        timer = setTimeout(showToast, AFTER_CLOSE);
+        hideToast();
+        sessionStorage.setItem("pt_toast_dismissed", "1");
       });
     });
 
-    // First show
     timer = setTimeout(showToast, FIRST_DELAY);
-  }
-
-  // ═══ SCROLL PROGRESS BAR ═══════════════════
-  function initScrollProgress() {
-    const topbar = document.getElementById("topbar");
-    if (!topbar) return;
-    function update() {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      topbar.style.setProperty("--scroll-progress", progress + "%");
-    }
-    window.addEventListener("scroll", update, { passive: true });
-    update();
   }
 
   // ═══ BOTTOM NAVIGATION ═════════════════════
@@ -496,20 +509,7 @@
     const nav = document.getElementById("bottom-nav");
     if (!nav) return;
 
-    // Show after scrolling past hero
-    let shown = false;
-    function checkVisibility() {
-      const shouldShow = window.scrollY > window.innerHeight * 0.5;
-      if (shouldShow && !shown) {
-        nav.classList.add("visible");
-        shown = true;
-      } else if (!shouldShow && shown) {
-        nav.classList.remove("visible");
-        shown = false;
-      }
-    }
-    window.addEventListener("scroll", checkVisibility, { passive: true });
-    checkVisibility();
+    // Visibility now handled by initUnifiedScroll
 
     // Active section tracking
     const items = nav.querySelectorAll(".bottom-nav-item[data-section]");
@@ -601,13 +601,19 @@
     if (window.innerWidth < 1024) return;
     const btns = document.querySelectorAll(".btn-primary, .btn-gold, .topbar-cta");
     btns.forEach((btn) => {
+      let rafId = null;
       btn.addEventListener("mousemove", (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+          rafId = null;
+        });
       });
       btn.addEventListener("mouseleave", () => {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
         btn.style.transform = "";
       });
     });

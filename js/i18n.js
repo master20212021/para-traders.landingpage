@@ -235,6 +235,20 @@ const i18n = {
     modal_error: "Código incorrecto. Inténtalo de nuevo.",
     modal_validating: "Validando código...",
     modal_success: "¡Acceso concedido!",
+
+    // Trust badges
+    trust_secure: "Pago 100% Seguro",
+    trust_instant: "Acceso Inmediato",
+    trust_guarantee: "7 Días de Garantía",
+    trust_lifetime: "Acceso de por Vida",
+
+    // Footer links
+    footer_privacy: "Privacidad",
+    footer_terms: "Términos",
+    footer_contact: "Contacto",
+
+    // Course guarantee
+    product_course_guarantee: "7 días de garantía — Pago seguro via Hotmart",
   },
 
   en: {
@@ -469,5 +483,19 @@ const i18n = {
     modal_error: "Incorrect code. Try again.",
     modal_validating: "Validating code...",
     modal_success: "Access granted!",
+
+    // Trust badges
+    trust_secure: "100% Secure Payment",
+    trust_instant: "Instant Access",
+    trust_guarantee: "7-Day Guarantee",
+    trust_lifetime: "Lifetime Access",
+
+    // Footer links
+    footer_privacy: "Privacy",
+    footer_terms: "Terms",
+    footer_contact: "Contact",
+
+    // Course guarantee
+    product_course_guarantee: "7-day guarantee — Secure payment via Hotmart",
   }
 };

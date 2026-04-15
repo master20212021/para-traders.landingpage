@@ -12,14 +12,54 @@
   <meta property="og:description" content="Analiza tus emociones con IA, domina tu mentalidad y opera con confianza. App + Curso completo." />
   <meta property="og:image" content="https://www.paratrades.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="P'Traders — App + Curso de Psicología del Trading" />
+  <meta name="twitter:description" content="Analiza tus emociones con IA, domina tu mentalidad y opera con confianza. App + Curso completo." />
+  <meta name="twitter:image" content="https://www.paratrades.com/og-image.png" />
+  <link rel="canonical" href="https://www.paratrades.com/" />
+  <link rel="alternate" hreflang="es" href="https://www.paratrades.com/" />
+  <link rel="alternate" hreflang="en" href="https://www.paratrades.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.paratrades.com/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /></noscript>
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=4.0" />
+  <link rel="stylesheet" href="css/style.css?v=5.0" />
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "P'Traders App",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "url": "https://app.paratrades.com/",
+    "description": "AI-powered trading psychology app. Analyze emotions, charts, and market predictions in real time.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "500" }
+  },{
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "Curso de Psicología del Trading — P'Traders",
+    "description": "6 módulos en video + 11 herramientas interactivas para dominar la psicología del trading.",
+    "provider": { "@type": "Organization", "name": "P'Traders", "url": "https://www.paratrades.com" },
+    "url": "https://go.hotmart.com/K101236595F?dp=1",
+    "hasCourseInstance": { "@type": "CourseInstance", "courseMode": "online" }
+  },{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "What's the difference between the App and the Course?", "acceptedAnswer": { "@type": "Answer", "text": "The App is a web platform with AI to analyze your emotions and charts in real time. The Course is a 6-module video program with 11 interactive tools for deep trading psychology learning." }},
+      { "@type": "Question", "name": "Is the App free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The App has a free plan (Beginner) with limited daily analyses. Premium plans available." }},
+      { "@type": "Question", "name": "Do I need previous trading experience?", "acceptedAnswer": { "@type": "Answer", "text": "No. Both the app and course are designed for all levels." }},
+      { "@type": "Question", "name": "What does the course include?", "acceptedAnswer": { "@type": "Answer", "text": "6 video modules, 11 exclusive interactive web tools, trader community access, downloadable materials, and lifetime updates." }},
+      { "@type": "Question", "name": "Does the app work on any device?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. It's a web application (PWA) that works in your browser from any device." }}
+    ]
+  }]
+  </script>
 </head>
 <body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
 
   <!-- Background effects -->
   <canvas id="particles-canvas"></canvas>
@@ -67,6 +107,7 @@
     </nav>
   </div>
 
+  <main id="main-content">
   <!-- ═══ HERO ═══ -->
   <section class="hero" id="hero">
     <div class="hero-badge">
@@ -172,6 +213,10 @@
             <i class="fa-solid fa-arrow-right"></i>
             <span data-i18n="product_course_cta">Inscribirme al Curso</span>
           </a>
+          <div class="product-guarantee">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span data-i18n="product_course_guarantee">7 días de garantía — Pago seguro via Hotmart</span>
+          </div>
         </div>
       </div>
     </div>
@@ -207,7 +252,7 @@
           </div>
           <div class="app-feat-card">
             <div class="app-feat-icon" style="background: rgba(139,92,246,0.1); color: var(--violet);">
-              <i class="fa-solid fa-crystal-ball fa-solid fa-wand-magic-sparkles"></i>
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
             <div>
               <h4 class="app-feat-title" data-i18n="appfeat_3_title">Predicciones de Mercado</h4>
@@ -614,20 +659,20 @@
             </a>
           </div>
           <div class="app-stores-row">
-            <a href="#" class="app-store-btn" id="btn-appstore">
+            <span class="app-store-btn app-store-btn--soon" id="btn-appstore" role="button" aria-disabled="true">
               <i class="fa-brands fa-apple"></i>
               <div>
                 <span class="app-store-small" data-i18n="app_available">Próximamente en</span>
                 <span class="app-store-name">App Store</span>
               </div>
-            </a>
-            <a href="#" class="app-store-btn" id="btn-playstore">
+            </span>
+            <span class="app-store-btn app-store-btn--soon" id="btn-playstore" role="button" aria-disabled="true">
               <i class="fa-brands fa-google-play"></i>
               <div>
                 <span class="app-store-small" data-i18n="app_available">Próximamente en</span>
                 <span class="app-store-name">Google Play</span>
               </div>
-            </a>
+            </span>
           </div>
         </div>
         <div class="app-promo-visual">
@@ -671,39 +716,39 @@
       </div>
       <div class="faq-list reveal">
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a1">
             <span data-i18n="faq_q1">¿Necesito experiencia previa en trading?</span>
             <i class="fa-solid fa-chevron-down faq-chevron"></i>
           </button>
-          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a1">No. El curso está diseñado tanto para principiantes como para traders con experiencia. Si operas o planeas operar, este curso te dará las bases psicológicas que necesitas desde el primer día.</div></div>
+          <div class="faq-answer" id="faq-a1"><div class="faq-answer-inner" data-i18n="faq_a1">No. El curso está diseñado tanto para principiantes como para traders con experiencia. Si operas o planeas operar, este curso te dará las bases psicológicas que necesitas desde el primer día.</div></div>
         </div>
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a2">
             <span data-i18n="faq_q2">¿Qué incluye exactamente el curso?</span>
             <i class="fa-solid fa-chevron-down faq-chevron"></i>
           </button>
-          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a2">6 módulos en video, 11 herramientas interactivas web exclusivas, acceso a la comunidad de traders, material descargable y actualizaciones futuras incluidas.</div></div>
+          <div class="faq-answer" id="faq-a2"><div class="faq-answer-inner" data-i18n="faq_a2">6 módulos en video, 11 herramientas interactivas web exclusivas, acceso a la comunidad de traders, material descargable y actualizaciones futuras incluidas.</div></div>
         </div>
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a3">
             <span data-i18n="faq_q3">¿Las herramientas son descargables o están online?</span>
             <i class="fa-solid fa-chevron-down faq-chevron"></i>
           </button>
-          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a3">Son aplicaciones web interactivas que funcionan desde tu navegador en cualquier dispositivo. Accedes con tu código personal y puedes usarlas en tu computadora, tablet o celular. Algunas permiten descargar resultados en formato texto.</div></div>
+          <div class="faq-answer" id="faq-a3"><div class="faq-answer-inner" data-i18n="faq_a3">Son aplicaciones web interactivas que funcionan desde tu navegador en cualquier dispositivo. Accedes con tu código personal y puedes usarlas en tu computadora, tablet o celular. Algunas permiten descargar resultados en formato texto.</div></div>
         </div>
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a4">
             <span data-i18n="faq_q4">¿Cuánto tiempo tengo acceso al curso?</span>
             <i class="fa-solid fa-chevron-down faq-chevron"></i>
           </button>
-          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a4">Acceso de por vida. Una vez inscrito, puedes revisar el material y usar las herramientas cuando quieras, sin límite de tiempo. Además, recibirás todas las actualizaciones futuras sin costo adicional.</div></div>
+          <div class="faq-answer" id="faq-a4"><div class="faq-answer-inner" data-i18n="faq_a4">Acceso de por vida. Una vez inscrito, puedes revisar el material y usar las herramientas cuando quieras, sin límite de tiempo. Además, recibirás todas las actualizaciones futuras sin costo adicional.</div></div>
         </div>
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-a5">
             <span data-i18n="faq_q5">¿El curso enseña estrategias de trading técnico?</span>
             <i class="fa-solid fa-chevron-down faq-chevron"></i>
           </button>
-          <div class="faq-answer"><div class="faq-answer-inner" data-i18n="faq_a5">No directamente. Este curso se enfoca 100% en la psicología del trading — el aspecto que representa el 80% de tu éxito. Es el complemento perfecto para cualquier estrategia técnica que ya uses o estés aprendiendo.</div></div>
+          <div class="faq-answer" id="faq-a5"><div class="faq-answer-inner" data-i18n="faq_a5">No directamente. Este curso se enfoca 100% en la psicología del trading — el aspecto que representa el 80% de tu éxito. Es el complemento perfecto para cualquier estrategia técnica que ya uses o estés aprendiendo.</div></div>
         </div>
       </div>
     </div>
@@ -817,6 +862,28 @@
     </div>
   </section>
 
+  <!-- ═══ TRUST BADGES ═══ -->
+  <section class="trust-bar reveal">
+    <div class="trust-grid">
+      <div class="trust-item">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span data-i18n="trust_secure">Pago 100% Seguro</span>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-bolt"></i>
+        <span data-i18n="trust_instant">Acceso Inmediato</span>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span data-i18n="trust_guarantee">7 Días de Garantía</span>
+      </div>
+      <div class="trust-item">
+        <i class="fa-solid fa-infinity"></i>
+        <span data-i18n="trust_lifetime">Acceso de por Vida</span>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ CTA FINAL ═══ -->
   <section class="cta-final" id="cta-final">
     <div class="container reveal">
@@ -835,6 +902,8 @@
     </div>
   </section>
 
+  </main>
+
   <!-- ═══ FOOTER ═══ -->
   <footer class="footer">
     <div class="footer-inner">
@@ -842,6 +911,9 @@
       <div class="footer-links">
         <a href="https://app.paratrades.com/" target="_blank" data-i18n="footer_app">Abrir la App</a>
         <a href="https://go.hotmart.com/K101236595F?dp=1" target="_blank" data-i18n="footer_course">El Curso</a>
+        <a href="privacy.html" data-i18n="footer_privacy">Privacidad</a>
+        <a href="terms.html" data-i18n="footer_terms">Términos</a>
+        <a href="mailto:contacto@paratrades.com" data-i18n="footer_contact">Contacto</a>
       </div>
       <div class="footer-social">
         <a href="https://www.facebook.com/paraltraders" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
@@ -856,10 +928,10 @@
   </footer>
 
   <!-- ═══ MODAL ═══ -->
-  <div class="modal-overlay" id="modal-overlay">
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
     <div class="modal">
       <div class="modal-icon"><i class="fa-solid fa-key text-accent"></i></div>
-      <h3 class="modal-title" data-i18n="modal_title">Acceso Exclusivo</h3>
+      <h3 class="modal-title" id="modal-title-text" data-i18n="modal_title">Acceso Exclusivo</h3>
       <p class="modal-desc" data-i18n="modal_desc">Ingresa el código que recibiste al inscribirte para desbloquear las herramientas interactivas.</p>
       <input type="text" class="modal-input" id="modal-input" maxlength="20" data-i18n-placeholder="modal_placeholder" placeholder="Ingresa tu código" />
       <div class="modal-error" id="modal-error"></div>
@@ -919,8 +991,8 @@
   <div class="cursor-glow" id="cursor-glow"></div>
 
   <!-- Scripts -->
-  <script src="js/auth.js?v=4.0"></script>
-  <script src="js/i18n.js?v=4.0"></script>
-  <script src="js/main.js?v=4.0"></script>
+  <script src="js/auth.js?v=5.0"></script>
+  <script src="js/i18n.js?v=5.0"></script>
+  <script src="js/main.js?v=5.0"></script>
 </body>
 </html>
