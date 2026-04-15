@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════
-   P'TRADERS — Main Application v2.0
-   Particles, counters, FAQ, tools
+   P'TRADERS — Main Application v4.0
+   Premium animations, bottom nav, particles
    ═══════════════════════════════════════════ */
 
 (() => {
@@ -14,6 +14,7 @@
     initParticles();
     initLanguage();
     initTopbarScroll();
+    initScrollProgress();
     initScrollReveal();
     initStatCounters();
     initFAQ();
@@ -23,6 +24,11 @@
     initMobileMenu();
     handleReturnScroll();
     initAppToast();
+    initBottomNav();
+    initCursorGlow();
+    initCardGlow();
+    initMagneticButtons();
+    initActiveNavHighlight();
   });
 
   // ═══ PARTICLE CANVAS ═══════════════════════
@@ -469,5 +475,168 @@
 
     // First show
     timer = setTimeout(showToast, FIRST_DELAY);
+  }
+
+  // ═══ SCROLL PROGRESS BAR ═══════════════════
+  function initScrollProgress() {
+    const topbar = document.getElementById("topbar");
+    if (!topbar) return;
+    function update() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      topbar.style.setProperty("--scroll-progress", progress + "%");
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+
+  // ═══ BOTTOM NAVIGATION ═════════════════════
+  function initBottomNav() {
+    const nav = document.getElementById("bottom-nav");
+    if (!nav) return;
+
+    // Show after scrolling past hero
+    let shown = false;
+    function checkVisibility() {
+      const shouldShow = window.scrollY > window.innerHeight * 0.5;
+      if (shouldShow && !shown) {
+        nav.classList.add("visible");
+        shown = true;
+      } else if (!shouldShow && shown) {
+        nav.classList.remove("visible");
+        shown = false;
+      }
+    }
+    window.addEventListener("scroll", checkVisibility, { passive: true });
+    checkVisibility();
+
+    // Active section tracking
+    const items = nav.querySelectorAll(".bottom-nav-item[data-section]");
+    const sections = [];
+    items.forEach((item) => {
+      const id = item.dataset.section;
+      const el = document.getElementById(id);
+      if (el) sections.push({ el, item, id });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            items.forEach((i) => i.classList.remove("active"));
+            const match = sections.find((s) => s.el === entry.target);
+            if (match) match.item.classList.add("active");
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: "-20% 0px -50% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s.el));
+
+    // Smooth scroll on click
+    items.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        const id = item.dataset.section;
+        const target = document.getElementById(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+  }
+
+  // ═══ CURSOR GLOW ═══════════════════════════
+  function initCursorGlow() {
+    const glow = document.getElementById("cursor-glow");
+    if (!glow || window.innerWidth < 1024) return;
+
+    let mouseX = 0, mouseY = 0;
+    let glowX = 0, glowY = 0;
+    let active = false;
+
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!active) {
+        active = true;
+        glow.classList.add("active");
+        animate();
+      }
+    });
+
+    document.addEventListener("mouseleave", () => {
+      active = false;
+      glow.classList.remove("active");
+    });
+
+    function animate() {
+      if (!active) return;
+      // Lerp for smooth trailing
+      glowX += (mouseX - glowX) * 0.08;
+      glowY += (mouseY - glowY) * 0.08;
+      glow.style.left = glowX + "px";
+      glow.style.top = glowY + "px";
+      requestAnimationFrame(animate);
+    }
+  }
+
+  // ═══ CARD GLOW (mouse position tracking) ═══
+  function initCardGlow() {
+    const cards = document.querySelectorAll(".product-card, .outcome-card, .app-feat-card, .tool-card");
+    cards.forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty("--mouse-x", x + "px");
+        card.style.setProperty("--mouse-y", y + "px");
+      });
+    });
+  }
+
+  // ═══ MAGNETIC BUTTONS ══════════════════════
+  function initMagneticButtons() {
+    if (window.innerWidth < 1024) return;
+    const btns = document.querySelectorAll(".btn-primary, .btn-gold, .topbar-cta");
+    btns.forEach((btn) => {
+      btn.addEventListener("mousemove", (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+      });
+      btn.addEventListener("mouseleave", () => {
+        btn.style.transform = "";
+      });
+    });
+  }
+
+  // ═══ ACTIVE NAV HIGHLIGHT ══════════════════
+  function initActiveNavHighlight() {
+    const navLinks = document.querySelectorAll(".topbar-nav a[href^='#']");
+    if (!navLinks.length) return;
+
+    const sectionMap = [];
+    navLinks.forEach((link) => {
+      const id = link.getAttribute("href").slice(1);
+      const section = document.getElementById(id);
+      if (section) sectionMap.push({ link, section });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            navLinks.forEach((l) => l.classList.remove("nav-active"));
+            const match = sectionMap.find((s) => s.section === entry.target);
+            if (match) match.link.classList.add("nav-active");
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "-80px 0px -40% 0px" }
+    );
+    sectionMap.forEach((s) => observer.observe(s.section));
   }
 })();

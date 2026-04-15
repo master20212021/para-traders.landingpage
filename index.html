@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
-  <link rel="stylesheet" href="css/style.css?v=3.0" />
+  <link rel="stylesheet" href="css/style.css?v=4.0" />
 </head>
 <body>
 
@@ -888,9 +888,39 @@
     </div>
   </div>
 
+  <!-- ═══ BOTTOM NAV (Mobile) ═══ -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <div class="bottom-nav-glow"></div>
+    <a href="#hero" class="bottom-nav-item active" data-section="hero">
+      <i class="fa-solid fa-house"></i>
+      <span data-i18n="bnav_home">Inicio</span>
+    </a>
+    <a href="#products" class="bottom-nav-item" data-section="products">
+      <i class="fa-solid fa-gem"></i>
+      <span data-i18n="bnav_products">Productos</span>
+    </a>
+    <a href="https://app.paratrades.com/" target="_blank" class="bottom-nav-item bottom-nav-item--cta">
+      <div class="bottom-nav-cta-ring">
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+      <span data-i18n="bnav_app">App</span>
+    </a>
+    <a href="#roadmap" class="bottom-nav-item" data-section="roadmap">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span data-i18n="bnav_course">Curso</span>
+    </a>
+    <a href="#faq" class="bottom-nav-item" data-section="faq">
+      <i class="fa-solid fa-circle-question"></i>
+      <span data-i18n="bnav_faq">FAQ</span>
+    </a>
+  </nav>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
   <!-- Scripts -->
-  <script src="js/auth.js?v=3.0"></script>
-  <script src="js/i18n.js?v=3.0"></script>
-  <script src="js/main.js?v=3.0"></script>
+  <script src="js/auth.js?v=4.0"></script>
+  <script src="js/i18n.js?v=4.0"></script>
+  <script src="js/main.js?v=4.0"></script>
 </body>
 </html>

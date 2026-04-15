@@ -219,6 +219,13 @@ const i18n = {
     footer_course: "El Curso",
     footer_legal: "© 2026 P'Traders. Todos los derechos reservados. Este sitio no es asesoría financiera. Trading implica riesgo de pérdida. Opera de forma responsable.",
 
+    // Bottom Nav
+    bnav_home: "Inicio",
+    bnav_products: "Productos",
+    bnav_app: "App",
+    bnav_course: "Curso",
+    bnav_faq: "FAQ",
+
     // Modal
     modal_title: "Acceso Exclusivo",
     modal_desc: "Ingresa tu clave única de acceso. La recibiste al adquirir el curso.",
@@ -445,6 +452,13 @@ const i18n = {
     footer_app: "Open the App",
     footer_course: "The Course",
     footer_legal: "© 2026 P'Traders. All rights reserved. This site is not financial advice. Trading involves risk of loss. Trade responsibly.",
+
+    // Bottom Nav
+    bnav_home: "Home",
+    bnav_products: "Products",
+    bnav_app: "App",
+    bnav_course: "Course",
+    bnav_faq: "FAQ",
 
     // Modal
     modal_title: "Exclusive Access",
