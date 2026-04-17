@@ -695,13 +695,22 @@
       visibleSlides = getVisibleSlides();
       const groupSize = window.innerWidth < 768 ? 2 : 3;
       const dotCount = Math.ceil(visibleSlides.length / groupSize);
+      const maxDots = 8;
       dotsContainer.innerHTML = "";
-      for (let i = 0; i < dotCount; i++) {
-        const dot = document.createElement("button");
-        dot.className = "gallery-dot" + (i === 0 ? " active" : "");
-        dot.setAttribute("aria-label", "Page " + (i + 1));
-        dot.addEventListener("click", () => scrollToGroup(i));
-        dotsContainer.appendChild(dot);
+      if (dotCount <= maxDots) {
+        for (let i = 0; i < dotCount; i++) {
+          const dot = document.createElement("button");
+          dot.className = "gallery-dot" + (i === 0 ? " active" : "");
+          dot.setAttribute("aria-label", "Page " + (i + 1));
+          dot.addEventListener("click", () => scrollToGroup(i));
+          dotsContainer.appendChild(dot);
+        }
+      } else {
+        // Show page counter instead of too many dots
+        const counter = document.createElement("span");
+        counter.className = "gallery-page-counter";
+        counter.textContent = "1 / " + dotCount;
+        dotsContainer.appendChild(counter);
       }
     }
 
@@ -715,9 +724,16 @@
     }
 
     function updateDots(activeIndex) {
-      dotsContainer.querySelectorAll(".gallery-dot").forEach((d, i) => {
-        d.classList.toggle("active", i === activeIndex);
-      });
+      const dots = dotsContainer.querySelectorAll(".gallery-dot");
+      if (dots.length > 0) {
+        dots.forEach((d, i) => { d.classList.toggle("active", i === activeIndex); });
+      }
+      const counter = dotsContainer.querySelector(".gallery-page-counter");
+      if (counter) {
+        const groupSize = window.innerWidth < 768 ? 2 : 3;
+        const dotCount = Math.ceil(visibleSlides.length / groupSize);
+        counter.textContent = (activeIndex + 1) + " / " + dotCount;
+      }
     }
 
     function getCurrentGroup() {
@@ -812,6 +828,21 @@
       video.addEventListener("ended", () => {
         playBtn.classList.remove("is-playing");
       });
+    });
+
+    // Auto-generate video posters from first frame
+    track.querySelectorAll("video[data-autoposter]").forEach((video) => {
+      video.addEventListener("loadeddata", function() {
+        if (this.readyState >= 2) {
+          try {
+            const canvas = document.createElement("canvas");
+            canvas.width = this.videoWidth;
+            canvas.height = this.videoHeight;
+            canvas.getContext("2d").drawImage(this, 0, 0);
+            this.setAttribute("poster", canvas.toDataURL("image/jpeg", 0.8));
+          } catch(e) { /* cross-origin videos won't work, that's fine */ }
+        }
+      }, { once: true });
     });
   }
 })();

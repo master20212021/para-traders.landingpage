@@ -249,28 +249,28 @@
             <!-- Videos FIRST for impact -->
             <div class="gallery-slide gallery-slide--video" data-category="video">
               <div class="gallery-video-frame">
-                <video src="assets/videos/es/01-analizador-graficos.mp4" playsinline muted loop preload="metadata"></video>
+                <video src="assets/videos/es/01-analizador-graficos.mp4" playsinline muted loop preload="metadata" poster="" data-autoposter></video>
                 <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
               </div>
               <span class="gallery-caption" data-i18n="gallery_vid_01">Analizador de Gráficos IA</span>
             </div>
             <div class="gallery-slide gallery-slide--video" data-category="video">
               <div class="gallery-video-frame">
-                <video src="assets/videos/es/02-analizador-emociones.mp4" playsinline muted loop preload="metadata"></video>
+                <video src="assets/videos/es/02-analizador-emociones.mp4" playsinline muted loop preload="metadata" poster="" data-autoposter></video>
                 <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
               </div>
               <span class="gallery-caption" data-i18n="gallery_vid_02">Analizador de Emociones</span>
             </div>
             <div class="gallery-slide gallery-slide--video" data-category="video">
               <div class="gallery-video-frame">
-                <video src="assets/videos/es/03-diario-notas.mp4" playsinline muted loop preload="metadata"></video>
+                <video src="assets/videos/es/03-diario-notas.mp4" playsinline muted loop preload="metadata" poster="" data-autoposter></video>
                 <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
               </div>
               <span class="gallery-caption" data-i18n="gallery_vid_03">Diario de Notas</span>
             </div>
             <div class="gallery-slide gallery-slide--video" data-category="video">
               <div class="gallery-video-frame">
-                <video src="assets/videos/es/04-noticias-ia.mp4" playsinline muted loop preload="metadata"></video>
+                <video src="assets/videos/es/04-noticias-ia.mp4" playsinline muted loop preload="metadata" poster="" data-autoposter></video>
                 <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
               </div>
               <span class="gallery-caption" data-i18n="gallery_vid_04">Noticias con IA</span>
@@ -495,12 +495,77 @@
         <div class="app-showcase-visual">
           <div class="app-phone-wrapper">
             <div class="app-phone app-phone--real">
-              <img src="assets/screenshots/es/04-grafico-ia-analisis.jpeg" alt="P'Traders App - AI Chart Analysis" class="app-phone-screenshot" loading="lazy">
+              <img src="assets/screenshots/es/12-grafico-ia-mercados.jpeg" alt="P'Traders App - AI Markets" class="app-phone-screenshot" loading="lazy">
             </div>
           </div>
           <a href="https://app.paratrades.com/" target="_blank" class="btn btn-primary btn-lg" style="margin-top:1.5rem">
             <i class="fa-solid fa-arrow-right"></i>
             <span data-i18n="appfeat_cta">Probar la App Gratis</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ APP PLANS ═══ -->
+  <section class="section" id="app-plans">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag section-tag--app"><i class="fa-solid fa-layer-group"></i> <span data-i18n="plans_tag">PLANES DE LA APP</span></span>
+        <h2 class="section-title" data-i18n="plans_title">Elige tu plan</h2>
+        <p class="section-desc" data-i18n="plans_desc">Empieza gratis y sube de nivel cuando quieras. Sin compromisos.</p>
+      </div>
+      <div class="plans-grid stagger-children reveal">
+        <!-- BEGINNER -->
+        <div class="plan-card">
+          <div class="plan-header">
+            <span class="plan-name" data-i18n="plan_beginner_name">Beginner</span>
+            <div class="plan-price"><span class="plan-amount" data-i18n="plan_beginner_price">Gratis</span></div>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_b_f1">3 analisis de emociones / dia</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_b_f2">1 analisis de grafico / dia</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_b_f3">Diario de trading</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_b_f4">Checklist pre-mercado</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_b_f5">Simuladores basicos</span></li>
+          </ul>
+          <a href="https://app.paratrades.com/" target="_blank" class="btn btn-outline btn-block">
+            <span data-i18n="plan_beginner_cta">Empezar Gratis</span>
+          </a>
+        </div>
+        <!-- INTERMEDIATE -->
+        <div class="plan-card">
+          <div class="plan-header">
+            <span class="plan-name" data-i18n="plan_inter_name">Intermediate</span>
+            <div class="plan-price"><span class="plan-amount">$9.99</span><span class="plan-period" data-i18n="plan_period">/mes</span></div>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_i_f1">10 analisis de emociones / dia</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_i_f2">5 analisis de grafico / dia</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_i_f3">Noticias del mercado con IA</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_i_f4">Todos los simuladores</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_i_f5">Historial completo</span></li>
+          </ul>
+          <a href="https://app.paratrades.com/" target="_blank" class="btn btn-primary btn-block">
+            <span data-i18n="plan_inter_cta">Comenzar</span>
+          </a>
+        </div>
+        <!-- ELITE -->
+        <div class="plan-card plan-card--featured">
+          <div class="plan-badge" data-i18n="plan_elite_badge">MAS POPULAR</div>
+          <div class="plan-header">
+            <span class="plan-name" data-i18n="plan_elite_name">Elite</span>
+            <div class="plan-price"><span class="plan-amount">$19.99</span><span class="plan-period" data-i18n="plan_period">/mes</span></div>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_e_f1">Analisis ilimitados</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_e_f2">Multi-Timeframe (3 temporalidades)</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_e_f3">Coaching IA personalizado</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_e_f4">Biblioteca de recursos Elite</span></li>
+            <li><i class="fa-solid fa-check"></i> <span data-i18n="plan_e_f5">Soporte prioritario</span></li>
+          </ul>
+          <a href="https://app.paratrades.com/" target="_blank" class="btn btn-primary btn-block">
+            <span data-i18n="plan_elite_cta">Ser Elite</span>
           </a>
         </div>
       </div>
@@ -553,6 +618,9 @@
     <div class="container">
       <div class="about-layout reveal">
         <div class="about-left" style="order:2;text-align:center">
+          <div class="about-avatar">
+            <img src="logo-oficial.png" alt="P'Traders Instructor" class="about-avatar-img">
+          </div>
           <span class="section-tag section-tag--gold" style="display:inline-flex"><i class="fa-solid fa-user-tie"></i> <span data-i18n="about_tag">TU INSTRUCTOR</span></span>
           <h2 class="section-title" style="text-align:center;margin-bottom:1.2rem" data-i18n="about_title">De trader a trader</h2>
           <p class="about-text" data-i18n="about_p1">
@@ -862,7 +930,7 @@
         <div class="app-promo-visual">
           <div class="app-phone-wrapper">
             <div class="app-phone app-phone--real">
-              <img src="assets/screenshots/es/01-perfil-progreso-logros.jpeg" alt="P'Traders App - Profile & Achievements" class="app-phone-screenshot" loading="lazy">
+              <img src="assets/screenshots/es/18-diario-dashboard-emociones.jpeg" alt="P'Traders App - Emotions Dashboard" class="app-phone-screenshot" loading="lazy">
             </div>
           </div>
         </div>
