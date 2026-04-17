@@ -772,10 +772,6 @@ button { font-family: inherit; cursor: pointer; }
   opacity: 0;
   pointer-events: none;
 }
-.gallery-video-frame:hover .gallery-video-play.is-playing {
-  opacity: 1;
-  pointer-events: auto;
-}
 .gallery-filter[data-filter="video"] i {
   font-size: 0.65rem;
   margin-right: 0.15rem;
