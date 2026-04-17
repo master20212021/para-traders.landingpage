@@ -46,8 +46,8 @@
 
 /* ── Reset ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
-body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.65; overflow-x: hidden; min-height: 100vh; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; overflow-x: hidden; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.65; overflow-x: hidden; min-height: 100vh; width: 100%; }
 ::selection { background: rgba(var(--accent-rgb), 0.3); color: #fff; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
@@ -201,7 +201,7 @@ button { font-family: inherit; cursor: pointer; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   padding: 0.75rem 1.6rem; font-family: var(--font-body); font-size: 0.88rem; font-weight: 600;
-  border: none; border-radius: var(--radius-sm); cursor: pointer; transition: all var(--duration) var(--ease-out);
+  border: none; border-radius: var(--radius-sm); cursor: pointer; transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), background var(--duration) var(--ease-out), opacity var(--duration) var(--ease-out);
   position: relative; overflow: hidden; letter-spacing: 0.2px;
 }
 .btn:active { transform: scale(0.97); }
@@ -443,10 +443,11 @@ button { font-family: inherit; cursor: pointer; }
 .app-store-btn {
   display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1.3rem;
   background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--text); font-size: 1rem; transition: all var(--duration) var(--ease-out); text-decoration: none;
+  color: var(--text); font-size: 1rem; transition: transform var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out), background var(--duration) var(--ease-out); text-decoration: none;
 }
 .app-store-btn i { font-size: 1.6rem; }
 .app-store-btn:hover { border-color: var(--border-hover); background: var(--accent-dim); transform: translateY(-2px); }
+.app-store-btn:active { transform: scale(0.97); }
 .app-store-small { display: block; font-size: 0.6rem; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; line-height: 1; }
 .app-store-name { display: block; font-size: 0.95rem; font-weight: 700; line-height: 1.3; }
 .app-coming-soon { font-size: 0.8rem; color: var(--accent); font-weight: 500; display: flex; align-items: center; gap: 0.4rem; }
@@ -469,6 +470,17 @@ button { font-family: inherit; cursor: pointer; }
   padding: 8px;
   position: relative;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+/* Real screenshot phone - no inner structure needed */
+.app-phone--real {
+  padding: 0;
+  overflow: hidden;
+}
+.app-phone-screenshot {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 28px;
 }
 .app-phone-notch {
   position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
@@ -570,12 +582,13 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all var(--duration) var(--ease-out);
+  transition: border-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out), background var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
 }
 .gallery-filter:hover {
   border-color: var(--border-hover);
   color: var(--text);
 }
+.gallery-filter:active { transform: scale(0.96); }
 .gallery-filter.active {
   background: rgba(var(--accent-rgb), 0.1);
   border-color: rgba(var(--accent-rgb), 0.3);
@@ -586,8 +599,8 @@ button { font-family: inherit; cursor: pointer; }
 .gallery-viewport {
   overflow: hidden;
   position: relative;
-  margin: 0 -1rem;
-  padding: 0 1rem;
+  margin: 0 calc(-1 * clamp(0.75rem, 2vw, 1rem));
+  padding: 0 clamp(0.75rem, 2vw, 1rem);
 }
 .gallery-track {
   display: flex;
@@ -617,7 +630,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Phone frame for screenshots */
 .gallery-phone {
-  width: 200px;
+  width: 220px;
   border-radius: 24px;
   overflow: hidden;
   border: 2px solid rgba(255,255,255,0.08);
@@ -627,7 +640,7 @@ button { font-family: inherit; cursor: pointer; }
     inset 0 1px 0 rgba(255,255,255,0.05);
   background: #060c1a;
   position: relative;
-  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
 }
 .gallery-phone:hover {
   transform: translateY(-6px) scale(1.02);
@@ -700,7 +713,7 @@ button { font-family: inherit; cursor: pointer; }
   flex: 0 0 auto;
 }
 .gallery-video-frame {
-  width: 200px;
+  width: 220px;
   border-radius: 24px;
   overflow: hidden;
   border: 2px solid rgba(255,255,255,0.08);
@@ -765,8 +778,8 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 @media (max-width: 768px) {
-  .gallery-phone { width: 160px; }
-  .gallery-video-frame { width: 160px; }
+  .gallery-phone { width: 180px; }
+  .gallery-video-frame { width: 180px; }
   .gallery-filters { gap: 0.35rem; }
   .gallery-filter { font-size: 0.72rem; padding: 0.35rem 0.75rem; }
   .gallery-track { gap: 0.8rem; }
