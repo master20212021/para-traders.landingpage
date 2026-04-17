@@ -546,23 +546,11 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ── App Screenshots Gallery ───────────────────────────── */
+.section--gallery {
+  padding-top: clamp(2rem, 4vw, 3rem);
+}
 .app-gallery {
-  margin-top: 3rem;
   text-align: center;
-}
-.app-gallery-title {
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-  background: var(--grad-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.app-gallery-subtitle {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  margin-bottom: 1.5rem;
 }
 
 /* Filters */

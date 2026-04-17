@@ -222,6 +222,187 @@
     </div>
   </section>
 
+  <!-- ═══ APP GALLERY — Capturas y Videos Reales ═══ -->
+  <section class="section section--gallery" id="app-gallery">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag section-tag--app"><i class="fa-solid fa-images"></i> <span data-i18n="gallery_tag">MIRA LA APP EN ACCIÓN</span></span>
+        <h2 class="section-title" data-i18n="gallery_title">Mira la app en acción</h2>
+        <p class="section-desc" data-i18n="gallery_subtitle">Capturas reales de la plataforma</p>
+      </div>
+
+      <div class="app-gallery reveal">
+        <!-- Category filters -->
+        <div class="gallery-filters">
+          <button class="gallery-filter active" data-filter="all" data-i18n="gallery_all">Todas</button>
+          <button class="gallery-filter" data-filter="video" data-i18n="gallery_video"><i class="fa-solid fa-play"></i> Videos</button>
+          <button class="gallery-filter" data-filter="profile" data-i18n="gallery_profile">Perfil</button>
+          <button class="gallery-filter" data-filter="simulator" data-i18n="gallery_simulator">Simuladores</button>
+          <button class="gallery-filter" data-filter="chart" data-i18n="gallery_chart">Gráfico IA</button>
+          <button class="gallery-filter" data-filter="checklist" data-i18n="gallery_checklist">Checklist</button>
+          <button class="gallery-filter" data-filter="journal" data-i18n="gallery_journal">Diario</button>
+        </div>
+
+        <!-- Carousel track -->
+        <div class="gallery-viewport">
+          <div class="gallery-track" id="gallery-track">
+            <!-- Videos FIRST for impact -->
+            <div class="gallery-slide gallery-slide--video" data-category="video">
+              <div class="gallery-video-frame">
+                <video src="assets/videos/01-demo-app-completa.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/01-perfil-progreso-logros.jpeg"></video>
+                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_vid_01">Demo completa de la App</span>
+            </div>
+            <div class="gallery-slide gallery-slide--video" data-category="video">
+              <div class="gallery-video-frame">
+                <video src="assets/videos/02-demo-simuladores.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/10-simulador-gimnasio-mental.jpeg"></video>
+                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_vid_02">Simuladores en acción</span>
+            </div>
+            <div class="gallery-slide gallery-slide--video" data-category="video">
+              <div class="gallery-video-frame">
+                <video src="assets/videos/03-demo-analisis-rapido.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/04-grafico-ia-analisis.jpeg"></video>
+                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_vid_03">Análisis rápido con IA</span>
+            </div>
+            <div class="gallery-slide gallery-slide--video" data-category="video">
+              <div class="gallery-video-frame">
+                <video src="assets/videos/04-demo-diario-trading.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/15-diario-panel-notas.jpeg"></video>
+                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_vid_04">Diario de Trading</span>
+            </div>
+            <!-- Screenshots -->
+            <div class="gallery-slide" data-category="chart">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/04-grafico-ia-analisis.jpeg" alt="Análisis de gráfico IA" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_04">Análisis multi-timeframe</span>
+            </div>
+            <div class="gallery-slide" data-category="simulator">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/10-simulador-gimnasio-mental.jpeg" alt="Gimnasio Mental" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_10">Tu Gimnasio Mental</span>
+            </div>
+            <div class="gallery-slide" data-category="journal">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/15-diario-panel-notas.jpeg" alt="Panel del diario" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_15">Panel y notas IA</span>
+            </div>
+            <div class="gallery-slide" data-category="profile">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/01-perfil-progreso-logros.jpeg" alt="Perfil - Progreso y logros" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_01">Progreso y logros</span>
+            </div>
+            <div class="gallery-slide" data-category="profile">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/02-perfil-misiones.jpeg" alt="Perfil - Misiones" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_02">Misiones para ganar análisis</span>
+            </div>
+            <div class="gallery-slide" data-category="profile">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/03-elite-coaching-ia.jpeg" alt="Elite - Coaching IA" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_03">Coaching IA Elite</span>
+            </div>
+            <div class="gallery-slide" data-category="chart">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/12-grafico-ia-mercados.jpeg" alt="Selección de mercados" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_12">Selección de mercados</span>
+            </div>
+            <div class="gallery-slide" data-category="simulator">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/05-simulador-modo-accion.jpeg" alt="Simulador Modo Acción" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_05">Modo Acción</span>
+            </div>
+            <div class="gallery-slide" data-category="simulator">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/06-simulador-identifica-vela.jpeg" alt="Identifica la Vela" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_06">Identifica la Vela</span>
+            </div>
+            <div class="gallery-slide" data-category="simulator">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/09-simulador-identifica-patron.jpeg" alt="Identifica el Patrón" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_09">Identifica el Patrón</span>
+            </div>
+            <div class="gallery-slide" data-category="simulator">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/08-simulador-desafio-trading.jpeg" alt="Desafío de Trading" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_08">Desafío de Trading</span>
+            </div>
+            <div class="gallery-slide" data-category="simulator">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/11-simulador-accion-correcto.jpeg" alt="Resultado correcto" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_11">Resultado correcto</span>
+            </div>
+            <div class="gallery-slide" data-category="simulator">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/07-simulador-vela-dificil.jpeg" alt="Vela difícil" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_07">Nivel difícil</span>
+            </div>
+            <div class="gallery-slide" data-category="checklist">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/14-checklist-pre-mercado.jpeg" alt="Checklist pre-mercado" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_14">Checklist pre-mercado</span>
+            </div>
+            <div class="gallery-slide" data-category="checklist">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/13-checklist-parcial.jpeg" alt="Checklist parcial" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_13">Checklist en progreso</span>
+            </div>
+            <div class="gallery-slide" data-category="journal">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/16-diario-registra-operacion.jpeg" alt="Registrar operación" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_16">Registrar operación</span>
+            </div>
+            <div class="gallery-slide" data-category="journal">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/17-diario-historial-operaciones.jpeg" alt="Historial" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_17">Historial de operaciones</span>
+            </div>
+            <div class="gallery-slide" data-category="journal">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/18-diario-dashboard-emociones.jpeg" alt="Dashboard emociones" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_18">Dashboard de emociones</span>
+            </div>
+            <div class="gallery-slide" data-category="journal">
+              <div class="gallery-phone">
+                <img src="assets/screenshots/es/19-diario-rendimiento-grafico.jpeg" alt="Rendimiento gráfico" loading="lazy">
+              </div>
+              <span class="gallery-caption" data-i18n="gallery_cap_19">Rendimiento y gráficos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="gallery-nav">
+          <button class="gallery-arrow gallery-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+          <div class="gallery-dots" id="gallery-dots"></div>
+          <button class="gallery-arrow gallery-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ APP FEATURES ═══ -->
   <section class="section" id="app-features">
     <div class="container">
@@ -702,184 +883,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- App Screenshots Gallery -->
-      <div class="app-gallery reveal">
-        <h3 class="app-gallery-title" data-i18n="gallery_title">Mira la app en acción</h3>
-        <p class="app-gallery-subtitle" data-i18n="gallery_subtitle">Capturas reales de la plataforma</p>
-
-        <!-- Category filters -->
-        <div class="gallery-filters">
-          <button class="gallery-filter active" data-filter="all" data-i18n="gallery_all">Todas</button>
-          <button class="gallery-filter" data-filter="profile" data-i18n="gallery_profile">Perfil</button>
-          <button class="gallery-filter" data-filter="simulator" data-i18n="gallery_simulator">Simuladores</button>
-          <button class="gallery-filter" data-filter="chart" data-i18n="gallery_chart">Gráfico IA</button>
-          <button class="gallery-filter" data-filter="checklist" data-i18n="gallery_checklist">Checklist</button>
-          <button class="gallery-filter" data-filter="journal" data-i18n="gallery_journal">Diario</button>
-          <button class="gallery-filter" data-filter="video" data-i18n="gallery_video"><i class="fa-solid fa-play"></i> Videos</button>
-        </div>
-
-        <!-- Carousel track -->
-        <div class="gallery-viewport">
-          <div class="gallery-track" id="gallery-track">
-            <!-- Profile -->
-            <div class="gallery-slide" data-category="profile">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/01-perfil-progreso-logros.jpeg" alt="Perfil - Progreso y logros" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_01">Progreso y logros</span>
-            </div>
-            <div class="gallery-slide" data-category="profile">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/02-perfil-misiones.jpeg" alt="Perfil - Misiones" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_02">Misiones para ganar análisis</span>
-            </div>
-            <div class="gallery-slide" data-category="profile">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/03-elite-coaching-ia.jpeg" alt="Elite - Coaching IA" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_03">Coaching IA Elite</span>
-            </div>
-            <!-- Chart IA -->
-            <div class="gallery-slide" data-category="chart">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/04-grafico-ia-analisis.jpeg" alt="Análisis de gráfico IA" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_04">Análisis multi-timeframe</span>
-            </div>
-            <div class="gallery-slide" data-category="chart">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/12-grafico-ia-mercados.jpeg" alt="Selección de mercados" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_12">Selección de mercados</span>
-            </div>
-            <!-- Simulators -->
-            <div class="gallery-slide" data-category="simulator">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/10-simulador-gimnasio-mental.jpeg" alt="Gimnasio Mental" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_10">Tu Gimnasio Mental</span>
-            </div>
-            <div class="gallery-slide" data-category="simulator">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/05-simulador-modo-accion.jpeg" alt="Simulador Modo Acción" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_05">Modo Acción</span>
-            </div>
-            <div class="gallery-slide" data-category="simulator">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/06-simulador-identifica-vela.jpeg" alt="Identifica la Vela" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_06">Identifica la Vela</span>
-            </div>
-            <div class="gallery-slide" data-category="simulator">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/09-simulador-identifica-patron.jpeg" alt="Identifica el Patrón" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_09">Identifica el Patrón</span>
-            </div>
-            <div class="gallery-slide" data-category="simulator">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/08-simulador-desafio-trading.jpeg" alt="Desafío de Trading" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_08">Desafío de Trading</span>
-            </div>
-            <div class="gallery-slide" data-category="simulator">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/11-simulador-accion-correcto.jpeg" alt="Resultado correcto" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_11">Resultado correcto</span>
-            </div>
-            <div class="gallery-slide" data-category="simulator">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/07-simulador-vela-dificil.jpeg" alt="Vela difícil" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_07">Nivel difícil</span>
-            </div>
-            <!-- Checklist -->
-            <div class="gallery-slide" data-category="checklist">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/14-checklist-pre-mercado.jpeg" alt="Checklist pre-mercado" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_14">Checklist pre-mercado</span>
-            </div>
-            <div class="gallery-slide" data-category="checklist">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/13-checklist-parcial.jpeg" alt="Checklist parcial" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_13">Checklist en progreso</span>
-            </div>
-            <!-- Journal -->
-            <div class="gallery-slide" data-category="journal">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/15-diario-panel-notas.jpeg" alt="Panel del diario" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_15">Panel y notas IA</span>
-            </div>
-            <div class="gallery-slide" data-category="journal">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/16-diario-registra-operacion.jpeg" alt="Registrar operación" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_16">Registrar operación</span>
-            </div>
-            <div class="gallery-slide" data-category="journal">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/17-diario-historial-operaciones.jpeg" alt="Historial" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_17">Historial de operaciones</span>
-            </div>
-            <div class="gallery-slide" data-category="journal">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/18-diario-dashboard-emociones.jpeg" alt="Dashboard emociones" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_18">Dashboard de emociones</span>
-            </div>
-            <div class="gallery-slide" data-category="journal">
-              <div class="gallery-phone">
-                <img src="assets/screenshots/es/19-diario-rendimiento-grafico.jpeg" alt="Rendimiento gráfico" loading="lazy">
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_cap_19">Rendimiento y gráficos</span>
-            </div>
-            <!-- Videos -->
-            <div class="gallery-slide gallery-slide--video" data-category="video">
-              <div class="gallery-video-frame">
-                <video src="assets/videos/01-demo-app-completa.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/01-perfil-progreso-logros.jpeg"></video>
-                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_vid_01">Demo completa de la App</span>
-            </div>
-            <div class="gallery-slide gallery-slide--video" data-category="video">
-              <div class="gallery-video-frame">
-                <video src="assets/videos/02-demo-simuladores.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/10-simulador-gimnasio-mental.jpeg"></video>
-                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_vid_02">Simuladores en acción</span>
-            </div>
-            <div class="gallery-slide gallery-slide--video" data-category="video">
-              <div class="gallery-video-frame">
-                <video src="assets/videos/03-demo-analisis-rapido.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/04-grafico-ia-analisis.jpeg"></video>
-                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_vid_03">Análisis rápido con IA</span>
-            </div>
-            <div class="gallery-slide gallery-slide--video" data-category="video">
-              <div class="gallery-video-frame">
-                <video src="assets/videos/04-demo-diario-trading.mp4" playsinline muted loop preload="metadata" poster="assets/screenshots/es/15-diario-panel-notas.jpeg"></video>
-                <button class="gallery-video-play" aria-label="Play video"><i class="fa-solid fa-play"></i></button>
-              </div>
-              <span class="gallery-caption" data-i18n="gallery_vid_04">Diario de Trading</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Navigation -->
-        <div class="gallery-nav">
-          <button class="gallery-arrow gallery-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
-          <div class="gallery-dots" id="gallery-dots"></div>
-          <button class="gallery-arrow gallery-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
       </div>
 

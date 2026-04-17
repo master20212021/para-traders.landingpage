@@ -533,6 +533,7 @@ const i18n = {
     product_course_guarantee: "7-day guarantee — Secure payment via Hotmart",
 
     // Gallery
+    gallery_tag: "SEE THE APP IN ACTION",
     gallery_title: "See the app in action",
     gallery_subtitle: "Real platform screenshots",
     gallery_all: "All",
