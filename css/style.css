@@ -707,11 +707,82 @@ button { font-family: inherit; cursor: pointer; }
   border-radius: 3px;
 }
 
+/* Video slides */
+.gallery-slide--video {
+  flex: 0 0 auto;
+}
+.gallery-video-frame {
+  width: 200px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.4),
+    0 0 40px rgba(var(--accent-rgb), 0.06),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  background: #060c1a;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+.gallery-video-frame:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.5),
+    0 0 60px rgba(var(--accent-rgb), 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  border-color: rgba(var(--accent-rgb), 0.2);
+}
+.gallery-video-frame video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.gallery-video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  z-index: 2;
+}
+.gallery-video-play:hover {
+  background: rgba(var(--accent-rgb), 0.7);
+  border-color: var(--accent);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.gallery-video-play.is-playing {
+  opacity: 0;
+  pointer-events: none;
+}
+.gallery-video-frame:hover .gallery-video-play.is-playing {
+  opacity: 1;
+  pointer-events: auto;
+}
+.gallery-filter[data-filter="video"] i {
+  font-size: 0.65rem;
+  margin-right: 0.15rem;
+}
+
 @media (max-width: 768px) {
   .gallery-phone { width: 160px; }
+  .gallery-video-frame { width: 160px; }
   .gallery-filters { gap: 0.35rem; }
   .gallery-filter { font-size: 0.72rem; padding: 0.35rem 0.75rem; }
   .gallery-track { gap: 0.8rem; }
+  .gallery-video-play { width: 40px; height: 40px; font-size: 0.85rem; }
 }
 
 /* ── Testimonials ──────────────────────────────────────── */

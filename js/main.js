@@ -754,5 +754,37 @@
 
     buildDots();
     window.addEventListener("resize", buildDots);
+
+    // Video play/pause
+    track.querySelectorAll(".gallery-video-frame").forEach((frame) => {
+      const video = frame.querySelector("video");
+      const playBtn = frame.querySelector(".gallery-video-play");
+      if (!video || !playBtn) return;
+
+      function togglePlay() {
+        if (video.paused) {
+          // Pause all other videos first
+          track.querySelectorAll("video").forEach((v) => {
+            if (v !== video && !v.paused) {
+              v.pause();
+              v.closest(".gallery-video-frame")?.querySelector(".gallery-video-play")?.classList.remove("is-playing");
+            }
+          });
+          video.play();
+          playBtn.classList.add("is-playing");
+        } else {
+          video.pause();
+          playBtn.classList.remove("is-playing");
+        }
+      }
+
+      playBtn.addEventListener("click", togglePlay);
+      frame.addEventListener("click", (e) => {
+        if (e.target !== playBtn && !playBtn.contains(e.target)) togglePlay();
+      });
+      video.addEventListener("ended", () => {
+        playBtn.classList.remove("is-playing");
+      });
+    });
   }
 })();
