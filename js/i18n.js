@@ -279,10 +279,10 @@ const i18n = {
     gallery_cap_18: "Dashboard de emociones",
     gallery_cap_19: "Rendimiento y gráficos",
     gallery_video: "Videos",
-    gallery_vid_01: "Demo completa de la App",
-    gallery_vid_02: "Simuladores en acción",
-    gallery_vid_03: "Análisis rápido con IA",
-    gallery_vid_04: "Diario de Trading",
+    gallery_vid_01: "Analizador de Gráficos IA",
+    gallery_vid_02: "Analizador de Emociones",
+    gallery_vid_03: "Diario de Notas",
+    gallery_vid_04: "Noticias con IA",
   },
 
   en: {
@@ -562,9 +562,9 @@ const i18n = {
     gallery_cap_18: "Emotions dashboard",
     gallery_cap_19: "Performance & charts",
     gallery_video: "Videos",
-    gallery_vid_01: "Full App demo",
-    gallery_vid_02: "Simulators in action",
-    gallery_vid_03: "Quick AI analysis",
-    gallery_vid_04: "Trading Journal",
+    gallery_vid_01: "AI Chart Analyzer",
+    gallery_vid_02: "Emotion Analyzer",
+    gallery_vid_03: "Notes Journal",
+    gallery_vid_04: "AI News Analyzer",
   }
 };
