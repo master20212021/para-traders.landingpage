@@ -829,20 +829,5 @@
         playBtn.classList.remove("is-playing");
       });
     });
-
-    // Auto-generate video posters from first frame
-    track.querySelectorAll("video[data-autoposter]").forEach((video) => {
-      video.addEventListener("loadeddata", function() {
-        if (this.readyState >= 2) {
-          try {
-            const canvas = document.createElement("canvas");
-            canvas.width = this.videoWidth;
-            canvas.height = this.videoHeight;
-            canvas.getContext("2d").drawImage(this, 0, 0);
-            this.setAttribute("poster", canvas.toDataURL("image/jpeg", 0.8));
-          } catch(e) { /* cross-origin videos won't work, that's fine */ }
-        }
-      }, { once: true });
-    });
   }
 })();
