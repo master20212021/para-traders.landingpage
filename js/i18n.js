@@ -249,6 +249,35 @@ const i18n = {
 
     // Course guarantee
     product_course_guarantee: "7 días de garantía — Pago seguro via Hotmart",
+
+    // Gallery
+    gallery_title: "Mira la app en acción",
+    gallery_subtitle: "Capturas reales de la plataforma",
+    gallery_all: "Todas",
+    gallery_profile: "Perfil",
+    gallery_simulator: "Simuladores",
+    gallery_chart: "Gráfico IA",
+    gallery_checklist: "Checklist",
+    gallery_journal: "Diario",
+    gallery_cap_01: "Progreso y logros",
+    gallery_cap_02: "Misiones para ganar análisis",
+    gallery_cap_03: "Coaching IA Elite",
+    gallery_cap_04: "Análisis multi-timeframe",
+    gallery_cap_05: "Modo Acción",
+    gallery_cap_06: "Identifica la Vela",
+    gallery_cap_07: "Nivel difícil",
+    gallery_cap_08: "Desafío de Trading",
+    gallery_cap_09: "Identifica el Patrón",
+    gallery_cap_10: "Tu Gimnasio Mental",
+    gallery_cap_11: "Resultado correcto",
+    gallery_cap_12: "Selección de mercados",
+    gallery_cap_13: "Checklist en progreso",
+    gallery_cap_14: "Checklist pre-mercado",
+    gallery_cap_15: "Panel y notas IA",
+    gallery_cap_16: "Registrar operación",
+    gallery_cap_17: "Historial de operaciones",
+    gallery_cap_18: "Dashboard de emociones",
+    gallery_cap_19: "Rendimiento y gráficos",
   },
 
   en: {
@@ -497,5 +526,34 @@ const i18n = {
 
     // Course guarantee
     product_course_guarantee: "7-day guarantee — Secure payment via Hotmart",
+
+    // Gallery
+    gallery_title: "See the app in action",
+    gallery_subtitle: "Real platform screenshots",
+    gallery_all: "All",
+    gallery_profile: "Profile",
+    gallery_simulator: "Simulators",
+    gallery_chart: "Chart AI",
+    gallery_checklist: "Checklist",
+    gallery_journal: "Journal",
+    gallery_cap_01: "Progress & achievements",
+    gallery_cap_02: "Missions to earn analyses",
+    gallery_cap_03: "Elite AI Coaching",
+    gallery_cap_04: "Multi-timeframe analysis",
+    gallery_cap_05: "Action Mode",
+    gallery_cap_06: "Identify the Candle",
+    gallery_cap_07: "Hard level",
+    gallery_cap_08: "Trading Challenge",
+    gallery_cap_09: "Identify the Pattern",
+    gallery_cap_10: "Your Mental Gym",
+    gallery_cap_11: "Correct result",
+    gallery_cap_12: "Market selection",
+    gallery_cap_13: "Checklist in progress",
+    gallery_cap_14: "Pre-market checklist",
+    gallery_cap_15: "Panel & AI notes",
+    gallery_cap_16: "Log a trade",
+    gallery_cap_17: "Trade history",
+    gallery_cap_18: "Emotions dashboard",
+    gallery_cap_19: "Performance & charts",
   }
 };

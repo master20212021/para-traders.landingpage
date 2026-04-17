@@ -28,6 +28,7 @@
     initCardGlow();
     initMagneticButtons();
     initActiveNavHighlight();
+    initAppGallery();
   });
 
   // ═══ PARTICLE CANVAS ═══════════════════════
@@ -644,5 +645,114 @@
       { threshold: 0.2, rootMargin: "-80px 0px -40% 0px" }
     );
     sectionMap.forEach((s) => observer.observe(s.section));
+  }
+
+  // ═══ APP SCREENSHOTS GALLERY ═══════════════
+  function initAppGallery() {
+    const track = document.getElementById("gallery-track");
+    const dotsContainer = document.getElementById("gallery-dots");
+    if (!track || !dotsContainer) return;
+
+    const allSlides = Array.from(track.querySelectorAll(".gallery-slide"));
+    const filters = document.querySelectorAll(".gallery-filter");
+    const prevBtn = document.querySelector(".gallery-prev");
+    const nextBtn = document.querySelector(".gallery-next");
+    let activeFilter = "all";
+    let visibleSlides = allSlides;
+
+    function getVisibleSlides() {
+      return allSlides.filter((s) => !s.classList.contains("hidden"));
+    }
+
+    function buildDots() {
+      visibleSlides = getVisibleSlides();
+      const groupSize = window.innerWidth < 768 ? 2 : 3;
+      const dotCount = Math.ceil(visibleSlides.length / groupSize);
+      dotsContainer.innerHTML = "";
+      for (let i = 0; i < dotCount; i++) {
+        const dot = document.createElement("button");
+        dot.className = "gallery-dot" + (i === 0 ? " active" : "");
+        dot.setAttribute("aria-label", "Page " + (i + 1));
+        dot.addEventListener("click", () => scrollToGroup(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function scrollToGroup(index) {
+      const groupSize = window.innerWidth < 768 ? 2 : 3;
+      const target = visibleSlides[index * groupSize];
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+      }
+      updateDots(index);
+    }
+
+    function updateDots(activeIndex) {
+      dotsContainer.querySelectorAll(".gallery-dot").forEach((d, i) => {
+        d.classList.toggle("active", i === activeIndex);
+      });
+    }
+
+    function getCurrentGroup() {
+      const groupSize = window.innerWidth < 768 ? 2 : 3;
+      const trackRect = track.getBoundingClientRect();
+      const center = trackRect.left + trackRect.width / 2;
+      let closest = 0;
+      let minDist = Infinity;
+      visibleSlides.forEach((slide, i) => {
+        const rect = slide.getBoundingClientRect();
+        const dist = Math.abs(rect.left + rect.width / 2 - center);
+        if (dist < minDist) { minDist = dist; closest = i; }
+      });
+      return Math.floor(closest / groupSize);
+    }
+
+    // Scroll listener for dot sync
+    let scrollTimer;
+    track.addEventListener("scroll", () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        updateDots(getCurrentGroup());
+      }, 100);
+    }, { passive: true });
+
+    // Arrows
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        const g = getCurrentGroup();
+        if (g > 0) scrollToGroup(g - 1);
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        const g = getCurrentGroup();
+        const groupSize = window.innerWidth < 768 ? 2 : 3;
+        const maxGroup = Math.ceil(visibleSlides.length / groupSize) - 1;
+        if (g < maxGroup) scrollToGroup(g + 1);
+      });
+    }
+
+    // Filters
+    filters.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filters.forEach((f) => f.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilter = btn.dataset.filter;
+
+        allSlides.forEach((slide) => {
+          if (activeFilter === "all" || slide.dataset.category === activeFilter) {
+            slide.classList.remove("hidden");
+          } else {
+            slide.classList.add("hidden");
+          }
+        });
+
+        track.scrollLeft = 0;
+        buildDots();
+      });
+    });
+
+    buildDots();
+    window.addEventListener("resize", buildDots);
   }
 })();

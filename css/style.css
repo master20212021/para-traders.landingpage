@@ -545,6 +545,175 @@ button { font-family: inherit; cursor: pointer; }
   .app-coming-soon { justify-content: center; }
 }
 
+/* ── App Screenshots Gallery ───────────────────────────── */
+.app-gallery {
+  margin-top: 3rem;
+  text-align: center;
+}
+.app-gallery-title {
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.app-gallery-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* Filters */
+.gallery-filters {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.gallery-filter {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease-out);
+}
+.gallery-filter:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+.gallery-filter.active {
+  background: rgba(var(--accent-rgb), 0.1);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  color: var(--accent);
+}
+
+/* Viewport & Track */
+.gallery-viewport {
+  overflow: hidden;
+  position: relative;
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+.gallery-track {
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 1rem 0 1.5rem;
+}
+.gallery-track::-webkit-scrollbar { display: none; }
+
+/* Slide */
+.gallery-slide {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+.gallery-slide.hidden {
+  display: none;
+}
+
+/* Phone frame for screenshots */
+.gallery-phone {
+  width: 200px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.4),
+    0 0 40px rgba(var(--accent-rgb), 0.06),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  background: #060c1a;
+  position: relative;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+.gallery-phone:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.5),
+    0 0 60px rgba(var(--accent-rgb), 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  border-color: rgba(var(--accent-rgb), 0.2);
+}
+.gallery-phone img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.gallery-caption {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Navigation */
+.gallery-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.gallery-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--glass);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all var(--duration) var(--ease-out);
+}
+.gallery-arrow:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.08);
+}
+.gallery-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+.gallery-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s var(--ease-out);
+}
+.gallery-dot.active {
+  background: var(--accent);
+  width: 18px;
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .gallery-phone { width: 160px; }
+  .gallery-filters { gap: 0.35rem; }
+  .gallery-filter { font-size: 0.72rem; padding: 0.35rem 0.75rem; }
+  .gallery-track { gap: 0.8rem; }
+}
+
 /* ── Testimonials ──────────────────────────────────────── */
 .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
 .testimonial-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 2rem; }
