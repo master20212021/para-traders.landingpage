@@ -135,6 +135,39 @@
       if (strings[key]) el.placeholder = strings[key];
     });
     document.documentElement.lang = currentLang;
+    updateGalleryLanguage();
+  }
+
+  function updateGalleryLanguage() {
+    const lang = currentLang === "en" ? "en" : "es";
+    const otherLang = lang === "en" ? "es" : "en";
+    // Swap screenshot images
+    document.querySelectorAll("#gallery-track img").forEach((img) => {
+      const src = img.getAttribute("src");
+      if (src && src.includes("screenshots/" + otherLang + "/")) {
+        const newSrc = src.replace("screenshots/" + otherLang + "/", "screenshots/" + lang + "/");
+        img.setAttribute("src", newSrc);
+        // Fallback to ES if EN image doesn't exist
+        if (lang === "en") {
+          img.onerror = function () { this.src = src; this.onerror = null; };
+        } else {
+          img.onerror = null;
+        }
+      }
+    });
+    // Swap video sources and posters
+    document.querySelectorAll("#gallery-track video").forEach((video) => {
+      const src = video.getAttribute("src");
+      const poster = video.getAttribute("poster");
+      if (src && src.includes("videos/" + otherLang + "/")) {
+        video.setAttribute("src", src.replace("videos/" + otherLang + "/", "videos/" + lang + "/"));
+      }
+      if (poster && poster.includes("screenshots/" + otherLang + "/")) {
+        video.setAttribute("poster", poster.replace("screenshots/" + otherLang + "/", "screenshots/" + lang + "/"));
+      }
+      // Reload video if it was playing
+      if (!video.paused) { video.pause(); video.load(); }
+    });
   }
 
   // ═══ TOPBAR SCROLL (now part of unified handler) ══
