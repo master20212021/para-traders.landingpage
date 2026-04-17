@@ -91,7 +91,7 @@ button { font-family: inherit; cursor: pointer; }
 .topbar.scrolled { background: rgba(3, 7, 18, 0.92); box-shadow: 0 2px 30px rgba(0,0,0,0.4); }
 .brand { display: flex; align-items: center; gap: 0.7rem; }
 .brand-logo { height: 30px; width: auto; filter: brightness(1.1); }
-.brand-text { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--accent); letter-spacing: 1.5px; }
+.brand-text { font-family: 'Outfit', var(--font-body); font-size: 1.05rem; font-weight: 800; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
 .topbar-nav { display: flex; align-items: center; gap: 2rem; }
 .topbar-nav a { font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); transition: color var(--duration); letter-spacing: 0.3px; }
 .topbar-nav a:hover { color: var(--text); }
