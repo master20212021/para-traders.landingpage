@@ -154,15 +154,11 @@
         }
       }
     });
-    // Swap video sources and posters
+    // Swap video sources
     document.querySelectorAll("#gallery-track video").forEach((video) => {
       const src = video.getAttribute("src");
-      const poster = video.getAttribute("poster");
       if (src && src.includes("videos/" + otherLang + "/")) {
         video.setAttribute("src", src.replace("videos/" + otherLang + "/", "videos/" + lang + "/"));
-      }
-      if (poster && poster.includes("screenshots/" + otherLang + "/")) {
-        video.setAttribute("poster", poster.replace("screenshots/" + otherLang + "/", "screenshots/" + lang + "/"));
       }
       if (!video.paused) { video.pause(); video.load(); }
     });
