@@ -808,45 +808,6 @@ button { font-family: inherit; cursor: pointer; }
 }
 .about-avatar-img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ── Plans Grid ────────────────────────────────────────── */
-.plans-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-  max-width: 900px; margin: 0 auto;
-}
-.plan-card {
-  background: var(--glass); border: 1px solid var(--glass-border);
-  border-radius: var(--radius); padding: 2rem 1.5rem;
-  display: flex; flex-direction: column; position: relative;
-  transition: border-color var(--duration) var(--ease-out), transform var(--duration) var(--ease-out);
-}
-.plan-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
-.plan-card--featured {
-  border-color: rgba(var(--accent-rgb), 0.3);
-  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.04), rgba(99, 102, 241, 0.03));
-}
-.plan-badge {
-  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-  background: var(--grad-accent); color: #fff; font-size: 0.6rem; font-weight: 700;
-  letter-spacing: 1px; padding: 0.25rem 0.75rem; border-radius: var(--radius-full);
-  white-space: nowrap;
-}
-.plan-header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
-.plan-name { font-size: 1.1rem; font-weight: 700; color: var(--text); display: block; margin-bottom: 0.5rem; }
-.plan-price { display: flex; align-items: baseline; justify-content: center; gap: 0.2rem; }
-.plan-amount { font-size: 2rem; font-weight: 800; color: var(--text); }
-.plan-period { font-size: 0.85rem; color: var(--muted); }
-.plan-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; flex: 1; }
-.plan-features li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); }
-.plan-features li i { color: var(--accent); font-size: 0.7rem; flex-shrink: 0; }
-.btn-outline {
-  background: transparent; border: 1px solid var(--border); color: var(--text);
-  transition: border-color var(--duration) var(--ease-out), background var(--duration) var(--ease-out);
-}
-.btn-outline:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.04); }
-@media (max-width: 768px) {
-  .plans-grid { grid-template-columns: 1fr; max-width: 380px; }
-}
-
 /* ── FAQ ───────────────────────────────────────────────── */
 .faq-list { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.8rem; }
 .faq-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); overflow: hidden; transition: border-color var(--duration); }
